@@ -5,6 +5,7 @@ info:
 # servers:
 #   - url: https://api.server.test/v1
 tags:
+  - name: default
   - name: Pedidos
     description: Requisições relacionadas a pedidos
   - name: Cardápio
@@ -20,6 +21,22 @@ components:
       scheme: bearer
       bearerFormat: JWT
 paths:
+  /:
+    get:
+      summary: Heartbeat
+      description: Verifica se o servidor está ativo.
+      responses:
+        "200":
+          description: O servidor está ativo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "O servidor está ativo"
+
   # Pedidos
   /pedido:
     post:
