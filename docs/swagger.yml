@@ -1,0 +1,143 @@
+openapi: "3.0.4"
+info:
+  title: Backend comida.app
+  version: "0.1.0"
+# servers:
+#   - url: https://api.server.test/v1
+tags:
+  - name: Pedidos
+    description: Requisições relacionadas a pedidos
+  - name: Cardápio
+    description: Requisições relacionadas ao cardápio do restaurante
+  - name: Restaurante
+    description: Requisições relacionadas ao restaurante
+  - name: A implementar
+    description: Requisições que ainda não irão ser implementadas
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  # Pedidos
+  /pedido:
+    post:
+      tags:
+        - Pedidos
+      summary: Cria um novo pedido
+      description: Cria um novo pedido com os detalhes fornecidos.
+  /pedido/{id}:
+    get:
+      tags:
+        - Pedidos
+      summary: Pega os detalhes de um pedido
+      description: Retorna os detalhes do pedido especificado pelo ID.
+      security:
+        - bearer: []
+  /pedido/list:
+    get:
+      tags:
+        - Pedidos
+      summary: Lista os pedidos do restaurante.
+      description: Retorna uma lista de pedidos associados ao restaurante.
+      security:
+        - bearer: []
+  /pedido/{id}/status:
+    patch:
+      tags:
+        - Pedidos
+      summary: Atualiza o status de um pedido
+      description: Atualiza o status do pedido especificado pelo ID.
+      security:
+        - bearer: []
+  # Cardápio
+  /cardapio/{restaurante_id}:
+    get:
+      tags:
+        - Cardápio
+      summary: Pega o cardápio de um restaurante
+      description: Retorna o cardápio do restaurante especificado pelo ID.
+  /cardapio/item/{id}:
+    get:
+      tags:
+        - Cardápio
+      summary: Pega os detalhes de um item do cardápio
+      description: Retorna os detalhes do item especificado pelo ID.
+    patch:
+      tags:
+        - Cardápio
+      summary: Atualiza um item do cardápio
+      description: Atualiza os detalhes do item especificado pelo ID.
+      security:
+        - bearer: []
+    delete:
+      tags:
+        - Cardápio
+      summary: Remove um item do cardápio
+      description: Remove o item especificado pelo ID do cardápio do restaurante.
+      security:
+        - bearer: []
+  /cardapio/item:
+    post:
+      tags:
+        - Cardápio
+      summary: Adiciona um item ao cardápio
+      description: Adiciona um novo item ao cardápio do restaurante.
+      security:
+        - bearer: []
+  # Restaurante
+  /restaurante/{id}:
+    get:
+      tags:
+        - Restaurante
+      summary: Pega os detalhes de um restaurante
+      description: Retorna os detalhes do restaurante especificado pelo ID.
+    patch:
+      tags:
+        - A implementar
+      summary: Atualiza os detalhes de um restaurante
+      description: Atualiza os detalhes do restaurante especificado pelo ID.
+    delete:
+      tags:
+        - A implementar
+      summary: Remove um restaurante
+      description: Remove o restaurante especificado pelo ID.
+  /restaurante/{id}/aberto:
+    get:
+      tags:
+        - Restaurante
+      summary: Verifica se o restaurante está aberto
+      description: Retorna o status de abertura do restaurante especificado pelo ID.
+    patch:
+      tags:
+        - Restaurante
+      summary: Atualiza o status de abertura do restaurante
+      description: Atualiza o status de abertura do restaurante especificado pelo ID.
+      security:
+        - bearer: []
+  # A implementar
+  /restaurante:
+    post:
+      tags:
+        - A implementar
+      summary: Cria um novo restaurante
+      description: Cria um novo restaurante com os detalhes fornecidos.
+  /login:
+    post:
+      tags:
+        - A implementar
+      summary: Realiza o login de um usuário
+      description: Autentica um usuário e retorna um token de sessão.
+  /logout:
+    post:
+      tags:
+        - A implementar
+      summary: Realiza o logout de um usuário
+      description: Finaliza a sessão do usuário autenticado.
+  /usuario:
+    post:
+      tags:
+        - A implementar
+      summary: Cria um novo usuário
+      description: Cria um novo usuário com os detalhes fornecidos.
