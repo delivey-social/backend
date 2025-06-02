@@ -1,6 +1,8 @@
 package pedido
 
 import (
+	"errors"
+
 	"comida.app/src/pedido/enums"
 	"comida.app/src/pedido/valueobject"
 	"comida.app/src/shared"
@@ -18,6 +20,10 @@ type Pedido struct {
 	metodo_pagamento enums.MetodoPagamento
 }
 
+var (
+	ErrInvalidAddress = errors.New("invalid address")
+)
+
 func NewPedido(
 	cliente shared.Usuario,
 	itens []uuid.UUID,
@@ -30,16 +36,9 @@ func NewPedido(
 		Taxa_app:     0,
 		Taxa_entrega: 0,
 	}
-	endereco := shared.Endereco{
-		CEP:         cep,
-		Rua:         "",
-		Bairro:      "",
-		Numero:      "",
-		Complemento: "",
-		Cidade:      "",
-		UF:          "",
-		Latitude:    0,
-		Longitude:   0,
+	endereco, err := shared.NewEndereco(cep)
+	if err != nil {
+		return Pedido{}, ErrInvalidAddress
 	}
 
 	return Pedido{

@@ -16,20 +16,14 @@ type Restaurante struct {
 }
 
 var (
-	ErrInvalidCNPJ = errors.New("invalid CNPJ")
+	ErrInvalidCNPJ    = errors.New("invalid CNPJ")
+	ErrInvalidAddress = errors.New("invalid address")
 )
 
 func NewRestaurante(nome string, cnpj string, cep string, responsavel shared.Usuario, imagem_url string) (Restaurante, error) {
-	endereco := shared.Endereco{
-		CEP:         cep,
-		Rua:         "",
-		Bairro:      "",
-		Numero:      "",
-		Complemento: "",
-		Cidade:      "",
-		UF:          "",
-		Latitude:    0,
-		Longitude:   0,
+	endereco, err := shared.NewEndereco(cep)
+	if err != nil {
+		return Restaurante{}, ErrInvalidAddress
 	}
 
 	cnpj_vo, err := valueobject.NewCNPJ(cnpj)
