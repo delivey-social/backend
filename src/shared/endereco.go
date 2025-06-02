@@ -1,8 +1,13 @@
 package shared
 
+import "errors"
+
+var (
+	ErrInvalidCEP = errors.New("invalid CEP")
+)
+
 type Endereco struct {
-	// TODO: CEP should be its own value object
-	CEP         string
+	CEP         CEP
 	Rua         string
 	Bairro      string
 	Numero      string
@@ -14,10 +19,15 @@ type Endereco struct {
 }
 
 func NewEndereco(cep string) (Endereco, error) {
-	// TODO: Fetch address infos in CEP
+	CEP, err := NewCEP(cep)
+	if err != nil {
+		return Endereco{}, ErrInvalidCEP
+	}
+
+	// TODO: Fetch address infos with CEP
 
 	return Endereco{
-		CEP:         cep,
+		CEP:         CEP,
 		Rua:         "",
 		Bairro:      "",
 		Numero:      "",
