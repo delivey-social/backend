@@ -1,4 +1,4 @@
-package valueobject
+package shared
 
 type Usuario struct {
 	Email        string

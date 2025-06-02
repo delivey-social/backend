@@ -1,4 +1,4 @@
-package valueobject
+package shared
 
 type Endereco struct {
 	// TODO: CEP should be its own value object

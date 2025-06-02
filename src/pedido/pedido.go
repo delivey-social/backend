@@ -3,14 +3,15 @@ package pedido
 import (
 	"comida.app/src/pedido/enums"
 	"comida.app/src/pedido/valueobject"
+	"comida.app/src/shared"
 	"github.com/google/uuid"
 )
 
 type Pedido struct {
 	id               uuid.UUID
 	itens            []*valueobject.ItemPedido
-	cliente          *valueobject.Usuario
-	endereco         *valueobject.Endereco
+	cliente          *shared.Usuario
+	endereco         *shared.Endereco
 	preco            *valueobject.Preco
 	observacao       string
 	status           enums.PedidoStatus
@@ -18,7 +19,7 @@ type Pedido struct {
 }
 
 func NewPedido(
-	cliente valueobject.Usuario,
+	cliente shared.Usuario,
 	itens []uuid.UUID,
 	cep string,
 	observacao string,
@@ -29,7 +30,7 @@ func NewPedido(
 		Taxa_app:     0,
 		Taxa_entrega: 0,
 	}
-	endereco := valueobject.Endereco{
+	endereco := shared.Endereco{
 		CEP:         cep,
 		Rua:         "",
 		Bairro:      "",
