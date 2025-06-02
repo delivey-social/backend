@@ -1,7 +1,7 @@
 package valueobject
 
 type Preco struct {
-	preco_itens  int
-	taxa_app     int
-	taxa_entrega int
+	Preco_itens  int
+	Taxa_app     int
+	Taxa_entrega int
 }

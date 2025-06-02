@@ -1,6 +1,6 @@
 package valueobject
 
 type Usuario struct {
-	email        string
-	phone_number string
+	Email        string
+	Phone_number string
 }

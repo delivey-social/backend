@@ -1,13 +1,14 @@
 package valueobject
 
 type Endereco struct {
+	// TODO: CEP should be its own value object
 	CEP         string
-	rua         string
-	bairro      string
-	numero      string
-	complemento string
-	cidade      string
-	uf          string
-	latitude    float64
-	longitude   float64
+	Rua         string
+	Bairro      string
+	Numero      string
+	Complemento string
+	Cidade      string
+	UF          string
+	Latitude    float64
+	Longitude   float64
 }
