@@ -1,12 +1,16 @@
 package shared
 
 type CEP struct {
-	Value string
+	value string
 }
 
 // TODO: Add CEP validation
 func NewCEP(input string) (CEP, error) {
 	return CEP{
-		Value: input,
+		value: input,
 	}, nil
+}
+
+func (cep *CEP) String() string {
+	return cep.value
 }

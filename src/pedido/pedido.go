@@ -11,7 +11,7 @@ import (
 
 type Pedido struct {
 	id               uuid.UUID
-	itens            []*valueobject.ItemPedido
+	itens            []*valueobject.ItemPedidoSnapshot
 	cliente          *shared.Usuario
 	endereco         *shared.Endereco
 	preco            *valueobject.Preco
@@ -31,11 +31,7 @@ func NewPedido(
 	observacao string,
 	metodo_pagamento enums.MetodoPagamento,
 ) (Pedido, error) {
-	preco := valueobject.Preco{
-		Preco_itens:  0,
-		Taxa_app:     0,
-		Taxa_entrega: 0,
-	}
+	preco := valueobject.NewPreco(0, 0)
 	endereco, err := shared.NewEndereco(cep)
 	if err != nil {
 		return Pedido{}, ErrInvalidAddress
@@ -43,7 +39,7 @@ func NewPedido(
 
 	return Pedido{
 		id:               uuid.New(),
-		itens:            make([]*valueobject.ItemPedido, 0),
+		itens:            make([]*valueobject.ItemPedidoSnapshot, 0),
 		cliente:          &cliente,
 		endereco:         &endereco,
 		preco:            &preco,
