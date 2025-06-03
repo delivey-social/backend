@@ -1,6 +1,6 @@
 package shared
 
 type Usuario struct {
-	Email        string
+	Email        Email
 	Phone_number string
 }
