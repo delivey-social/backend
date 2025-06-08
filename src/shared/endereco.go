@@ -18,16 +18,11 @@ type Endereco struct {
 	longitude   float64
 }
 
-func NewEndereco(cep string) (Endereco, error) {
-	CEP, err := NewCEP(cep)
-	if err != nil {
-		return Endereco{}, ErrInvalidCEP
-	}
-
-	// TODO: Fetch address infos with CEP
+func NewEndereco(cep CEP) (Endereco, error) {
+	// TODO: Fetch address infos
 
 	return Endereco{
-		cep:         CEP,
+		cep:         cep,
 		rua:         "",
 		bairro:      "",
 		numero:      "",

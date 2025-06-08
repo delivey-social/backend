@@ -17,11 +17,17 @@ type Restaurante struct {
 
 var (
 	ErrInvalidCNPJ    = errors.New("invalid CNPJ")
+	ErrInvalidCEP     = errors.New("invalid CEP")
 	ErrInvalidAddress = errors.New("invalid address")
 )
 
 func NewRestaurante(nome string, cnpj string, cep string, responsavel shared.Usuario, imagem_url string) (Restaurante, error) {
-	endereco, err := shared.NewEndereco(cep)
+	CEP, err := shared.NewCEP(cep)
+	if err != nil {
+		return Restaurante{}, ErrInvalidCEP
+	}
+
+	endereco, err := shared.NewEndereco(CEP)
 	if err != nil {
 		return Restaurante{}, ErrInvalidAddress
 	}
