@@ -1,18 +1,20 @@
 package shared
 
+import "net/mail"
+
 type Usuario struct {
-	email    Email
+	email    mail.Address
 	telefone Telefone
 }
 
-func NewUsuario(email Email, telefone Telefone) Usuario {
+func NewUsuario(email mail.Address, telefone Telefone) Usuario {
 	return Usuario{
 		email:    email,
 		telefone: telefone,
 	}
 }
 
-func (usuario *Usuario) Email() Email {
+func (usuario *Usuario) Email() mail.Address {
 	return usuario.email
 }
 func (usuario *Usuario) Telefone() Telefone {

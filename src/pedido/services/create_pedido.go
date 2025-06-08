@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"net/mail"
 
 	"comida.app/src/pedido"
 	"comida.app/src/pedido/enums"
@@ -23,12 +24,17 @@ var (
 	ErrInvalidCep     = errors.New("invalid CEP")
 	ErrInvalidAddress = errors.New("invalid address")
 	ErrCreatingPedido = errors.New("error creating pedido")
+	ErrInvalidEmail   = errors.New("invalid email address")
 )
 
 func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
-	email := shared.NewEmail(cmd.UserEmail)
+	email, err := mail.ParseAddress(cmd.UserEmail)
+	if err != nil {
+		return nil, ErrInvalidEmail
+	}
+
 	phone := shared.NewTelefone(cmd.UserPhone)
-	usuario := shared.NewUsuario(email, phone)
+	usuario := shared.NewUsuario(*email, phone)
 
 	// TODO: Fetch items snapshot in restaurant context?
 	var ItemsSnapshot []valueobject.ItemPedidoSnapshot
