@@ -25,6 +25,7 @@ var (
 	ErrInvalidAddress = errors.New("invalid address")
 	ErrCreatingPedido = errors.New("error creating pedido")
 	ErrInvalidEmail   = errors.New("invalid email address")
+	ErrInvalidPhone   = errors.New("invalid phone number")
 )
 
 func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
@@ -33,7 +34,10 @@ func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
 		return nil, ErrInvalidEmail
 	}
 
-	phone := shared.NewTelefone(cmd.UserPhone)
+	phone, err := shared.NewTelefone(cmd.UserPhone)
+	if err != nil {
+		return nil, ErrInvalidPhone
+	}
 	usuario := shared.NewUsuario(*email, phone)
 
 	// TODO: Fetch items snapshot in restaurant context?
@@ -53,7 +57,7 @@ func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
 		return nil, ErrInvalidAddress
 	}
 
-	// TODO: Calculare delivery fee
+	// TODO: Calculate delivery fee
 	var taxaEntrega int
 
 	preco := valueobject.NewPreco(precoItens, taxaEntrega)

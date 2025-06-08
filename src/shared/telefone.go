@@ -1,16 +1,50 @@
 package shared
 
+import (
+	"regexp"
+)
+
 type Telefone struct {
-	value string
+	countryCode string
+	ufCode      string
+	phoneNumber string
 }
 
-// TODO: Validate telefone
-func NewTelefone(input string) Telefone {
-	return Telefone{
-		value: input,
+var (
+	validateRegex  = regexp.MustCompile(`^(\+?\s?55)?\s?(\(?\d{2}\)?\s?)\d{4,5}(-?)\d{4}$`)
+	normalizeRegex = regexp.MustCompile(`^\+?\s?55|\D`)
+)
+
+func NewTelefone(input string) (Telefone, error) {
+	if !validateRegex.MatchString(input) {
+		return Telefone{}, ErrInvalidFormat
 	}
+
+	sanitized := normalizeRegex.ReplaceAllString(input, "")
+
+	if len(sanitized) < 10 || len(sanitized) > 11 {
+		return Telefone{}, ErrInvalidFormat
+	}
+
+	ufCode := sanitized[:2]
+	phone := sanitized[2:]
+
+	return Telefone{
+		countryCode: "55",
+		ufCode:      ufCode,
+		phoneNumber: phone,
+	}, nil
 }
 
-func (telefone *Telefone) String() string {
-	return telefone.value
+func (telefone Telefone) String() string {
+	return telefone.countryCode + telefone.ufCode + telefone.phoneNumber
+}
+
+func (telefone Telefone) Formatted() string {
+	raw := telefone.String()
+
+	re := regexp.MustCompile(`^(\d{2})(\d{2})(\d{4,5})(\d{4})`)
+	formatted := re.ReplaceAllString(raw, "+$1 ($2) $3-$4")
+
+	return formatted
 }

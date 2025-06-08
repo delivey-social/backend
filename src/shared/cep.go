@@ -10,7 +10,7 @@ type CEP struct {
 }
 
 var (
-	ErrInvalidFormat = errors.New("invalid CEP format")
+	ErrInvalidFormat = errors.New("invalid format")
 
 	sanitizationRegex     = regexp.MustCompile(`[.-]`)
 	digitsValidationRegex = regexp.MustCompile(`^\d{8}$`)
