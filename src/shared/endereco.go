@@ -7,7 +7,6 @@ var (
 	ErrInvalidField       = errors.New("invalid field")
 )
 
-// TODO: Add tests
 type Endereco struct {
 	cep         CEP
 	rua         string
