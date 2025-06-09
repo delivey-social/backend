@@ -27,7 +27,7 @@ func NewRestaurante(nome string, cnpj string, cep string, responsavel shared.Usu
 		return Restaurante{}, ErrInvalidCEP
 	}
 
-	endereco, err := shared.NewEndereco(CEP)
+	endereco, err := shared.NewEndereco(CEP, "", "", "", "", "", "", 0, 0)
 	if err != nil {
 		return Restaurante{}, ErrInvalidAddress
 	}

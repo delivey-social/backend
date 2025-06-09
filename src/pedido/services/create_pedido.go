@@ -51,7 +51,7 @@ func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
 	if err != nil {
 		return nil, ErrInvalidAddress
 	}
-	endereco, err := shared.NewEndereco(cep)
+	endereco, err := shared.NewEndereco(cep, "", "", "", "", "", "", 0, 0)
 	if err != nil {
 		return nil, ErrInvalidAddress
 	}

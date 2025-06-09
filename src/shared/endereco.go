@@ -3,9 +3,11 @@ package shared
 import "errors"
 
 var (
-	ErrInvalidCEP = errors.New("invalid CEP")
+	ErrInvalidCoordinates = errors.New("invalid latitude or longitude")
+	ErrInvalidField       = errors.New("invalid field")
 )
 
+// TODO: Add tests
 type Endereco struct {
 	cep         CEP
 	rua         string
@@ -13,24 +15,46 @@ type Endereco struct {
 	numero      string
 	complemento string
 	cidade      string
-	uf          string
-	latitude    float64
-	longitude   float64
+	// TODO: Make UF it's own type (enum)
+	uf string
+	// TODO: Make coordinates VO
+	latitude  float64
+	longitude float64
 }
 
-func NewEndereco(cep CEP) (Endereco, error) {
-	// TODO: Fetch address infos
+func NewEndereco(
+	cep CEP,
+	rua string,
+	bairro string,
+	numero string,
+	complemento string,
+	cidade string,
+	uf string,
+	latitude float64,
+	longitude float64) (Endereco, error) {
+
+	if rua == "" || bairro == "" || numero == "" || cidade == "" || uf == "" {
+		return Endereco{}, ErrInvalidField
+	}
+
+	// TODO: Limit latitude and longitude to Brazil limits
+	if latitude < -90 || latitude > 90 {
+		return Endereco{}, ErrInvalidCoordinates
+	}
+	if longitude < -180 || longitude > 180 {
+		return Endereco{}, ErrInvalidCoordinates
+	}
 
 	return Endereco{
 		cep:         cep,
-		rua:         "",
-		bairro:      "",
-		numero:      "",
-		complemento: "",
-		cidade:      "",
-		uf:          "",
-		latitude:    0,
-		longitude:   0,
+		rua:         rua,
+		bairro:      bairro,
+		numero:      numero,
+		complemento: complemento,
+		cidade:      cidade,
+		uf:          uf,
+		latitude:    latitude,
+		longitude:   longitude,
 	}, nil
 }
 
