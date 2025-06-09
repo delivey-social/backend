@@ -45,7 +45,7 @@ func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
 	var precoItens int
 
 	for _, item := range ItemsSnapshot {
-		precoItens += item.Preco()
+		precoItens += item.Preco
 	}
 
 	cep, err := shared.NewCEP(cmd.Cep)
