@@ -25,6 +25,7 @@ var (
 	ErrCreatingPedido = errors.New("error creating pedido")
 	ErrInvalidEmail   = errors.New("invalid email address")
 	ErrInvalidPhone   = errors.New("invalid phone number")
+	ErrPrice          = errors.New("invalid price")
 )
 
 func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
@@ -58,8 +59,13 @@ func CreatePedido(cmd CreatePedidoCommand) (*pedido.Pedido, error) {
 
 	// TODO: Calculate delivery fee
 	var taxaEntrega int
+	// TODO: Calculate app fee
+	var taxaApp int
 
-	preco := valueobject.NewPreco(precoItens, taxaEntrega)
+	preco, err := valueobject.NewPreco(precoItens, taxaEntrega, taxaApp)
+	if err != nil {
+		return nil, ErrPrice
+	}
 
 	pedido, err := pedido.NewPedido(usuario, ItemsSnapshot, endereco, preco, cmd.Obervacao, cmd.MetodoPagamento)
 	if err != nil {
