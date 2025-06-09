@@ -23,7 +23,7 @@ This will:
 
 #### 📁 Output
 
-- coverage.out: raw coverage data
+- cover.prof: raw coverage data
 
 - HTML report: opens automatically (uses go tool cover -html=coverage.out)
 

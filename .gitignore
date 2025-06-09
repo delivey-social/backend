@@ -32,3 +32,5 @@ go.work.sum
 # .vscode/
 
 models.asta.lock
+cover.html
+cover.prof
