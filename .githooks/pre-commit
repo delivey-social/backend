@@ -1,7 +1,8 @@
 #!/bin/bash
 
+echo ""
 echo "🔍 Running Go tests before commit..."
-go test ./...
+go test ./... > /dev/null
 
 if [ $? -ne 0 ]; then
   echo ""
