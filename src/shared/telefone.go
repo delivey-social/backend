@@ -22,10 +22,6 @@ func NewTelefone(input string) (Telefone, error) {
 
 	sanitized := normalizeRegex.ReplaceAllString(input, "")
 
-	if len(sanitized) < 10 || len(sanitized) > 11 {
-		return Telefone{}, ErrInvalidFormat
-	}
-
 	ufCode := sanitized[:2]
 	phone := sanitized[2:]
 

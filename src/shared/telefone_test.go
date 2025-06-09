@@ -26,6 +26,7 @@ var invalidPhones = []string{
 	"9999-9999",
 	"55419999999999",
 	"+54 (41) 9999-9999",
+	"41999999",
 }
 
 type TelefoneTest struct {
