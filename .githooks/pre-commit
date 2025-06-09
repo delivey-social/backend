@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "🔍 Running Go tests before push..."
+go test ./...
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Tests failed. Push aborted."
+  exit 1
+fi
+
+echo "✅ Tests passed. Proceeding with push."

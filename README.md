@@ -26,3 +26,17 @@ This will:
 - coverage.out: raw coverage data
 
 - HTML report: opens automatically (uses go tool cover -html=coverage.out)
+
+### Git Hooks
+
+This project uses custom Git hooks stored in the .githooks directory to ensure code quality before commits or pushes.
+
+To enable these hooks locally, run the following command once:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+This tells Git to use the .githooks/ folder instead of the default .git/hooks/.
+
+Now any tracked hooks (like pre-push) will automatically run during Git operations.
