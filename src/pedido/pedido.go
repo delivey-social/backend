@@ -8,14 +8,14 @@ import (
 )
 
 type Pedido struct {
-	id               uuid.UUID
-	itens            []valueobject.ItemPedidoSnapshot
-	cliente          *shared.Usuario
-	endereco         *shared.Endereco
-	preco            *valueobject.Preco
-	observacao       string
-	status           enums.PedidoStatus
-	metodo_pagamento enums.MetodoPagamento
+	ID              uuid.UUID
+	Itens           []valueobject.ItemPedidoSnapshot
+	Cliente         *shared.Usuario
+	Endereco        *shared.Endereco
+	Preco           *valueobject.Preco
+	Observacao      string
+	Status          enums.PedidoStatus
+	MetodoPagamento enums.MetodoPagamento
 }
 
 func NewPedido(
@@ -24,16 +24,16 @@ func NewPedido(
 	endereco shared.Endereco,
 	preco valueobject.Preco,
 	observacao string,
-	metodo_pagamento enums.MetodoPagamento,
+	metodoPagamento enums.MetodoPagamento,
 ) (Pedido, error) {
 	return Pedido{
-		id:               uuid.New(),
-		itens:            itens,
-		cliente:          &cliente,
-		endereco:         &endereco,
-		preco:            &preco,
-		observacao:       observacao,
-		status:           enums.StatusAguardandoPagamento,
-		metodo_pagamento: metodo_pagamento,
+		ID:              uuid.New(),
+		Itens:           itens,
+		Cliente:         &cliente,
+		Endereco:        &endereco,
+		Preco:           &preco,
+		Observacao:      observacao,
+		Status:          enums.StatusAguardandoPagamento,
+		MetodoPagamento: metodoPagamento,
 	}, nil
 }
