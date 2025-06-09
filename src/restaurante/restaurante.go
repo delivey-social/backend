@@ -2,46 +2,35 @@ package restaurante
 
 import (
 	"errors"
+	"strings"
 
 	"comida.app/src/restaurante/valueobject"
 	"comida.app/src/shared"
 )
 
 type Restaurante struct {
-	nome        string
-	cnpj        valueobject.CNPJ
-	endereco    shared.Endereco
-	responsavel shared.Usuario
-	imagem_url  string
+	Nome        string
+	CNPJ        valueobject.CNPJ
+	Endereco    shared.Endereco
+	Responsavel shared.Usuario
+	ImagemUrl   shared.URL
 }
 
 var (
-	ErrInvalidCNPJ    = errors.New("invalid CNPJ")
-	ErrInvalidCEP     = errors.New("invalid CEP")
-	ErrInvalidAddress = errors.New("invalid address")
+	ErrInvalidNameLength = errors.New("restaurant name must have at least 3 digits")
 )
 
-func NewRestaurante(nome string, cnpj string, cep string, responsavel shared.Usuario, imagem_url string) (Restaurante, error) {
-	CEP, err := shared.NewCEP(cep)
-	if err != nil {
-		return Restaurante{}, ErrInvalidCEP
-	}
-
-	endereco, err := shared.NewEndereco(CEP, "", "", "", "", "", "", 0, 0)
-	if err != nil {
-		return Restaurante{}, ErrInvalidAddress
-	}
-
-	cnpj_vo, err := valueobject.NewCNPJ(cnpj)
-	if err != nil {
-		return Restaurante{}, ErrInvalidCNPJ
+func NewRestaurante(nome string, cnpj valueobject.CNPJ, endereco shared.Endereco, responsavel shared.Usuario, imagemUrl shared.URL) (Restaurante, error) {
+	nome = strings.TrimSpace(nome)
+	if len(nome) < 3 {
+		return Restaurante{}, ErrInvalidNameLength
 	}
 
 	return Restaurante{
-		nome:        nome,
-		cnpj:        cnpj_vo,
-		endereco:    endereco,
-		responsavel: responsavel,
-		imagem_url:  imagem_url,
+		Nome:        nome,
+		CNPJ:        cnpj,
+		Endereco:    endereco,
+		Responsavel: responsavel,
+		ImagemUrl:   imagemUrl,
 	}, nil
 }
