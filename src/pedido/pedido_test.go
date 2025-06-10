@@ -19,8 +19,9 @@ func makeValidUsuario() shared.Usuario {
 
 func makeValidEndereco() shared.Endereco {
 	cep, _ := shared.NewCEP("80000000")
+	coordenada, _ := shared.NewCoordenada(50.65, 40.44)
 
-	endereco, _ := shared.NewEndereco(cep, "Rua de Teste", "Teste", "994", "AP 12", "Curitiba", "PR", 50.65, 40.44)
+	endereco, _ := shared.NewEndereco(cep, "Rua de Teste", "Teste", "994", "AP 12", "Curitiba", "PR", coordenada)
 
 	return endereco
 }
