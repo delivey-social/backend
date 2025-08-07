@@ -3,25 +3,24 @@ package handler
 import (
 	"net/http"
 
+	"comida.app/src/internal/pedido/types"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
-type CreatePedidoRequest struct {
-	Items []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
-}
-
-type CreatePedidoRequestItem struct {
-	ItemId   uuid.UUID `json:"item_id" binding:"required"`
-	Quantity uint32    `json:"quantidade" binding:"required"`
-}
-
 func (h *PedidoHandler) create(c *gin.Context) {
-	var body CreatePedidoRequest
+	var body types.CreatePedidoRequest
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"mensagem": "Pedido inválido",
+		})
+		return
+	}
+
+	err := h.service.Create(body.Items)
+	if err != nil{
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
 		})
 		return
 	}

@@ -1,13 +1,18 @@
 package handler
 
 import (
+	"comida.app/src/internal/pedido/application"
 	"github.com/gin-gonic/gin"
 )
 
-type PedidoHandler struct{}
+type PedidoHandler struct {
+	service application.PedidoService
+}
 
-func NewPedidoHandler() *PedidoHandler {
-	return &PedidoHandler{}
+func NewPedidoHandler(service application.PedidoService) *PedidoHandler {
+	return &PedidoHandler{
+		service,
+	}
 }
 
 func (h *PedidoHandler) RegisterRoutes(router *gin.Engine) {

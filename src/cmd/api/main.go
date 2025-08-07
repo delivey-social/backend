@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"comida.app/src/internal/pedido/application"
 	"comida.app/src/internal/pedido/handler"
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +19,9 @@ func Start() {
 		})
 	})
 
-	pedidoHandler := handler.NewPedidoHandler()
+	pedidoService := application.NewPedidoService()
+
+	pedidoHandler := handler.NewPedidoHandler(*pedidoService)
 	pedidoHandler.RegisterRoutes(router)
 
 	router.Run(":" + PORT)
