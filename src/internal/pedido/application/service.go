@@ -1,16 +1,17 @@
 package application
 
 import (
+	"comida.app/src/internal/pedido/repositories"
 	"comida.app/src/internal/pedido/types"
 	"github.com/google/uuid"
 )
 
 type PedidoService struct{
-	repository types.PedidoRepository
+	repository repositories.PedidoRepository
 	cardapioService types.CardapioService
 }
 
-func NewPedidoService(repository types.PedidoRepository, cardapioService types.CardapioService) *PedidoService {
+func NewPedidoService(repository repositories.PedidoRepository, cardapioService types.CardapioService) *PedidoService {
 	return &PedidoService{
 		repository,
 		cardapioService,
@@ -35,21 +36,21 @@ func (s *PedidoService) Create(items []types.CreatePedidoRequestItem) error{
 	return nil
 }
 
-func joinItems(quantities []types.CreatePedidoRequestItem, prices []types.CardapioItem) []types.PedidoRepositoryItem {
+func joinItems(quantities []types.CreatePedidoRequestItem, prices []types.CardapioItem) []repositories.PedidoRepositoryItem {
 	priceMap:= make(map[string]uint32)
 
 	for _, price := range prices {
 		priceMap[price.Id.String()] = price.Price
 	}
 
-	var result []types.PedidoRepositoryItem
+	var result []repositories.PedidoRepositoryItem
 	for _, item := range quantities {
 		price, ok := priceMap[item.ItemID.String()]
 		if !ok {
 			panic("item not found")
 		}
 
-		result = append(result, types.PedidoRepositoryItem{
+		result = append(result, repositories.PedidoRepositoryItem{
 			ID: item.ItemID,
 			Quantity: item.Quantity,
 			PriceSnapshot: price,

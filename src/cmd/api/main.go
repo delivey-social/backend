@@ -5,6 +5,7 @@ import (
 
 	"comida.app/src/internal/pedido/application"
 	"comida.app/src/internal/pedido/handler"
+	"comida.app/src/internal/pedido/repositories"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,7 +20,9 @@ func Start() {
 		})
 	})
 
-	pedidoService := application.NewPedidoService()
+	pedidoRepo := repositories.NewInMemoryPedidoRepository()
+	
+	pedidoService := application.NewPedidoService(pedidoRepo)
 
 	pedidoHandler := handler.NewPedidoHandler(*pedidoService)
 	pedidoHandler.RegisterRoutes(router)

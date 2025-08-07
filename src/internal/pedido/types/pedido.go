@@ -19,13 +19,3 @@ type CardapioItem struct {
 	Id uuid.UUID
 	Price uint32
 }
-
-type PedidoRepository interface {
-	Create(items []PedidoRepositoryItem)
-}
-
-type PedidoRepositoryItem struct{
-	ID uuid.UUID
-	Quantity uint16
-	PriceSnapshot uint32
-}
