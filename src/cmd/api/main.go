@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"comida.app/src/internal/pedido"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,9 @@ func Start() {
 			"message": "Service is online",
 		})
 	})
+
+	pedidoHandler := pedido.NewPedidoHandler()
+	pedidoHandler.RegisterRoutes(router)
 
 	router.Run(":" + PORT)
 }
