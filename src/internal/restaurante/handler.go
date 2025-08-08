@@ -7,10 +7,13 @@ import (
 )
 
 type RestauranteHandler struct {
+	service RestauranteService
 }
 
-func NewRestaurantHandler() *RestauranteHandler {
-	return &RestauranteHandler{}
+func NewRestaurantHandler(service RestauranteService) *RestauranteHandler {
+	return &RestauranteHandler{
+		service,
+	}
 }
 
 func (h *RestauranteHandler) RegisterRoutes(router *gin.Engine) {
@@ -18,7 +21,9 @@ func (h *RestauranteHandler) RegisterRoutes(router *gin.Engine) {
 }
 
 func (h *RestauranteHandler) list(c *gin.Context) {
+	restaurantes := h.service.repo.List()
+
 	c.JSON(http.StatusOK, gin.H{
-		"restaurantes": []string{},
+		"restaurantes": restaurantes,
 	})
 }
