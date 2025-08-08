@@ -1,4 +1,4 @@
-package repositories
+package pedido
 
 import (
 	"fmt"
@@ -15,13 +15,13 @@ type PedidoRepository interface {
 	Create(items []PedidoRepositoryItem)
 }
 
-type PedidoRepositoryItem struct{
-	ID uuid.UUID
-	Quantity uint16
+type PedidoRepositoryItem struct {
+	ID            uuid.UUID
+	Quantity      uint16
 	PriceSnapshot uint32
 }
 
-func NewInMemoryPedidoRepository() PedidoRepository{
+func NewInMemoryPedidoRepository() PedidoRepository {
 	return &InMemoryPedidoRepository{}
 }
 

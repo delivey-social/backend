@@ -1,15 +1,14 @@
-package handler
+package pedido
 
 import (
-	"comida.app/src/internal/pedido/application"
 	"github.com/gin-gonic/gin"
 )
 
 type PedidoHandler struct {
-	service application.PedidoService
+	service PedidoService
 }
 
-func NewPedidoHandler(service application.PedidoService) *PedidoHandler {
+func NewPedidoHandler(service PedidoService) *PedidoHandler {
 	return &PedidoHandler{
 		service,
 	}

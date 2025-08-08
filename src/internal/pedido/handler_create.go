@@ -1,14 +1,13 @@
-package handler
+package pedido
 
 import (
 	"net/http"
 
-	"comida.app/src/internal/pedido/types"
 	"github.com/gin-gonic/gin"
 )
 
 func (h *PedidoHandler) create(c *gin.Context) {
-	var body types.CreatePedidoRequest
+	var body CreatePedidoRequest
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -18,7 +17,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 	}
 
 	err := h.service.Create(body.Items)
-	if err != nil{
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
 		})

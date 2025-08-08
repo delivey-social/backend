@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"comida.app/src/internal/pedido/application"
-	"comida.app/src/internal/pedido/handler"
-	"comida.app/src/internal/pedido/repositories"
-	"comida.app/src/internal/pedido/types"
+	"comida.app/src/internal/cardapio"
+	"comida.app/src/internal/pedido"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -23,20 +21,23 @@ func Start() {
 		})
 	})
 
-	pedidoRepo := repositories.NewInMemoryPedidoRepository()
+	pedidoRepo := pedido.NewInMemoryPedidoRepository()
 
-	pedidoService := application.NewPedidoService(pedidoRepo, &InMemoryCardapioService{})
+	pedidoService := pedido.NewPedidoService(pedidoRepo, &InMemoryCardapioService{})
 
-	pedidoHandler := handler.NewPedidoHandler(*pedidoService)
+	pedidoHandler := pedido.NewPedidoHandler(*pedidoService)
 	pedidoHandler.RegisterRoutes(router)
+
+	cardapioHandler := cardapio.NewCardapioHandler()
+	cardapioHandler.RegisterRoutes(router)
 
 	router.Run(":" + PORT)
 }
 
 type InMemoryCardapioService struct{}
 
-func (f *InMemoryCardapioService) GetItemsByIDS(ids []uuid.UUID) ([]types.CardapioItem, error) {
-	var items = []types.CardapioItem{{Id: uuid.New(), Price: 1234}}
+func (f *InMemoryCardapioService) GetItemsByIDS(ids []uuid.UUID) ([]pedido.CardapioItem, error) {
+	var items = []pedido.CardapioItem{{Id: uuid.New(), Price: 1234}}
 
 	fmt.Println(items)
 

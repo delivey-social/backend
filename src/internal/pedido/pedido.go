@@ -1,4 +1,4 @@
-package types
+package pedido
 
 import "github.com/google/uuid"
 
@@ -16,6 +16,6 @@ type CardapioService interface {
 }
 
 type CardapioItem struct {
-	Id uuid.UUID
+	Id    uuid.UUID
 	Price uint32
 }
