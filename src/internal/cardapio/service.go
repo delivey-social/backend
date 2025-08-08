@@ -8,20 +8,10 @@ type CardapioService struct {
 	repository CardapioRepository
 }
 
-type CardapioRepository interface {
-	GetByID(id uuid.UUID) *Cardapio
-}
-
-type Cardapio map[string]MenuItem
-
-type MenuItem struct {
-	ID    uuid.UUID
-	Name  string
-	Price uint32
-}
-
-func NewCardapioService() *CardapioService {
-	return &CardapioService{}
+func NewCardapioService(repository CardapioRepository) *CardapioService {
+	return &CardapioService{
+		repository,
+	}
 }
 
 func (s *CardapioService) GetDetails(id uuid.UUID) Cardapio {

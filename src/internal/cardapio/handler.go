@@ -7,10 +7,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type CardapioHandler struct{}
+type CardapioHandler struct {
+	service CardapioService
+}
 
-func NewCardapioHandler() *CardapioHandler {
-	return &CardapioHandler{}
+func NewCardapioHandler(service CardapioService) *CardapioHandler {
+	return &CardapioHandler{
+		service,
+	}
 }
 
 func (h *CardapioHandler) RegisterRoutes(router *gin.Engine) {
@@ -18,13 +22,15 @@ func (h *CardapioHandler) RegisterRoutes(router *gin.Engine) {
 }
 
 func (h *CardapioHandler) getDetails(c *gin.Context) {
-	_, err := uuid.Parse(c.Param("id"))
+	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"mensagem": "id inválido",
 		})
 		return
 	}
+
+	h.service.GetDetails(id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"cardapio": []string{},

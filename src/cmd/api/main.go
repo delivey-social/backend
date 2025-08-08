@@ -28,7 +28,10 @@ func Start() {
 	pedidoHandler := pedido.NewPedidoHandler(*pedidoService)
 	pedidoHandler.RegisterRoutes(router)
 
-	cardapioHandler := cardapio.NewCardapioHandler()
+	cardapioRepo := cardapio.NewInMemoryCardapioRepository()
+	cardapioService := cardapio.NewCardapioService(cardapioRepo)
+
+	cardapioHandler := cardapio.NewCardapioHandler(*cardapioService)
 	cardapioHandler.RegisterRoutes(router)
 
 	router.Run(":" + PORT)
