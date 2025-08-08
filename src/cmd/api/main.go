@@ -33,7 +33,7 @@ func Start() {
 	cardapioHandler.RegisterRoutes(router)
 
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
-	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
+	restauranteService := restaurante.NewRestauranteService(restauranteRepo, &InMemoryCardapioService{})
 	restauranteHandler := restaurante.NewRestaurantHandler(*restauranteService)
 	restauranteHandler.RegisterRoutes(router)
 
@@ -50,6 +50,12 @@ func (f *InMemoryCardapioService) GetItemsByIDS(ids []uuid.UUID) ([]pedido.Carda
 	fmt.Println(items)
 
 	return items, nil
+}
+
+func (f *InMemoryCardapioService) Create() uuid.UUID {
+	id := uuid.New()
+
+	return id
 }
 
 func initializeRestaurante(s *restaurante.RestauranteService) {

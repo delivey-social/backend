@@ -3,12 +3,18 @@ package restaurante
 import "github.com/google/uuid"
 
 type RestauranteService struct {
-	repo RestauranteRepository
+	repo            RestauranteRepository
+	cardapioService CardapioService
 }
 
-func NewRestauranteService(repo RestauranteRepository) *RestauranteService {
+type CardapioService interface {
+	Create() uuid.UUID
+}
+
+func NewRestauranteService(repo RestauranteRepository, cardapioService CardapioService) *RestauranteService {
 	return &RestauranteService{
 		repo,
+		cardapioService,
 	}
 }
 
@@ -17,5 +23,7 @@ func (s *RestauranteService) List() []Restaurante {
 }
 
 func (s *RestauranteService) Create(CNPJ CNPJ, Name string) uuid.UUID {
-	return s.repo.Create(CNPJ, Name)
+	cardapioID := s.cardapioService.Create()
+
+	return s.repo.Create(CNPJ, Name, cardapioID)
 }

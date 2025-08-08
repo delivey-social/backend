@@ -24,15 +24,16 @@ func (r *InMemoryRestauranteRepository) List() []Restaurante {
 	return r.store
 }
 
-func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID {
+func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string, CardapioID uuid.UUID) uuid.UUID {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	id := uuid.New()
 	r.store = append(r.store, Restaurante{
-		ID:   id,
-		CNPJ: CNPJ.String(),
-		Name: Name,
+		ID:         id,
+		CNPJ:       CNPJ.String(),
+		Name:       Name,
+		CardapioID: CardapioID,
 	})
 
 	return id
