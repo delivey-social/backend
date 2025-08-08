@@ -53,5 +53,10 @@ func (f *InMemoryCardapioService) GetItemsByIDS(ids []uuid.UUID) ([]pedido.Carda
 }
 
 func initializeRestaurante(s *restaurante.RestauranteService) {
-	s.Create("CNPJ", "Santo Crepe")
+	cnpj, err := restaurante.NewCNPJ("18781203/0001-28")
+	if err != nil {
+		panic(err)
+	}
+
+	s.Create(cnpj, "Santo Crepe")
 }

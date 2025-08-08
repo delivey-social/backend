@@ -16,6 +16,6 @@ func (s *RestauranteService) List() []Restaurante {
 	return s.repo.List()
 }
 
-func (s *RestauranteService) Create(CNPJ string, Name string) uuid.UUID {
+func (s *RestauranteService) Create(CNPJ CNPJ, Name string) uuid.UUID {
 	return s.repo.Create(CNPJ, Name)
 }
