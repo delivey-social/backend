@@ -37,6 +37,8 @@ func Start() {
 	restauranteHandler := restaurante.NewRestaurantHandler(*restauranteService)
 	restauranteHandler.RegisterRoutes(router)
 
+	initializeRestaurante(restauranteService)
+
 	router.Run(":" + PORT)
 }
 
@@ -48,4 +50,8 @@ func (f *InMemoryCardapioService) GetItemsByIDS(ids []uuid.UUID) ([]pedido.Carda
 	fmt.Println(items)
 
 	return items, nil
+}
+
+func initializeRestaurante(s *restaurante.RestauranteService) {
+	s.Create("CNPJ", "Santo Crepe")
 }
