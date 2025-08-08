@@ -6,18 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RestaurantHandler struct {
+type RestauranteHandler struct {
 }
 
-func NewRestaurantHandler() *RestaurantHandler {
-	return &RestaurantHandler{}
+func NewRestaurantHandler() *RestauranteHandler {
+	return &RestauranteHandler{}
 }
 
-func (h *RestaurantHandler) RegisterRoutes(router *gin.Engine) {
+func (h *RestauranteHandler) RegisterRoutes(router *gin.Engine) {
 	router.GET("/restaurante", h.list)
 }
 
-func (h *RestaurantHandler) list(c *gin.Context) {
+func (h *RestauranteHandler) list(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"restaurantes": []string{},
 	})
