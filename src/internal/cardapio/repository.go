@@ -4,9 +4,14 @@ import "github.com/google/uuid"
 
 type CardapioRepository interface {
 	GetByID(id uuid.UUID) *Cardapio
+	Create(restaurantId uuid.UUID) uuid.UUID
 }
 
-type Cardapio map[string]MenuItem
+type Cardapio struct {
+	ID           uuid.UUID
+	RestaurantID uuid.UUID
+	Cardapio     map[string]MenuItem
+}
 
 type MenuItem struct {
 	ID    uuid.UUID

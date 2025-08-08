@@ -17,3 +17,9 @@ func NewCardapioService(repository CardapioRepository) *CardapioService {
 func (s *CardapioService) GetDetails(id uuid.UUID) Cardapio {
 	return *s.repository.GetByID(id)
 }
+
+func (s *CardapioService) Create(restaurantId uuid.UUID) uuid.UUID {
+	// Checks if restaurant exists
+
+	return s.repository.Create(restaurantId)
+}
