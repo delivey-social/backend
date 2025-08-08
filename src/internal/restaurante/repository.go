@@ -8,8 +8,8 @@ type RestauranteRepository interface {
 }
 
 type Restaurante struct {
-	ID         uuid.UUID
-	CNPJ       string
-	Name       string
-	CardapioID uuid.UUID
+	ID         uuid.UUID `json:"id"`
+	CNPJ       string    `json:"cnpj"`
+	Name       string    `json:"nome"`
+	CardapioID uuid.UUID `json:"cardapio_id"`
 }
