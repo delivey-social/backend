@@ -1,6 +1,10 @@
 package restaurante
 
-import "sync"
+import (
+	"sync"
+
+	"github.com/google/uuid"
+)
 
 type InMemoryRestauranteRepository struct {
 	mu    sync.RWMutex
@@ -18,4 +22,18 @@ func (r *InMemoryRestauranteRepository) List() []Restaurante {
 	defer r.mu.Unlock()
 
 	return r.store
+}
+
+func (r *InMemoryRestauranteRepository) Create(CNPJ string, Name string) uuid.UUID {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	id := uuid.New()
+	r.store = append(r.store, Restaurante{
+		ID:   id,
+		CNPJ: CNPJ,
+		Name: Name,
+	})
+
+	return id
 }
