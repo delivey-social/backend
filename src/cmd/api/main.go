@@ -6,6 +6,7 @@ import (
 
 	"comida.app/src/internal/cardapio"
 	"comida.app/src/internal/pedido"
+	"comida.app/src/internal/restaurante"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -22,17 +23,17 @@ func Start() {
 	})
 
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
-
 	pedidoService := pedido.NewPedidoService(pedidoRepo, &InMemoryCardapioService{})
-
 	pedidoHandler := pedido.NewPedidoHandler(*pedidoService)
 	pedidoHandler.RegisterRoutes(router)
 
 	cardapioRepo := cardapio.NewInMemoryCardapioRepository()
 	cardapioService := cardapio.NewCardapioService(cardapioRepo)
-
 	cardapioHandler := cardapio.NewCardapioHandler(*cardapioService)
 	cardapioHandler.RegisterRoutes(router)
+
+	restauranteHandler := restaurante.NewRestaurantHandler()
+	restauranteHandler.RegisterRoutes(router)
 
 	router.Run(":" + PORT)
 }
