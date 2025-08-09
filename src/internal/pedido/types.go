@@ -11,7 +11,7 @@ type CreatePedidoRequestItem struct {
 	Quantity uint16    `json:"quantidade" binding:"required"`
 }
 
-type CardapioService interface {
+type RestauranteService interface {
 	GetItemsByIDS(ids []uuid.UUID) ([]CardapioItem, error)
 }
 

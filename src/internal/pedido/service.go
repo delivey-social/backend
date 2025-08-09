@@ -6,10 +6,10 @@ import (
 
 type PedidoService struct {
 	repository      PedidoRepository
-	cardapioService CardapioService
+	cardapioService RestauranteService
 }
 
-func NewPedidoService(repository PedidoRepository, cardapioService CardapioService) *PedidoService {
+func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService) *PedidoService {
 	return &PedidoService{
 		repository,
 		cardapioService,
