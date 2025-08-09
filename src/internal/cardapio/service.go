@@ -18,8 +18,11 @@ func (s *CardapioService) GetDetails(id uuid.UUID) Cardapio {
 	return *s.repository.GetByID(id)
 }
 
-func (s *CardapioService) Create(restaurantId uuid.UUID) uuid.UUID {
-	// Checks if restaurant exists
+func (s *CardapioService) Create() uuid.UUID {
 
-	return s.repository.Create(restaurantId)
+	return s.repository.Create()
+}
+
+func (s *CardapioService) GetItemsByIDS(ids []uuid.UUID) []MenuItem {
+	return []MenuItem{}
 }

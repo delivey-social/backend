@@ -22,15 +22,14 @@ func (repo *InMemoryCardapioRepository) GetByID(id uuid.UUID) *Cardapio {
 	return &Cardapio{}
 }
 
-func (repo *InMemoryCardapioRepository) Create(restaurantId uuid.UUID) uuid.UUID {
+func (repo *InMemoryCardapioRepository) Create() uuid.UUID {
 	repo.mu.Lock()
 	defer repo.mu.Unlock()
 
 	id := uuid.New()
 	repo.store = append(repo.store, &Cardapio{
-		ID:           id,
-		RestaurantID: restaurantId,
-		Cardapio:     make(map[string]MenuItem),
+		ID:       id,
+		Cardapio: make(map[string]MenuItem),
 	})
 
 	return id
