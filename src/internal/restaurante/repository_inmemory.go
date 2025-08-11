@@ -60,7 +60,10 @@ func (r *InMemoryRestauranteRepository) GetMenu(restaurantID uuid.UUID) (*Cardap
 	return nil, errors.New("restaurant not found")
 }
 
-func (r *InMemoryRestauranteRepository) CreateMenuItem(data MenuItemParams, restaurantID uuid.UUID) (uuid.UUID, error) {
+func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, data MenuItemParams) (uuid.UUID, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
 	var restaurant *Restaurante
 	for _, item := range r.store {
 		if item.ID == restaurantID {
@@ -76,18 +79,30 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(data MenuItemParams, rest
 	for category, items := range restaurant.Cardapio.Content {
 		if category == data.Category {
 			id := uuid.New()
+
 			items = append(items, CardapioItem{
 				ID:       id,
 				Name:     data.Name,
 				Price:    data.Price,
 				Category: data.Category,
 			})
+			restaurant.Cardapio.Content[category] = items
 
-			return uuid.UUID{}, nil
+			return id, nil
 		}
 	}
 
-	return uuid.UUID{}, errors.New("category not found")
+	id := uuid.New()
+	restaurant.Cardapio.Content[data.Category] = []CardapioItem{
+		CardapioItem{
+			ID:       id,
+			Name:     data.Name,
+			Price:    data.Price,
+			Category: data.Category,
+		},
+	}
+
+	return id, nil
 }
 
 func (r *InMemoryRestauranteRepository) UpdateMenuItem(id uuid.UUID, data MenuItemParams) {

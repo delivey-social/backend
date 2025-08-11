@@ -32,8 +32,8 @@ func (s *RestauranteService) GetMenuItemsByIDs(ids []uuid.UUID) []CardapioItem {
 	return s.repo.GetItemsByIDs(ids)
 }
 
-func (s *RestauranteService) CreateMenuItem() error {
-	return errors.New("bot implemented")
+func (s *RestauranteService) CreateMenuItem(restaurantId uuid.UUID, data MenuItemParams) (uuid.UUID, error) {
+	return s.repo.CreateMenuItem(restaurantId, data)
 }
 
 func (s *RestauranteService) UpdateMenuItem() error {
