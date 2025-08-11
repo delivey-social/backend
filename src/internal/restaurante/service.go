@@ -1,6 +1,10 @@
 package restaurante
 
-import "github.com/google/uuid"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 type RestauranteService struct {
 	repo RestauranteRepository
@@ -26,4 +30,16 @@ func (s *RestauranteService) GetMenu(restaurantID uuid.UUID) Cardapio {
 
 func (s *RestauranteService) GetMenuItemsByIDs(ids []uuid.UUID) []CardapioItem {
 	return s.repo.GetItemsByIDs(ids)
+}
+
+func (s *RestauranteService) CreateMenuItem() error {
+	return errors.New("bot implemented")
+}
+
+func (s *RestauranteService) UpdateMenuItem() error {
+	return errors.New("not implemented")
+}
+
+func (s *RestauranteService) DeleteMenuItem() error {
+	return errors.New("not implemented")
 }
