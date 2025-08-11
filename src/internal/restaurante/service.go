@@ -24,7 +24,7 @@ func (s *RestauranteService) Create(CNPJ CNPJ, Name string) uuid.UUID {
 	return s.repo.Create(CNPJ, Name)
 }
 
-func (s *RestauranteService) GetMenu(restaurantID uuid.UUID) Cardapio {
+func (s *RestauranteService) GetMenu(restaurantID uuid.UUID) (*Cardapio, error) {
 	return s.repo.GetMenu(restaurantID)
 }
 

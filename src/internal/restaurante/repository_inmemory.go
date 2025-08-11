@@ -1,6 +1,7 @@
 package restaurante
 
 import (
+	"errors"
 	"sync"
 
 	"github.com/google/uuid"
@@ -35,7 +36,7 @@ func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID
 		Name: Name,
 		Cardapio: Cardapio{
 			ID:      uuid.New(),
-			Content: map[string]CardapioItem{},
+			Content: map[string][]CardapioItem{},
 		},
 	})
 
@@ -46,6 +47,53 @@ func (r *InMemoryRestauranteRepository) GetItemsByIDs(ids []uuid.UUID) []Cardapi
 	return []CardapioItem{}
 }
 
-func (r *InMemoryRestauranteRepository) GetMenu(restauranteID uuid.UUID) Cardapio {
-	return Cardapio{}
+func (r *InMemoryRestauranteRepository) GetMenu(restaurantID uuid.UUID) (*Cardapio, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	for _, restaurant := range r.store {
+		if restaurant.ID == restaurantID {
+			return &restaurant.Cardapio, nil
+		}
+	}
+
+	return nil, errors.New("restaurant not found")
+}
+
+func (r *InMemoryRestauranteRepository) CreateMenuItem(data MenuItemParams, restaurantID uuid.UUID) (uuid.UUID, error) {
+	var restaurant *Restaurante
+	for _, item := range r.store {
+		if item.ID == restaurantID {
+			restaurant = &item
+			break
+		}
+	}
+
+	if restaurant == nil {
+		return uuid.UUID{}, errors.New("restaurant not found")
+	}
+
+	for category, items := range restaurant.Cardapio.Content {
+		if category == data.Category {
+			id := uuid.New()
+			items = append(items, CardapioItem{
+				ID:       id,
+				Name:     data.Name,
+				Price:    data.Price,
+				Category: data.Category,
+			})
+
+			return uuid.UUID{}, nil
+		}
+	}
+
+	return uuid.UUID{}, errors.New("category not found")
+}
+
+func (r *InMemoryRestauranteRepository) UpdateMenuItem(id uuid.UUID, data MenuItemParams) {
+	errors.New("unsuported operation")
+}
+
+func (r *InMemoryRestauranteRepository) DeleteMenuItem(id uuid.UUID) {
+	errors.New("unsuported operation")
 }
