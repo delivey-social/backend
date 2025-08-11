@@ -21,15 +21,15 @@ type Restaurante struct {
 }
 
 type Cardapio struct {
-	ID      uuid.UUID
-	Content map[string][]CardapioItem
+	ID      uuid.UUID                 `json:"id"`
+	Content map[string][]CardapioItem `json:"content"`
 }
 
 type CardapioItem struct {
-	ID       uuid.UUID
-	Name     string
-	Price    uint32
-	Category string
+	ID       uuid.UUID `json:"id"`
+	Name     string    `json:"nome"`
+	Price    uint32    `json:"preco"`
+	Category string    `json:"categoria"`
 }
 
 type MenuItemParams struct {

@@ -23,7 +23,7 @@ func (h *RestauranteHandler) RegisterRoutes(router *gin.Engine) {
 }
 
 func (h *RestauranteHandler) list(c *gin.Context) {
-	restaurantes := h.service.repo.List()
+	restaurantes := h.service.List()
 
 	c.JSON(http.StatusOK, gin.H{
 		"restaurantes": restaurantes,
