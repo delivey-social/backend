@@ -1,8 +1,6 @@
 package restaurante
 
 import (
-	"errors"
-
 	"github.com/google/uuid"
 )
 
@@ -36,10 +34,12 @@ func (s *RestauranteService) CreateMenuItem(restaurantId uuid.UUID, data MenuIte
 	return s.repo.CreateMenuItem(restaurantId, data)
 }
 
-func (s *RestauranteService) UpdateMenuItem() error {
-	return errors.New("not implemented")
+func (s *RestauranteService) UpdateMenuItem(id uuid.UUID, data MenuItemParams) error {
+	s.repo.UpdateMenuItem(id, data)
+	return nil
 }
 
-func (s *RestauranteService) DeleteMenuItem() error {
-	return errors.New("not implemented")
+func (s *RestauranteService) DeleteMenuItem(id uuid.UUID) error {
+	s.repo.DeleteMenuItem(id)
+	return nil
 }
