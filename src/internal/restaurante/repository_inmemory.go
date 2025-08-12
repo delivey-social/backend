@@ -7,6 +7,11 @@ import (
 	"github.com/google/uuid"
 )
 
+var (
+	ErrNotFound   = errors.New("resource not found")
+	ErrUnsuported = errors.New("unsuported operation")
+)
+
 type InMemoryRestauranteRepository struct {
 	mu    sync.RWMutex
 	store []Restaurante
@@ -51,29 +56,21 @@ func (r *InMemoryRestauranteRepository) GetMenu(restaurantID uuid.UUID) (*Cardap
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	for _, restaurant := range r.store {
-		if restaurant.ID == restaurantID {
-			return &restaurant.Cardapio, nil
-		}
+	restaurant := r.findRestaurantById(restaurantID)
+	if restaurant == nil {
+		return nil, ErrNotFound
 	}
 
-	return nil, errors.New("restaurant not found")
+	return &restaurant.Cardapio, nil
 }
 
 func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, data MenuItemParams) (uuid.UUID, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	var restaurant *Restaurante
-	for _, item := range r.store {
-		if item.ID == restaurantID {
-			restaurant = &item
-			break
-		}
-	}
-
+	restaurant := r.findRestaurantById(restaurantID)
 	if restaurant == nil {
-		return uuid.UUID{}, errors.New("restaurant not found")
+		return uuid.UUID{}, ErrNotFound
 	}
 
 	for category, items := range restaurant.Cardapio.Content {
@@ -94,7 +91,7 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, d
 
 	id := uuid.New()
 	restaurant.Cardapio.Content[data.Category] = []CardapioItem{
-		CardapioItem{
+		{
 			ID:       id,
 			Name:     data.Name,
 			Price:    data.Price,
@@ -105,10 +102,20 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, d
 	return id, nil
 }
 
-func (r *InMemoryRestauranteRepository) UpdateMenuItem(id uuid.UUID, data MenuItemParams) {
-	errors.New("unsuported operation")
+func (r *InMemoryRestauranteRepository) UpdateMenuItem(id uuid.UUID, data MenuItemParams) error {
+	return ErrUnsuported
 }
 
-func (r *InMemoryRestauranteRepository) DeleteMenuItem(id uuid.UUID) {
-	errors.New("unsuported operation")
+func (r *InMemoryRestauranteRepository) DeleteMenuItem(id uuid.UUID) error {
+	return ErrUnsuported
+}
+
+func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUID) *Restaurante {
+	for _, restaurante := range r.store {
+		if restaurante.ID == restaurantID {
+			return &restaurante
+		}
+	}
+
+	return nil
 }
