@@ -35,11 +35,9 @@ func (s *RestauranteService) CreateMenuItem(restaurantID uuid.UUID, data MenuIte
 }
 
 func (s *RestauranteService) UpdateMenuItem(restaurantID uuid.UUID, id uuid.UUID, data MenuItemParams) error {
-	s.repo.UpdateMenuItem(restaurantID, id, data)
-	return nil
+	return s.repo.UpdateMenuItem(restaurantID, id, data)
 }
 
 func (s *RestauranteService) DeleteMenuItem(restaurantID uuid.UUID, id uuid.UUID) error {
-	s.repo.DeleteMenuItem(restaurantID, id)
-	return nil
+	return s.repo.DeleteMenuItem(restaurantID, id)
 }
