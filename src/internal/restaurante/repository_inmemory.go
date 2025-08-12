@@ -39,7 +39,7 @@ func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID
 		ID:       id,
 		CNPJ:     CNPJ.String(),
 		Name:     Name,
-		Cardapio: map[string][]CardapioItem{},
+		Cardapio: []CardapioItem{},
 	})
 
 	return id
@@ -70,31 +70,13 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, d
 		return uuid.UUID{}, ErrNotFound
 	}
 
-	for category, items := range restaurant.Cardapio {
-		if category == data.Category {
-			id := uuid.New()
-
-			items = append(items, CardapioItem{
-				ID:       id,
-				Name:     data.Name,
-				Price:    data.Price,
-				Category: data.Category,
-			})
-			restaurant.Cardapio[category] = items
-
-			return id, nil
-		}
-	}
-
 	id := uuid.New()
-	restaurant.Cardapio[data.Category] = []CardapioItem{
-		{
-			ID:       id,
-			Name:     data.Name,
-			Price:    data.Price,
-			Category: data.Category,
-		},
-	}
+	restaurant.Cardapio = append(restaurant.Cardapio, CardapioItem{
+		ID:       id,
+		Name:     data.Name,
+		Price:    data.Price,
+		Category: data.Category,
+	})
 
 	return id, nil
 }
@@ -108,9 +90,10 @@ func (r *InMemoryRestauranteRepository) DeleteMenuItem(id uuid.UUID) error {
 }
 
 func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUID) *Restaurante {
-	for _, restaurante := range r.store {
-		if restaurante.ID == restaurantID {
-			return &restaurante
+	for i := range r.store {
+		restaurant := &r.store[i]
+		if (restaurant).ID == restaurantID {
+			return restaurant
 		}
 	}
 
