@@ -101,7 +101,22 @@ func (r *InMemoryRestauranteRepository) UpdateMenuItem(restaurantID uuid.UUID, I
 }
 
 func (r *InMemoryRestauranteRepository) DeleteMenuItem(restaurantID uuid.UUID, ID uuid.UUID) error {
-	return ErrUnsuported
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	restaurant := r.findRestaurantById(restaurantID)
+	if restaurant == nil {
+		return ErrNotFound
+	}
+
+	for i, item := range restaurant.Cardapio {
+		if item.ID == ID {
+			restaurant.Cardapio = append(restaurant.Cardapio[:i], restaurant.Cardapio[i+1:]...)
+			return nil
+		}
+	}
+
+	return ErrNotFound
 }
 
 func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUID) *Restaurante {
