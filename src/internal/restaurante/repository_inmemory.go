@@ -81,19 +81,50 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, d
 	return id, nil
 }
 
-func (r *InMemoryRestauranteRepository) UpdateMenuItem(id uuid.UUID, data MenuItemParams) error {
-	return ErrUnsuported
+func (r *InMemoryRestauranteRepository) UpdateMenuItem(restaurantID uuid.UUID, ID uuid.UUID, data MenuItemParams) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	item := r.findItemById(restaurantID, ID)
+	if item == nil {
+		return ErrNotFound
+	}
+
+	*item = CardapioItem{
+		ID:       item.ID,
+		Name:     data.Name,
+		Price:    data.Price,
+		Category: data.Category,
+	}
+
+	return nil
 }
 
-func (r *InMemoryRestauranteRepository) DeleteMenuItem(id uuid.UUID) error {
+func (r *InMemoryRestauranteRepository) DeleteMenuItem(restaurantID uuid.UUID, ID uuid.UUID) error {
 	return ErrUnsuported
 }
 
 func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUID) *Restaurante {
 	for i := range r.store {
 		restaurant := &r.store[i]
-		if (restaurant).ID == restaurantID {
+		if restaurant.ID == restaurantID {
 			return restaurant
+		}
+	}
+
+	return nil
+}
+
+func (r *InMemoryRestauranteRepository) findItemById(restaurantID uuid.UUID, itemID uuid.UUID) *CardapioItem {
+	restaurant := r.findRestaurantById(restaurantID)
+	if restaurant == nil {
+		return nil
+	}
+
+	for i := range restaurant.Cardapio {
+		item := &restaurant.Cardapio[i]
+		if item.ID == itemID {
+			return item
 		}
 	}
 

@@ -8,9 +8,9 @@ type RestauranteRepository interface {
 	GetMenu(restaurantID uuid.UUID) (*Cardapio, error)
 	GetItemsByIDs(ids []uuid.UUID) []CardapioItem
 
-	CreateMenuItem(restaurantId uuid.UUID, data MenuItemParams) (uuid.UUID, error)
-	UpdateMenuItem(id uuid.UUID, data MenuItemParams) error
-	DeleteMenuItem(id uuid.UUID) error
+	CreateMenuItem(restaurantID uuid.UUID, data MenuItemParams) (uuid.UUID, error)
+	UpdateMenuItem(restaurantID uuid.UUID, ID uuid.UUID, data MenuItemParams) error
+	DeleteMenuItem(restaurantID uuid.UUID, ID uuid.UUID) error
 }
 
 type Restaurante struct {
