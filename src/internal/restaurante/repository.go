@@ -20,10 +20,7 @@ type Restaurante struct {
 	Cardapio Cardapio  `json:"cardapio"`
 }
 
-type Cardapio struct {
-	ID      uuid.UUID                 `json:"id"`
-	Content map[string][]CardapioItem `json:"content"`
-}
+type Cardapio map[string][]CardapioItem
 
 type CardapioItem struct {
 	ID       uuid.UUID `json:"id"`

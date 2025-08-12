@@ -36,13 +36,10 @@ func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID
 
 	id := uuid.New()
 	r.store = append(r.store, Restaurante{
-		ID:   id,
-		CNPJ: CNPJ.String(),
-		Name: Name,
-		Cardapio: Cardapio{
-			ID:      uuid.New(),
-			Content: map[string][]CardapioItem{},
-		},
+		ID:       id,
+		CNPJ:     CNPJ.String(),
+		Name:     Name,
+		Cardapio: map[string][]CardapioItem{},
 	})
 
 	return id
@@ -73,7 +70,7 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, d
 		return uuid.UUID{}, ErrNotFound
 	}
 
-	for category, items := range restaurant.Cardapio.Content {
+	for category, items := range restaurant.Cardapio {
 		if category == data.Category {
 			id := uuid.New()
 
@@ -83,14 +80,14 @@ func (r *InMemoryRestauranteRepository) CreateMenuItem(restaurantID uuid.UUID, d
 				Price:    data.Price,
 				Category: data.Category,
 			})
-			restaurant.Cardapio.Content[category] = items
+			restaurant.Cardapio[category] = items
 
 			return id, nil
 		}
 	}
 
 	id := uuid.New()
-	restaurant.Cardapio.Content[data.Category] = []CardapioItem{
+	restaurant.Cardapio[data.Category] = []CardapioItem{
 		{
 			ID:       id,
 			Name:     data.Name,
