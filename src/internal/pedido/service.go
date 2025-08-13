@@ -22,6 +22,7 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 	if len(items) == 0 {
 		return errors.New("é necessário que o pedido tenha ao menos um item")
 	}
+
 	for _, item := range items {
 		if item.Quantity <= 0 {
 			return errors.New("algum item possuí quantidade inválida")
