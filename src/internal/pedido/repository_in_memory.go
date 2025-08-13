@@ -11,21 +11,6 @@ type InMemoryPedidoRepository struct {
 	store []Pedido
 }
 
-type Pedido struct {
-	ID    uuid.UUID
-	Items []PedidoItem
-}
-
-type PedidoItem struct {
-	ID            uuid.UUID
-	Quantity      uint16
-	PriceSnapshot uint32
-}
-
-type PedidoRepository interface {
-	Create(items []PedidoItem) uuid.UUID
-}
-
 func NewInMemoryPedidoRepository() PedidoRepository {
 	return &InMemoryPedidoRepository{}
 }
