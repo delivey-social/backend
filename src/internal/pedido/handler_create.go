@@ -11,7 +11,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"mensagem": "Pedido inválido",
+			"mensagem": "Requisição Inválida",
 		})
 		return
 	}

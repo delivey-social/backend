@@ -1,6 +1,8 @@
 package pedido
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 )
 
@@ -17,6 +19,15 @@ func NewPedidoService(repository PedidoRepository, cardapioService RestauranteSe
 }
 
 func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem) error {
+	if len(items) == 0 {
+		return errors.New("é necessário que o pedido tenha ao menos um item")
+	}
+	for _, item := range items {
+		if item.Quantity <= 0 {
+			return errors.New("algum item possuí quantidade inválida")
+		}
+	}
+
 	var itemsIDs []uuid.UUID
 	for _, item := range items {
 		itemsIDs = append(itemsIDs, item.ItemID)
