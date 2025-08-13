@@ -26,8 +26,8 @@ func (s *RestauranteService) GetMenu(restaurantID uuid.UUID) (*Cardapio, error) 
 	return s.repo.GetMenu(restaurantID)
 }
 
-func (s *RestauranteService) GetMenuItemsByIDs(ids []uuid.UUID) []CardapioItem {
-	return s.repo.GetItemsByIDs(ids)
+func (s *RestauranteService) GetMenuItemsByIDs(restaurantID uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error) {
+	return s.repo.GetItemsByIDs(restaurantID, ids)
 }
 
 func (s *RestauranteService) CreateMenuItem(restaurantID uuid.UUID, data MenuItemParams) (uuid.UUID, error) {

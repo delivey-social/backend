@@ -45,8 +45,26 @@ func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID
 	return id
 }
 
-func (r *InMemoryRestauranteRepository) GetItemsByIDs(ids []uuid.UUID) []CardapioItem {
-	return []CardapioItem{}
+func (r *InMemoryRestauranteRepository) GetItemsByIDs(restaurantID uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error) {
+	restaurant := r.findRestaurantById(restaurantID)
+	if restaurant == nil {
+		return nil, ErrNotFound
+	}
+
+	var result []CardapioItem
+	for _, id := range ids {
+		for _, item := range restaurant.Cardapio {
+			if item.ID == id {
+				result = append(result, item)
+			}
+		}
+	}
+
+	if len(result) != len(ids) {
+		return nil, ErrNotFound
+	}
+
+	return &result, nil
 }
 
 func (r *InMemoryRestauranteRepository) GetMenu(restaurantID uuid.UUID) (*Cardapio, error) {

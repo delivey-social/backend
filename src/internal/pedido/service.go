@@ -16,14 +16,14 @@ func NewPedidoService(repository PedidoRepository, cardapioService RestauranteSe
 	}
 }
 
-func (s *PedidoService) Create(items []CreatePedidoRequestItem) error {
+func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem) error {
 	var itemsIDs []uuid.UUID
 	for _, item := range items {
 		itemsIDs = append(itemsIDs, item.ItemID)
 	}
 
 	// Check if items exist
-	menuItems, err := s.cardapioService.GetItemsByIDS(itemsIDs)
+	menuItems, err := s.cardapioService.GetItemsByIDS(restaurantID, itemsIDs)
 	if err != nil {
 		return err
 	}

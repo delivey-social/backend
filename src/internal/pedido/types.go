@@ -3,7 +3,8 @@ package pedido
 import "github.com/google/uuid"
 
 type CreatePedidoRequest struct {
-	Items []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
+	RestaurantID uuid.UUID                 `json:"restaurant_id binding:required"`
+	Items        []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
 }
 
 type CreatePedidoRequestItem struct {
@@ -12,7 +13,7 @@ type CreatePedidoRequestItem struct {
 }
 
 type RestauranteService interface {
-	GetItemsByIDS(ids []uuid.UUID) ([]CardapioItem, error)
+	GetItemsByIDS(restaurantID uuid.UUID, ids []uuid.UUID) ([]CardapioItem, error)
 }
 
 type CardapioItem struct {

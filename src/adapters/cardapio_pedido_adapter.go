@@ -16,11 +16,14 @@ func NewCardapioPedidoAdapter(service *restaurante.RestauranteService) *Cardapio
 	}
 }
 
-func (adapter *CardapioPedidoAdapter) GetItemsByIDS(ids []uuid.UUID) ([]pedido.CardapioItem, error) {
-	items := adapter.service.GetMenuItemsByIDs(ids)
+func (adapter *CardapioPedidoAdapter) GetItemsByIDS(restaurantID uuid.UUID, ids []uuid.UUID) ([]pedido.CardapioItem, error) {
+	items, err := adapter.service.GetMenuItemsByIDs(restaurantID, ids)
+	if err == nil {
+		return []pedido.CardapioItem{}, err
+	}
 
-	result := make([]pedido.CardapioItem, len(items))
-	for i, item := range items {
+	result := make([]pedido.CardapioItem, len(*items))
+	for i, item := range *items {
 		result[i] = pedido.CardapioItem{
 			Id:    item.ID,
 			Price: item.Price,

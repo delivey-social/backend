@@ -16,7 +16,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	err := h.service.Create(body.Items)
+	err := h.service.Create(body.RestaurantID, body.Items)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
