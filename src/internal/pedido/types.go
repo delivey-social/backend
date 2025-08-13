@@ -3,7 +3,7 @@ package pedido
 import "github.com/google/uuid"
 
 type CreatePedidoRequest struct {
-	RestaurantID uuid.UUID                 `json:"restaurant_id binding:required"`
+	RestaurantID uuid.UUID                 `json:"restaurant_id" binding:"required"`
 	Items        []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
 }
 
