@@ -18,14 +18,14 @@ func NewPedidoService(repository PedidoRepository, cardapioService RestauranteSe
 	}
 }
 
-func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem) error {
+func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem) (uuid.UUID, error) {
 	if len(items) == 0 {
-		return errors.New("é necessário que o pedido tenha ao menos um item")
+		return uuid.UUID{}, errors.New("é necessário que o pedido tenha ao menos um item")
 	}
 
 	for _, item := range items {
 		if item.Quantity <= 0 {
-			return errors.New("algum item possuí quantidade inválida")
+			return uuid.UUID{}, errors.New("algum item possuí quantidade inválida")
 		}
 	}
 
@@ -34,33 +34,32 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 		itemsIDs = append(itemsIDs, item.ItemID)
 	}
 
-	// Check if items exist
 	menuItems, err := s.cardapioService.GetItemsByIDS(restaurantID, itemsIDs)
 	if err != nil {
-		return err
+		return uuid.UUID{}, err
 	}
 
 	// Creates the pedido
-	s.repository.Create(joinItems(items, menuItems))
+	id := s.repository.Create(joinItems(items, menuItems))
 
-	return nil
+	return id, nil
 }
 
-func joinItems(quantities []CreatePedidoRequestItem, prices []CardapioItem) []PedidoRepositoryItem {
+func joinItems(quantities []CreatePedidoRequestItem, prices []CardapioItem) []PedidoItem {
 	priceMap := make(map[string]uint32)
 
 	for _, price := range prices {
 		priceMap[price.Id.String()] = price.Price
 	}
 
-	var result []PedidoRepositoryItem
+	var result []PedidoItem
 	for _, item := range quantities {
 		price, ok := priceMap[item.ItemID.String()]
 		if !ok {
 			panic("item not found")
 		}
 
-		result = append(result, PedidoRepositoryItem{
+		result = append(result, PedidoItem{
 			ID:            item.ItemID,
 			Quantity:      item.Quantity,
 			PriceSnapshot: price,
