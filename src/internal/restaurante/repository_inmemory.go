@@ -2,6 +2,7 @@ package restaurante
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 
 	"github.com/google/uuid"
@@ -46,6 +47,9 @@ func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID
 }
 
 func (r *InMemoryRestauranteRepository) GetItemsByIDs(restaurantID uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
 	restaurant := r.findRestaurantById(restaurantID)
 	if restaurant == nil {
 		return nil, ErrNotFound
@@ -140,6 +144,9 @@ func (r *InMemoryRestauranteRepository) DeleteMenuItem(restaurantID uuid.UUID, I
 func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUID) *Restaurante {
 	for i := range r.store {
 		restaurant := &r.store[i]
+
+		fmt.Println("RESTAURANT", restaurant.Name, restaurant.ID, restaurantID)
+
 		if restaurant.ID == restaurantID {
 			return restaurant
 		}
