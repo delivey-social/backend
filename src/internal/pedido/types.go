@@ -1,6 +1,13 @@
 package pedido
 
-import "github.com/google/uuid"
+import (
+	"comida.app/src/infra"
+	"github.com/google/uuid"
+)
+
+type EventPublisher interface {
+	Publish(event infra.Event)
+}
 
 type CreatePedidoRequest struct {
 	RestaurantID uuid.UUID                 `json:"restaurant_id" binding:"required"`

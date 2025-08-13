@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"comida.app/src/adapters"
+	"comida.app/src/infra/eventbus"
 	"comida.app/src/internal/pedido"
 	"comida.app/src/internal/restaurante"
 	"github.com/gin-gonic/gin"
@@ -20,13 +21,15 @@ func Start() {
 		})
 	})
 
+	eventBus := eventbus.NewEventBus()
+
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 	restauranteHandler := restaurante.NewRestaurantHandler(*restauranteService)
 	restauranteHandler.RegisterRoutes(router)
 
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
-	pedidoService := pedido.NewPedidoService(pedidoRepo, adapters.NewCardapioPedidoAdapter(restauranteService))
+	pedidoService := pedido.NewPedidoService(pedidoRepo, adapters.NewCardapioPedidoAdapter(restauranteService), eventBus)
 	pedidoHandler := pedido.NewPedidoHandler(*pedidoService)
 	pedidoHandler.RegisterRoutes(router)
 

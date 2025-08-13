@@ -3,18 +3,21 @@ package pedido
 import (
 	"errors"
 
+	"comida.app/src/infra"
 	"github.com/google/uuid"
 )
 
 type PedidoService struct {
 	repository      PedidoRepository
 	cardapioService RestauranteService
+	publisher EventPublisher
 }
 
-func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService) *PedidoService {
+func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService, publisher EventPublisher) *PedidoService {
 	return &PedidoService{
 		repository,
 		cardapioService,
+		publisher,
 	}
 }
 
@@ -41,6 +44,8 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 
 	// Creates the pedido
 	id := s.repository.Create(joinItems(items, menuItems))
+
+	s.publisher.Publish(infra.OrderCreated)
 
 	return id, nil
 }
