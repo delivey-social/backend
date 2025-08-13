@@ -18,7 +18,7 @@ func NewCardapioPedidoAdapter(service *restaurante.RestauranteService) *Cardapio
 
 func (adapter *CardapioPedidoAdapter) GetItemsByIDS(restaurantID uuid.UUID, ids []uuid.UUID) ([]pedido.CardapioItem, error) {
 	items, err := adapter.service.GetMenuItemsByIDs(restaurantID, ids)
-	if err == nil {
+	if err != nil {
 		return []pedido.CardapioItem{}, err
 	}
 
