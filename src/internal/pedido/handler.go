@@ -31,7 +31,13 @@ func (h *PedidoHandler) readyForDelivery(c *gin.Context) {
 		return
 	}
 
-	h.service.ReadyForDelivery(id)
+	err = h.service.ReadyForDelivery(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "pedido atualizado",
