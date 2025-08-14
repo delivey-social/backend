@@ -5,6 +5,7 @@ import (
 
 	"comida.app/src/adapters"
 	"comida.app/src/infra/eventbus"
+	"comida.app/src/internal/notificacoes"
 	"comida.app/src/internal/pedido"
 	"comida.app/src/internal/restaurante"
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,8 @@ func Start() {
 	})
 
 	eventBus := eventbus.NewEventBus()
+	
+	notificacoes.NewNotificacoesService(eventBus)
 
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
