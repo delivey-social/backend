@@ -67,6 +67,13 @@ func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 
 	s.repository.UpdateStatus(id, PedidoStatusReadyForDelivery)
 
+	s.publisher.Publish(infra.Event{
+		Type: infra.OrderReadyForDelivery,
+		Payload: infra.OrderUpdatedPayload{
+			OrderID: id,
+		},
+	})
+
 	return nil
 }
 

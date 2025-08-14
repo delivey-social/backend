@@ -6,6 +6,7 @@ type EventType int
 
 const (
 	OrderCreated EventType = iota
+	OrderReadyForDelivery
 )
 
 type Event struct {
@@ -14,5 +15,9 @@ type Event struct {
 }
 
 type OrderCreatedPayload struct {
+	OrderID uuid.UUID
+}
+
+type OrderUpdatedPayload struct {
 	OrderID uuid.UUID
 }
