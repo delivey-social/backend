@@ -3,6 +3,7 @@ package pedido
 import (
 	"sync"
 
+	"comida.app/src/utils"
 	"github.com/google/uuid"
 )
 
@@ -26,4 +27,17 @@ func (r *InMemoryPedidoRepository) Create(items []PedidoItem) uuid.UUID {
 	})
 
 	return id
+}
+
+func (r *InMemoryPedidoRepository) FindByID(id uuid.UUID) (Pedido, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	for _, pedido := range r.store {
+		if(pedido.ID == id) {
+			return pedido, nil
+		}
+	}
+	
+	return Pedido{}, utils.NewResourceNotFoundError("pedido")
 }

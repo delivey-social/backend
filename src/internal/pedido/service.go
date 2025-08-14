@@ -55,6 +55,15 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 	return id, nil
 }
 
+func (s *PedidoService) ReadyForDelivery(id uuid.UUID) (error){
+	_, err := s.repository.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func joinItems(quantities []CreatePedidoRequestItem, prices []CardapioItem) []PedidoItem {
 	priceMap := make(map[string]uint32)
 

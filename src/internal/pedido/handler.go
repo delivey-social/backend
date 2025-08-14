@@ -1,7 +1,10 @@
 package pedido
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type PedidoHandler struct {
@@ -16,4 +19,21 @@ func NewPedidoHandler(service PedidoService) *PedidoHandler {
 
 func (h *PedidoHandler) RegisterRoutes(router *gin.Engine) {
 	router.POST("/pedido", h.create)
+	router.POST("/pedido/:id/ready_for_delivery", h.readyForDelivery)
+}
+
+func (h *PedidoHandler) readyForDelivery(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "id inválido",
+		})
+		return
+	}
+
+	h.service.ReadyForDelivery(id)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "pedido atualizado",
+	})
 }

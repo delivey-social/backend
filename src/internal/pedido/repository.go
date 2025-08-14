@@ -4,6 +4,8 @@ import "github.com/google/uuid"
 
 type PedidoRepository interface {
 	Create(items []PedidoItem) uuid.UUID
+
+	FindByID(id uuid.UUID) (Pedido, error)
 }
 
 type Pedido struct {
