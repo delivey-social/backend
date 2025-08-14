@@ -2,7 +2,6 @@ package restaurante
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 
 	"comida.app/src/utils"
@@ -108,7 +107,7 @@ func (r *InMemoryRestauranteRepository) UpdateMenuItem(restaurantID uuid.UUID, I
 	defer r.mu.Unlock()
 
 	item, err := r.findItemById(restaurantID, ID)
-	if item == nil {
+	if err != nil {
 		return err
 	}
 
@@ -145,8 +144,6 @@ func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUI
 	for i := range r.store {
 		restaurant := &r.store[i]
 
-		fmt.Println("RESTAURANT", restaurant.Name, restaurant.ID, restaurantID)
-
 		if restaurant.ID == restaurantID {
 			return restaurant, nil
 		}
@@ -157,7 +154,7 @@ func (r *InMemoryRestauranteRepository) findRestaurantById(restaurantID uuid.UUI
 
 func (r *InMemoryRestauranteRepository) findItemById(restaurantID uuid.UUID, itemID uuid.UUID) (*CardapioItem, error) {
 	restaurant, err := r.findRestaurantById(restaurantID)
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 
