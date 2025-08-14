@@ -10,7 +10,7 @@ import (
 type PedidoService struct {
 	repository      PedidoRepository
 	cardapioService RestauranteService
-	publisher EventPublisher
+	publisher       EventPublisher
 }
 
 func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService, publisher EventPublisher) *PedidoService {
@@ -55,17 +55,17 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 	return id, nil
 }
 
-func (s *PedidoService) ReadyForDelivery(id uuid.UUID) (error){
+func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 	pedido, err := s.repository.FindByID(id)
 	if err != nil {
 		return err
 	}
 
-	if(pedido.Status != PedidoStatusCreated) {
+	if pedido.Status != PedidoStatusCreated {
 		return errors.New("pedido em estado inválido para essa operação")
 	}
 
-	s.repository.ReadyForDelivery(id)
+	s.repository.UpdateStatus(id, PedidoStatusReadyForDelivery)
 
 	return nil
 }

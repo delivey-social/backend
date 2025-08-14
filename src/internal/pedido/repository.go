@@ -7,12 +7,12 @@ type PedidoRepository interface {
 
 	FindByID(id uuid.UUID) (Pedido, error)
 
-	ReadyForDelivery(id uuid.UUID) error
+	UpdateStatus(id uuid.UUID, status PedidoStatus) error
 }
 
 type Pedido struct {
-	ID    uuid.UUID
-	Items []PedidoItem
+	ID     uuid.UUID
+	Items  []PedidoItem
 	Status PedidoStatus
 }
 
@@ -24,7 +24,7 @@ type PedidoItem struct {
 
 type PedidoStatus string
 
-var(
-	PedidoStatusCreated PedidoStatus = "CREATED"
-	PedidoStatusReadyForDelivery PedidoStatus ="READY_FOR_DELIVERY"
+const (
+	PedidoStatusCreated          PedidoStatus = "CREATED"
+	PedidoStatusReadyForDelivery PedidoStatus = "READY_FOR_DELIVERY"
 )
