@@ -24,6 +24,7 @@ func (r *InMemoryPedidoRepository) Create(items []PedidoItem) uuid.UUID {
 	r.store = append(r.store, Pedido{
 		ID:    id,
 		Items: items,
+		Status: PedidoStatusCreated,
 	})
 
 	return id
@@ -40,4 +41,18 @@ func (r *InMemoryPedidoRepository) FindByID(id uuid.UUID) (Pedido, error) {
 	}
 	
 	return Pedido{}, utils.NewResourceNotFoundError("pedido")
+}
+
+func (r *InMemoryPedidoRepository) ReadyForDelivery(id uuid.UUID) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	for i := range r.store {
+		if r.store[i].ID == id {
+			r.store[i].Status = PedidoStatusReadyForDelivery
+			return nil
+		}
+	}
+
+	return utils.NewResourceNotFoundError("pedido")
 }

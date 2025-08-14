@@ -56,10 +56,16 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 }
 
 func (s *PedidoService) ReadyForDelivery(id uuid.UUID) (error){
-	_, err := s.repository.FindByID(id)
+	pedido, err := s.repository.FindByID(id)
 	if err != nil {
 		return err
 	}
+
+	if(pedido.Status != PedidoStatusCreated) {
+		return errors.New("pedido em estado inválido para essa operação")
+	}
+
+	s.repository.ReadyForDelivery(id)
 
 	return nil
 }
