@@ -27,4 +27,5 @@ type PedidoStatus string
 const (
 	PedidoStatusCreated          PedidoStatus = "CREATED"
 	PedidoStatusReadyForDelivery PedidoStatus = "READY_FOR_DELIVERY"
+	PedidoStatusInDelivery       PedidoStatus = "IN_DELIVERY"
 )

@@ -77,6 +77,21 @@ func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 	return nil
 }
 
+func (s *PedidoService) InitiateDelivery(id uuid.UUID) error {
+	pedido, err := s.repository.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	if pedido.Status != PedidoStatusReadyForDelivery {
+		return errors.New("pedido em estado inválido para essa operação")
+	}
+
+	s.repository.UpdateStatus(id, PedidoStatusInDelivery)
+
+	return nil
+}
+
 func joinItems(quantities []CreatePedidoRequestItem, prices []CardapioItem) []PedidoItem {
 	priceMap := make(map[string]uint32)
 

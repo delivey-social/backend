@@ -32,7 +32,6 @@ func (h *RestauranteHandler) list(c *gin.Context) {
 
 func (h *RestauranteHandler) getMenu(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid id",
