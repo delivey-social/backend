@@ -89,6 +89,13 @@ func (s *PedidoService) InitiateDelivery(id uuid.UUID) error {
 
 	s.repository.UpdateStatus(id, PedidoStatusInDelivery)
 
+	s.publisher.Publish(infra.Event{
+		Type: infra.OrderInDelivery,
+		Payload: infra.OrderUpdatedPayload{
+			OrderID: id,
+		},
+	})
+
 	return nil
 }
 

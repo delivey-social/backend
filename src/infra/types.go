@@ -7,6 +7,7 @@ type EventType int
 const (
 	OrderCreated EventType = iota
 	OrderReadyForDelivery
+	OrderInDelivery
 )
 
 type Event struct {
