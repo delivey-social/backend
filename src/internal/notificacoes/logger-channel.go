@@ -18,6 +18,7 @@ func (c *LoggerChannel) Subscriptions() map[infra.EventType]func(infra.Event) {
 	res[infra.OrderCreated] = c.onOrderCreated
 	res[infra.OrderReadyForDelivery] = c.onOrderReadyForDelivery
 	res[infra.OrderInDelivery] = c.onOrderInDelivery
+	res[infra.OrderDelivered] = c.onOrderDelivered
 
 	return res
 }
@@ -38,4 +39,10 @@ func (c *LoggerChannel) onOrderInDelivery(evt infra.Event) {
 	payload := evt.Payload.(infra.OrderUpdatedPayload)
 
 	fmt.Println("ORDER IN DELIVERY", payload)
+}
+
+func (c *LoggerChannel) onOrderDelivered(evt infra.Event) {
+	payload := evt.Payload.(infra.OrderUpdatedPayload)
+
+	fmt.Println("ORDER DELIVERED", payload)
 }

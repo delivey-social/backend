@@ -111,6 +111,13 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 
 	s.repository.UpdateStatus(id, PedidoStatusDeliveryFinished)
 
+	s.publisher.Publish(infra.Event{
+		Type: infra.OrderDelivered,
+		Payload: infra.OrderUpdatedPayload{
+			OrderID: id,
+		},
+	})
+
 	return nil
 }
 

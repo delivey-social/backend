@@ -8,6 +8,7 @@ const (
 	OrderCreated EventType = iota
 	OrderReadyForDelivery
 	OrderInDelivery
+	OrderDelivered
 )
 
 type Event struct {
