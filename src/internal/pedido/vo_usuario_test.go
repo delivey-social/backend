@@ -16,7 +16,9 @@ func TestNewUsuario(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	usuario := pedido.NewUsuario(email, telefone)
+	nome := "Test"
+
+	usuario := pedido.NewUsuario(email, telefone, nome)
 
 	if usuario.Email() != email {
 		t.Errorf("expected email %v, got %v", email, usuario.Email())

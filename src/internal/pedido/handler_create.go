@@ -49,7 +49,7 @@ func createUserVO(email string, phone string, name string) (*Usuario, error) {
 		return nil, err
 	}
 
-	usuario := NewUsuario(userEmail, userPhone)
+	usuario := NewUsuario(userEmail, userPhone, name)
 
 	return &usuario, nil
 }
