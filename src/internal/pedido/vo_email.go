@@ -1,6 +1,7 @@
-package shared
+package pedido
 
 import (
+	"errors"
 	"net/mail"
 	"regexp"
 )
@@ -14,11 +15,11 @@ var strictEmailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-']+@([a-zA-Z0-9]+(-[
 func NewEmail(input string) (Email, error) {
 	email, err := mail.ParseAddress(input)
 	if err != nil {
-		return Email{}, ErrInvalidFormat
+		return Email{}, errors.New("email inválido")
 	}
 
 	if !strictEmailRegex.MatchString(email.Address) {
-		return Email{}, ErrInvalidFormat
+		return Email{}, errors.New("email inválido")
 	}
 
 	return Email{

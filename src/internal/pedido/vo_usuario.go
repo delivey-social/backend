@@ -1,4 +1,4 @@
-package shared
+package pedido
 
 type Usuario struct {
 	email    Email

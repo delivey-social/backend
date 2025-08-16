@@ -1,6 +1,7 @@
-package shared
+package pedido
 
 import (
+	"errors"
 	"regexp"
 )
 
@@ -17,7 +18,7 @@ var (
 
 func NewTelefone(input string) (Telefone, error) {
 	if !validateRegex.MatchString(input) {
-		return Telefone{}, ErrInvalidFormat
+		return Telefone{}, errors.New("telefone inválido")
 	}
 
 	sanitized := normalizeRegex.ReplaceAllString(input, "")

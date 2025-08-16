@@ -1,22 +1,22 @@
-package shared_test
+package pedido_test
 
 import (
 	"testing"
 
-	"comida.app/src/shared"
+	"comida.app/src/internal/pedido"
 )
 
 func TestNewUsuario(t *testing.T) {
-	email, err := shared.NewEmail("user@example.com")
+	email, err := pedido.NewEmail("user@example.com")
 	if err != nil {
 		t.Fatal(err)
 	}
-	telefone, err := shared.NewTelefone("11999999999")
+	telefone, err := pedido.NewTelefone("11999999999")
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	usuario := shared.NewUsuario(email, telefone)
+	usuario := pedido.NewUsuario(email, telefone)
 
 	if usuario.Email() != email {
 		t.Errorf("expected email %v, got %v", email, usuario.Email())

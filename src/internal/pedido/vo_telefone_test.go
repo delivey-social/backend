@@ -1,9 +1,9 @@
-package shared_test
+package pedido_test
 
 import (
 	"testing"
 
-	"comida.app/src/shared"
+	"comida.app/src/internal/pedido"
 )
 
 var validPhones = []string{
@@ -51,7 +51,7 @@ var telefoneValues = []TelefoneTest{
 func TestTelefone(t *testing.T) {
 	t.Run("Valid phones", func(t *testing.T) {
 		for _, phone := range validPhones {
-			_, err := shared.NewTelefone(phone)
+			_, err := pedido.NewTelefone(phone)
 			if err != nil {
 				t.Errorf("Unexpected error for value %s: %v", phone, err)
 			}
@@ -60,7 +60,7 @@ func TestTelefone(t *testing.T) {
 
 	t.Run("Invalid phones", func(t *testing.T) {
 		for _, phone := range invalidPhones {
-			phone, err := shared.NewTelefone(phone)
+			phone, err := pedido.NewTelefone(phone)
 			if err == nil {
 				t.Errorf("Expected error, got %s", phone)
 			}
@@ -69,7 +69,7 @@ func TestTelefone(t *testing.T) {
 
 	t.Run("Phone string", func(t *testing.T) {
 		for _, phone := range telefoneValues {
-			final, err := shared.NewTelefone(phone.Input)
+			final, err := pedido.NewTelefone(phone.Input)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -82,7 +82,7 @@ func TestTelefone(t *testing.T) {
 
 	t.Run("Phone formatted", func(t *testing.T) {
 		for _, phone := range telefoneValues {
-			final, err := shared.NewTelefone(phone.Input)
+			final, err := pedido.NewTelefone(phone.Input)
 			if err != nil {
 				t.Fatal(err)
 			}

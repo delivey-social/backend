@@ -1,9 +1,9 @@
-package shared_test
+package pedido_test
 
 import (
 	"testing"
 
-	"comida.app/src/shared"
+	"comida.app/src/internal/pedido"
 )
 
 var validEmails = []string{
@@ -116,7 +116,7 @@ var invalidEmails = []string{
 func TestEmail(t *testing.T) {
 	t.Run("Valid emails", func(t *testing.T) {
 		for _, input := range validEmails {
-			_, err := shared.NewEmail(input)
+			_, err := pedido.NewEmail(input)
 			if err != nil {
 				t.Errorf("Unexpected error for %s: %v", input, err)
 			}
@@ -125,7 +125,7 @@ func TestEmail(t *testing.T) {
 
 	t.Run("Invalid emails", func(t *testing.T) {
 		for _, input := range invalidEmails {
-			_, err := shared.NewEmail(input)
+			_, err := pedido.NewEmail(input)
 			if err == nil {
 				t.Errorf("Expected error for %s got nothing", input)
 			}

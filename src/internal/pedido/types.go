@@ -12,11 +12,18 @@ type EventPublisher interface {
 type CreatePedidoRequest struct {
 	RestaurantID uuid.UUID                 `json:"restaurant_id" binding:"required"`
 	Items        []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
+	User         UserRequest               `json:"usuario" binding:"required"`
 }
 
 type CreatePedidoRequestItem struct {
 	ItemID   uuid.UUID `json:"item_id" binding:"required"`
 	Quantity uint16    `json:"quantidade" binding:"required"`
+}
+
+type UserRequest struct {
+	Email string `json:"email" binding:"required"`
+	Phone string `json:"telefone" binding:"required"`
+	Name  string `json:"nome" binding:"required"`
 }
 
 type RestauranteService interface {
