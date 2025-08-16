@@ -21,7 +21,7 @@ func NewPedidoService(repository PedidoRepository, cardapioService RestauranteSe
 	}
 }
 
-func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem) (uuid.UUID, error) {
+func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem, usuario Usuario) (uuid.UUID, error) {
 	if len(items) == 0 {
 		return uuid.UUID{}, errors.New("é necessário que o pedido tenha ao menos um item")
 	}
