@@ -43,7 +43,7 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoReque
 	}
 
 	// Creates the pedido
-	id := s.repository.Create(joinItems(items, menuItems))
+	id := s.repository.Create(joinItems(items, menuItems), usuario)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderCreated,
