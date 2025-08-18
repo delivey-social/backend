@@ -7,7 +7,7 @@ type PedidoRepository interface {
 		items []PedidoItem,
 		usuario Usuario,
 		endereco Endereco,
-		metodoPagamento PaymentMethods,
+		metodoPagamento PaymentMethod,
 	) uuid.UUID
 
 	FindByID(id uuid.UUID) (Pedido, error)
@@ -21,7 +21,7 @@ type Pedido struct {
 	Status        PedidoStatus
 	Customer      Usuario
 	Address       Endereco
-	PaymentMethod PaymentMethods
+	PaymentMethod PaymentMethod
 }
 
 type PedidoItem struct {

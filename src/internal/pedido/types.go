@@ -45,9 +45,9 @@ type CardapioItem struct {
 	Price uint32
 }
 
-type PaymentMethods string
+type PaymentMethod string
 
 const (
-	DEBITO_RECEBIMENTO PaymentMethods = "DEBITO_RECEBIMENTO"
-	PIX                PaymentMethods = "PIX"
+	DEBITO_RECEBIMENTO PaymentMethod = "DEBITO_RECEBIMENTO"
+	PIX                PaymentMethod = "PIX"
 )

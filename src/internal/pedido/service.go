@@ -26,7 +26,7 @@ func (s *PedidoService) Create(
 	items []CreatePedidoDTOItem,
 	usuario Usuario,
 	endereco Endereco,
-	metodoPagamento PaymentMethods,
+	metodoPagamento PaymentMethod,
 ) (uuid.UUID, error) {
 	if len(items) == 0 {
 		return uuid.UUID{}, errors.New("é necessário que o pedido tenha ao menos um item")

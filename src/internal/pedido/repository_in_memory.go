@@ -20,7 +20,7 @@ func (r *InMemoryPedidoRepository) Create(
 	items []PedidoItem,
 	usuario Usuario,
 	endereco Endereco,
-	metodoPagamento PaymentMethods,
+	metodoPagamento PaymentMethod,
 ) uuid.UUID {
 	r.mu.Lock()
 	defer r.mu.Unlock()

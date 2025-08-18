@@ -6,15 +6,15 @@ var (
 	ErrInvalidPaymentMethod = errors.New("método de pagamento inválido")
 )
 
-func ToMetodoPagamento(val interface{}) (PaymentMethods, error) {
+func ToMetodoPagamento(val interface{}) (PaymentMethod, error) {
 	res, ok := val.(string)
 	if !ok {
 		return "", ErrInvalidPaymentMethod
 	}
 
-	switch PaymentMethods(res) {
+	switch PaymentMethod(res) {
 	case DEBITO_RECEBIMENTO, PIX:
-		return PaymentMethods(res), nil
+		return PaymentMethod(res), nil
 	default:
 		return "", ErrInvalidPaymentMethod
 	}
