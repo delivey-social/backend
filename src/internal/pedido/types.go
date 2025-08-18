@@ -9,25 +9,25 @@ type EventPublisher interface {
 	Publish(event infra.Event)
 }
 
-type CreatePedidoRequest struct {
-	RestaurantID uuid.UUID                 `json:"restaurant_id" binding:"required"`
-	Items        []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
-	User         UserRequest               `json:"usuario" binding:"required"`
-	Address      AddressRequest            `json:"endereco" binding:"required"`
+type CreatePedidoDTO struct {
+	RestaurantID uuid.UUID             `json:"restaurant_id" binding:"required"`
+	Items        []CreatePedidoDTOItem `json:"itens" binding:"required,dive,required"`
+	User         UserDTO               `json:"usuario" binding:"required"`
+	Address      AddressDTO            `json:"endereco" binding:"required"`
 }
 
-type CreatePedidoRequestItem struct {
+type CreatePedidoDTOItem struct {
 	ItemID   uuid.UUID `json:"item_id" binding:"required"`
 	Quantity uint16    `json:"quantidade" binding:"required"`
 }
 
-type UserRequest struct {
+type UserDTO struct {
 	Email string `json:"email" binding:"required"`
 	Phone string `json:"telefone" binding:"required"`
 	Name  string `json:"nome" binding:"required"`
 }
 
-type AddressRequest struct {
+type AddressDTO struct {
 	Street       string `json:"rua" binding:"required"`
 	Neighborhood string `json:"bairro" binding:"required"`
 	Number       string `json:"numero" binding:"required"`

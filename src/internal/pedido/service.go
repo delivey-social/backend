@@ -21,7 +21,7 @@ func NewPedidoService(repository PedidoRepository, cardapioService RestauranteSe
 	}
 }
 
-func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoRequestItem, usuario Usuario) (uuid.UUID, error) {
+func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoDTOItem, usuario Usuario) (uuid.UUID, error) {
 	if len(items) == 0 {
 		return uuid.UUID{}, errors.New("é necessário que o pedido tenha ao menos um item")
 	}
@@ -121,7 +121,7 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 	return nil
 }
 
-func joinItems(quantities []CreatePedidoRequestItem, prices []CardapioItem) []PedidoItem {
+func joinItems(quantities []CreatePedidoDTOItem, prices []CardapioItem) []PedidoItem {
 	priceMap := make(map[string]uint32)
 
 	for _, price := range prices {
