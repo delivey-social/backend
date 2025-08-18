@@ -16,7 +16,7 @@ func NewInMemoryPedidoRepository() PedidoRepository {
 	return &InMemoryPedidoRepository{}
 }
 
-func (r *InMemoryPedidoRepository) Create(items []PedidoItem, usuario Usuario) uuid.UUID {
+func (r *InMemoryPedidoRepository) Create(items []PedidoItem, usuario Usuario, endereco Endereco) uuid.UUID {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -26,6 +26,7 @@ func (r *InMemoryPedidoRepository) Create(items []PedidoItem, usuario Usuario) u
 		Items:    items,
 		Status:   PedidoStatusCreated,
 		Customer: usuario,
+		Address:  endereco,
 	})
 
 	return id

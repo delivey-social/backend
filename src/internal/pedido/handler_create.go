@@ -24,7 +24,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	_, err = createAddressVO(body.Address)
+	endereco, err := createAddressVO(body.Address)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
@@ -32,7 +32,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	id, err := h.service.Create(body.RestaurantID, body.Items, *usuario)
+	id, err := h.service.Create(body.RestaurantID, body.Items, *usuario, *endereco)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),

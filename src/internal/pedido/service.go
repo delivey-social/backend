@@ -21,7 +21,7 @@ func NewPedidoService(repository PedidoRepository, cardapioService RestauranteSe
 	}
 }
 
-func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoDTOItem, usuario Usuario) (uuid.UUID, error) {
+func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoDTOItem, usuario Usuario, endereco Endereco) (uuid.UUID, error) {
 	if len(items) == 0 {
 		return uuid.UUID{}, errors.New("é necessário que o pedido tenha ao menos um item")
 	}
@@ -43,7 +43,7 @@ func (s *PedidoService) Create(restaurantID uuid.UUID, items []CreatePedidoDTOIt
 	}
 
 	// Creates the pedido
-	id := s.repository.Create(joinItems(items, menuItems), usuario)
+	id := s.repository.Create(joinItems(items, menuItems), usuario, endereco)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderCreated,
