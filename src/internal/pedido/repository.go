@@ -3,7 +3,12 @@ package pedido
 import "github.com/google/uuid"
 
 type PedidoRepository interface {
-	Create(items []PedidoItem, usuario Usuario, endereco Endereco) uuid.UUID
+	Create(
+		items []PedidoItem,
+		usuario Usuario,
+		endereco Endereco,
+		metodoPagamento PaymentMethods,
+	) uuid.UUID
 
 	FindByID(id uuid.UUID) (Pedido, error)
 
@@ -11,11 +16,12 @@ type PedidoRepository interface {
 }
 
 type Pedido struct {
-	ID       uuid.UUID
-	Items    []PedidoItem
-	Status   PedidoStatus
-	Customer Usuario
-	Address  Endereco
+	ID            uuid.UUID
+	Items         []PedidoItem
+	Status        PedidoStatus
+	Customer      Usuario
+	Address       Endereco
+	PaymentMethod PaymentMethods
 }
 
 type PedidoItem struct {

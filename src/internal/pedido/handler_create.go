@@ -16,6 +16,14 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
+	metodoPagamento, err := ToMetodoPagamento(body.PaymentMethod)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
 	usuario, err := createUserVO(body.User.Email, body.User.Phone, body.User.Name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -32,7 +40,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	id, err := h.service.Create(body.RestaurantID, body.Items, *usuario, *endereco)
+	id, err := h.service.Create(body.RestaurantID, body.Items, *usuario, *endereco, metodoPagamento)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
