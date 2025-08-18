@@ -10,10 +10,11 @@ type EventPublisher interface {
 }
 
 type CreatePedidoDTO struct {
-	RestaurantID uuid.UUID             `json:"restaurant_id" binding:"required"`
-	Items        []CreatePedidoDTOItem `json:"itens" binding:"required,dive,required"`
-	User         UserDTO               `json:"usuario" binding:"required"`
-	Address      AddressDTO            `json:"endereco" binding:"required"`
+	RestaurantID  uuid.UUID             `json:"restaurant_id" binding:"required"`
+	Items         []CreatePedidoDTOItem `json:"itens" binding:"required,dive,required"`
+	User          UserDTO               `json:"usuario" binding:"required"`
+	Address       AddressDTO            `json:"endereco" binding:"required"`
+	PaymentMethod string                `json:"metodo_pagamento" binding:"required"`
 }
 
 type CreatePedidoDTOItem struct {
@@ -43,3 +44,10 @@ type CardapioItem struct {
 	Id    uuid.UUID
 	Price uint32
 }
+
+type PaymentMethods string
+
+const (
+	DEBITO_RECEBIMENTO PaymentMethods = "DEBITO_RECEBIMENTO"
+	PIX                PaymentMethods = "PIX"
+)
