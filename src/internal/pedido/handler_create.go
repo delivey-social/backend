@@ -24,6 +24,14 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
+	_, err = createAddressVO(body.Address)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
 	id, err := h.service.Create(body.RestaurantID, body.Items, *usuario)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -52,4 +60,18 @@ func createUserVO(email string, phone string, name string) (*Usuario, error) {
 	usuario := NewUsuario(userEmail, userPhone, name)
 
 	return &usuario, nil
+}
+
+func createAddressVO(data AddressDTO) (*Endereco, error) {
+	cep, err := NewCEP(data.CEP)
+	if err != nil {
+		return nil, err
+	}
+
+	address, err := NewEndereco(cep, data.Street, data.Neighborhood, data.Number, data.Observation)
+	if err != nil {
+		return nil, err
+	}
+
+	return &address, nil
 }
