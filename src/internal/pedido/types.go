@@ -31,7 +31,7 @@ type AddressDTO struct {
 	Street       string `json:"rua" binding:"required"`
 	Neighborhood string `json:"bairro" binding:"required"`
 	Number       string `json:"numero" binding:"required"`
-	Observation  string `json:"observacao" binding:"required"`
+	Observation  string `json:"observacao"`
 	CEP          string `json:"CEP" binding:"required"`
 }
 
