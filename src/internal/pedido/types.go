@@ -13,6 +13,7 @@ type CreatePedidoRequest struct {
 	RestaurantID uuid.UUID                 `json:"restaurant_id" binding:"required"`
 	Items        []CreatePedidoRequestItem `json:"itens" binding:"required,dive,required"`
 	User         UserRequest               `json:"usuario" binding:"required"`
+	Address      AddressRequest            `json:"endereco" binding:"required"`
 }
 
 type CreatePedidoRequestItem struct {
@@ -24,6 +25,14 @@ type UserRequest struct {
 	Email string `json:"email" binding:"required"`
 	Phone string `json:"telefone" binding:"required"`
 	Name  string `json:"nome" binding:"required"`
+}
+
+type AddressRequest struct {
+	Street       string `json:"rua" binding:"required"`
+	Neighborhood string `json:"bairro" binding:"required"`
+	Number       string `json:"numero" binding:"required"`
+	Observation  string `json:"observacao" binding:"required"`
+	CEP          string `json:"CEP" binding:"required"`
 }
 
 type RestauranteService interface {

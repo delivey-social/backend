@@ -7,7 +7,7 @@ import (
 )
 
 func (h *PedidoHandler) create(c *gin.Context) {
-	var body CreatePedidoRequest
+	var body CreatePedidoDTO
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
