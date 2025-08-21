@@ -127,6 +127,10 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 	return nil
 }
 
+func (s *PedidoService) FindByID(id uuid.UUID) (Pedido, error) {
+	return s.repository.FindByID(id)
+}
+
 func joinItems(quantities []CreatePedidoDTOItem, prices []CardapioItem) []PedidoItem {
 	priceMap := make(map[string]uint32)
 

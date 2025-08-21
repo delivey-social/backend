@@ -48,9 +48,17 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
+	pedido, err := h.service.FindByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"mensagem": "Pedido criado com sucesso!",
 		"id":       id,
+		"preco":    pedido.CalculateTotal(),
 	})
 }
 
