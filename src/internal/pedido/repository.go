@@ -15,21 +15,6 @@ type PedidoRepository interface {
 	UpdateStatus(id uuid.UUID, status PedidoStatus) error
 }
 
-type Pedido struct {
-	ID            uuid.UUID
-	Items         []PedidoItem
-	Status        PedidoStatus
-	Customer      Usuario
-	Address       Endereco
-	PaymentMethod PaymentMethod
-}
-
-type PedidoItem struct {
-	ID            uuid.UUID
-	Quantity      uint16
-	PriceSnapshot uint32
-}
-
 type PedidoStatus string
 
 const (
