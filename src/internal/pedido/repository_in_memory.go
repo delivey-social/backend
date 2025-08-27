@@ -9,43 +9,43 @@ import (
 
 type InMemoryPedidoRepository struct {
 	mu    sync.RWMutex
-	store []Pedido
+	store map[uuid.UUID]*Pedido
 }
 
 func NewInMemoryPedidoRepository() PedidoRepository {
-	return &InMemoryPedidoRepository{}
+	return &InMemoryPedidoRepository{
+		store: make(map[uuid.UUID]*Pedido),
+	}
 }
 
 func (r *InMemoryPedidoRepository) Create(pedido Pedido) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.store = append(r.store, pedido)
+	r.store[pedido.GetId()] = &pedido
 }
 
-func (r *InMemoryPedidoRepository) Update(id uuid.UUID, pedido Pedido) error {
+func (r *InMemoryPedidoRepository) Update(pedido Pedido) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	for i := range r.store {
-		if r.store[i].id == id {
-			r.store[i] = pedido
-			return nil
-		}
+	if _, exists := r.store[pedido.GetId()]; !exists {
+		return utils.NewResourceNotFoundError("pedido")
 	}
 
-	return utils.NewResourceNotFoundError("pedido")
+	r.store[pedido.GetId()] = &pedido
+	return nil
 }
 
 func (r *InMemoryPedidoRepository) FindByID(id uuid.UUID) (Pedido, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	for _, pedido := range r.store {
-		if pedido.id == id {
-			return pedido, nil
-		}
+	pedido := r.store[id]
+	if pedido == nil {
+		return Pedido{}, utils.NewResourceNotFoundError("pedido")
 	}
 
-	return Pedido{}, utils.NewResourceNotFoundError("pedido")
+	return *pedido, nil
+
 }
