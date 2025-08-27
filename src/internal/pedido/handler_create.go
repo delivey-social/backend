@@ -59,9 +59,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"mensagem": "Pedido criado com sucesso!",
 		"id":       id,
-		"preco": gin.H{
-			"total_itens": pedido.CalculateTotal(),
-		},
+		"preco":    pedido.CalculateTotal(),
 	})
 }
 

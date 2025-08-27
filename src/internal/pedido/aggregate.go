@@ -22,6 +22,11 @@ type PedidoItem struct {
 	PriceSnapshot uint32
 }
 
+type PedidoTotal struct {
+	Itens   uint32 `json:"itens"`
+	TaxaApp uint32 `json:"taxa_aplicativo"`
+}
+
 func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
 	return Pedido{
 		id:            uuid.New(),
@@ -33,14 +38,19 @@ func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMe
 	}
 }
 
-func (p *Pedido) CalculateTotal() uint32 {
+func (p *Pedido) CalculateTotal() PedidoTotal {
 	var itemsTotal uint32
 
 	for _, item := range p.Items {
 		itemsTotal += item.PriceSnapshot * uint32(item.Quantity)
 	}
 
-	return itemsTotal
+	taxaApp := itemsTotal / 10
+
+	return PedidoTotal{
+		Itens:   itemsTotal,
+		TaxaApp: taxaApp,
+	}
 }
 
 func (p *Pedido) GetId() uuid.UUID {
