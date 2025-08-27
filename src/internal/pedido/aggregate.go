@@ -9,12 +9,13 @@ import (
 )
 
 type Pedido struct {
-	id            uuid.UUID
-	Items         []PedidoItem
-	Status        PedidoStatus
-	Customer      Usuario
-	Address       Endereco
-	PaymentMethod PaymentMethod
+	id                    uuid.UUID
+	Items                 []PedidoItem
+	Status                PedidoStatus
+	Customer              Usuario
+	Address               Endereco
+	PaymentMethod         PaymentMethod
+	DeliveryFeeCalculator DeliveryFeeCalculator
 }
 
 type PedidoItem struct {
@@ -24,18 +25,20 @@ type PedidoItem struct {
 }
 
 type PedidoTotal struct {
-	Itens   uint32 `json:"itens"`
-	TaxaApp uint32 `json:"taxa_aplicativo"`
+	Itens       uint32 `json:"itens"`
+	TaxaApp     uint32 `json:"taxa_aplicativo"`
+	TaxaEntrega uint32 `json:"taxa_entrega"`
 }
 
 func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
 	return Pedido{
-		id:            uuid.New(),
-		Items:         items,
-		Status:        PedidoStatusCreated,
-		Customer:      customer,
-		Address:       Address,
-		PaymentMethod: paymentMethod,
+		id:                    uuid.New(),
+		Items:                 items,
+		Status:                PedidoStatusCreated,
+		Customer:              customer,
+		Address:               Address,
+		PaymentMethod:         paymentMethod,
+		DeliveryFeeCalculator: NewFixedRateCalculator(500),
 	}
 }
 
@@ -49,8 +52,9 @@ func (p *Pedido) CalculateTotal() PedidoTotal {
 	}
 
 	return PedidoTotal{
-		Itens:   itemsTotal,
-		TaxaApp: uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
+		Itens:       itemsTotal,
+		TaxaApp:     uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
+		TaxaEntrega: p.DeliveryFeeCalculator.Calculate(DeliveryFeeContext{}),
 	}
 }
 
