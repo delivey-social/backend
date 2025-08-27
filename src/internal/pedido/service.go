@@ -49,7 +49,9 @@ func (s *PedidoService) Create(
 	}
 
 	// Creates the pedido
-	id := s.repository.Create(joinItems(items, menuItems), usuario, endereco, metodoPagamento)
+	pedido := NewPedido(joinItems(items, menuItems), usuario, endereco, metodoPagamento)
+	id := pedido.GetId()
+	s.repository.Create(pedido)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderCreated,
@@ -67,11 +69,13 @@ func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	if pedido.Status != PedidoStatusCreated {
-		return errors.New("pedido em estado inválido para essa operação")
-	}
+	// if pedido.Status != PedidoStatusCreated {
+	// 	return errors.New("pedido em estado inválido para essa operação")
+	// }
 
-	s.repository.UpdateStatus(id, PedidoStatusReadyForDelivery)
+	pedido.UpdateStatus(PedidoStatusReadyForDelivery)
+
+	s.repository.Update(pedido)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderReadyForDelivery,
@@ -89,11 +93,13 @@ func (s *PedidoService) InitiateDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	if pedido.Status != PedidoStatusReadyForDelivery {
-		return errors.New("pedido em estado inválido para essa operação")
-	}
+	// if pedido.Status != PedidoStatusReadyForDelivery {
+	// 	return errors.New("pedido em estado inválido para essa operação")
+	// }
 
-	s.repository.UpdateStatus(id, PedidoStatusInDelivery)
+	pedido.UpdateStatus(PedidoStatusInDelivery)
+
+	s.repository.Update(pedido)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderInDelivery,
@@ -115,7 +121,9 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 		return errors.New("pedido em estado inválido para essa operação")
 	}
 
-	s.repository.UpdateStatus(id, PedidoStatusDeliveryFinished)
+	pedido.UpdateStatus(PedidoStatusDeliveryFinished)
+
+	s.repository.Update(pedido)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderDelivered,

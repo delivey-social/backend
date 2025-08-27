@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type PedidoRepository interface {
 	Create(pedido Pedido)
-	Update(id uuid.UUID, pedido Pedido) error
+	Update(pedido Pedido) error
 
 	FindByID(id uuid.UUID) (Pedido, error)
 }
