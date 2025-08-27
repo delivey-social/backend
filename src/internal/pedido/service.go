@@ -69,10 +69,6 @@ func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	// if pedido.Status != PedidoStatusCreated {
-	// 	return errors.New("pedido em estado inválido para essa operação")
-	// }
-
 	pedido.UpdateStatus(PedidoStatusReadyForDelivery)
 
 	s.repository.Update(pedido)
@@ -92,10 +88,6 @@ func (s *PedidoService) InitiateDelivery(id uuid.UUID) error {
 	if err != nil {
 		return err
 	}
-
-	// if pedido.Status != PedidoStatusReadyForDelivery {
-	// 	return errors.New("pedido em estado inválido para essa operação")
-	// }
 
 	pedido.UpdateStatus(PedidoStatusInDelivery)
 
@@ -117,12 +109,7 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	if pedido.Status != PedidoStatusInDelivery {
-		return errors.New("pedido em estado inválido para essa operação")
-	}
-
 	pedido.UpdateStatus(PedidoStatusDeliveryFinished)
-
 	s.repository.Update(pedido)
 
 	s.publisher.Publish(infra.Event{

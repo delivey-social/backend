@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"golang.org/x/exp/slices"
 )
 
 type Pedido struct {
@@ -46,6 +47,18 @@ func (p *Pedido) GetId() uuid.UUID {
 	return p.id
 }
 
+var validNextStatus map[PedidoStatus][]PedidoStatus = map[PedidoStatus][]PedidoStatus{
+	PedidoStatusCreated:          {PedidoStatusReadyForDelivery},
+	PedidoStatusReadyForDelivery: {PedidoStatusInDelivery},
+	PedidoStatusInDelivery:       {PedidoStatusDeliveryFinished},
+	PedidoStatusDeliveryFinished: {},
+}
+
 func (p *Pedido) UpdateStatus(newStatus PedidoStatus) error {
-	return fmt.Errorf("not implemented")
+	if slices.Contains(validNextStatus[p.Status], newStatus) {
+		p.Status = newStatus
+		return nil
+	}
+
+	return fmt.Errorf("pedido em estado inválido para essa operação")
 }
