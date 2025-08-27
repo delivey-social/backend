@@ -38,6 +38,8 @@ func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMe
 	}
 }
 
+const APP_FEE_PERCENTAGE = float32(10) / 100
+
 func (p *Pedido) CalculateTotal() PedidoTotal {
 	var itemsTotal uint32
 
@@ -45,11 +47,9 @@ func (p *Pedido) CalculateTotal() PedidoTotal {
 		itemsTotal += item.PriceSnapshot * uint32(item.Quantity)
 	}
 
-	taxaApp := itemsTotal / 10
-
 	return PedidoTotal{
 		Itens:   itemsTotal,
-		TaxaApp: taxaApp,
+		TaxaApp: uint32(float32(itemsTotal) * APP_FEE_PERCENTAGE),
 	}
 }
 
