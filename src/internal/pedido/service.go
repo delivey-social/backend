@@ -51,7 +51,7 @@ func (s *PedidoService) Create(
 	// Creates the pedido
 	pedido := NewPedido(joinItems(items, menuItems), usuario, endereco, metodoPagamento)
 	id := pedido.GetId()
-	s.repository.Create(pedido)
+	s.repository.Save(pedido)
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderCreated,

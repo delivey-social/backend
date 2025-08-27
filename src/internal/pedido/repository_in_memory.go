@@ -18,7 +18,7 @@ func NewInMemoryPedidoRepository() PedidoRepository {
 	}
 }
 
-func (r *InMemoryPedidoRepository) Create(pedido Pedido) {
+func (r *InMemoryPedidoRepository) Save(pedido Pedido) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

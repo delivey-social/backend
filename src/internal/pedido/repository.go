@@ -3,7 +3,7 @@ package pedido
 import "github.com/google/uuid"
 
 type PedidoRepository interface {
-	Create(pedido Pedido)
+	Save(pedido Pedido)
 	Update(pedido Pedido) error
 
 	FindByID(id uuid.UUID) (Pedido, error)
