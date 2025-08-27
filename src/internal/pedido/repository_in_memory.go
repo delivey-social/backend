@@ -28,7 +28,7 @@ func (r *InMemoryPedidoRepository) Update(id uuid.UUID, pedido Pedido) error {
 	defer r.mu.Unlock()
 
 	for i := range r.store {
-		if r.store[i].ID == id {
+		if r.store[i].id == id {
 			r.store[i] = pedido
 			return nil
 		}
@@ -42,7 +42,7 @@ func (r *InMemoryPedidoRepository) FindByID(id uuid.UUID) (Pedido, error) {
 	defer r.mu.Unlock()
 
 	for _, pedido := range r.store {
-		if pedido.ID == id {
+		if pedido.id == id {
 			return pedido, nil
 		}
 	}

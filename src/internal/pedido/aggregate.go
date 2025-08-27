@@ -1,9 +1,13 @@
 package pedido
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Pedido struct {
-	ID            uuid.UUID
+	id            uuid.UUID
 	Items         []PedidoItem
 	Status        PedidoStatus
 	Customer      Usuario
@@ -17,6 +21,17 @@ type PedidoItem struct {
 	PriceSnapshot uint32
 }
 
+func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
+	return Pedido{
+		id:            uuid.New(),
+		Items:         items,
+		Status:        PedidoStatusCreated,
+		Customer:      customer,
+		Address:       Address,
+		PaymentMethod: paymentMethod,
+	}
+}
+
 func (p *Pedido) CalculateTotal() uint32 {
 	var itemsTotal uint32
 
@@ -25,4 +40,12 @@ func (p *Pedido) CalculateTotal() uint32 {
 	}
 
 	return itemsTotal
+}
+
+func (p *Pedido) GetId() uuid.UUID {
+	return p.id
+}
+
+func (p *Pedido) UpdateStatus(newStatus PedidoStatus) error {
+	return fmt.Errorf("not implemented")
 }
