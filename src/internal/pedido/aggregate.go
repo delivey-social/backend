@@ -1,9 +1,14 @@
 package pedido
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+	"golang.org/x/exp/slices"
+)
 
 type Pedido struct {
-	ID            uuid.UUID
+	id            uuid.UUID
 	Items         []PedidoItem
 	Status        PedidoStatus
 	Customer      Usuario
@@ -17,6 +22,17 @@ type PedidoItem struct {
 	PriceSnapshot uint32
 }
 
+func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
+	return Pedido{
+		id:            uuid.New(),
+		Items:         items,
+		Status:        PedidoStatusCreated,
+		Customer:      customer,
+		Address:       Address,
+		PaymentMethod: paymentMethod,
+	}
+}
+
 func (p *Pedido) CalculateTotal() uint32 {
 	var itemsTotal uint32
 
@@ -25,4 +41,24 @@ func (p *Pedido) CalculateTotal() uint32 {
 	}
 
 	return itemsTotal
+}
+
+func (p *Pedido) GetId() uuid.UUID {
+	return p.id
+}
+
+var validNextStatus map[PedidoStatus][]PedidoStatus = map[PedidoStatus][]PedidoStatus{
+	PedidoStatusCreated:          {PedidoStatusReadyForDelivery},
+	PedidoStatusReadyForDelivery: {PedidoStatusInDelivery},
+	PedidoStatusInDelivery:       {PedidoStatusDeliveryFinished},
+	PedidoStatusDeliveryFinished: {},
+}
+
+func (p *Pedido) UpdateStatus(newStatus PedidoStatus) error {
+	if slices.Contains(validNextStatus[p.Status], newStatus) {
+		p.Status = newStatus
+		return nil
+	}
+
+	return fmt.Errorf("pedido em estado inválido para essa operação")
 }

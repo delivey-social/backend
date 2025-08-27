@@ -3,16 +3,10 @@ package pedido
 import "github.com/google/uuid"
 
 type PedidoRepository interface {
-	Create(
-		items []PedidoItem,
-		usuario Usuario,
-		endereco Endereco,
-		metodoPagamento PaymentMethod,
-	) uuid.UUID
+	Save(pedido Pedido)
+	Update(pedido Pedido) error
 
 	FindByID(id uuid.UUID) (Pedido, error)
-
-	UpdateStatus(id uuid.UUID, status PedidoStatus) error
 }
 
 type PedidoStatus string
