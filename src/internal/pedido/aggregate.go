@@ -2,6 +2,7 @@ package pedido
 
 import (
 	"fmt"
+	"math"
 
 	"github.com/google/uuid"
 	"golang.org/x/exp/slices"
@@ -38,7 +39,7 @@ func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMe
 	}
 }
 
-const APP_FEE_PERCENTAGE = float32(10) / 100
+const APP_FEE_PERCENTAGE = float64(10) / 100
 
 func (p *Pedido) CalculateTotal() PedidoTotal {
 	var itemsTotal uint32
@@ -49,7 +50,7 @@ func (p *Pedido) CalculateTotal() PedidoTotal {
 
 	return PedidoTotal{
 		Itens:   itemsTotal,
-		TaxaApp: uint32(float32(itemsTotal) * APP_FEE_PERCENTAGE),
+		TaxaApp: uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
 	}
 }
 
