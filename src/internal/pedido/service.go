@@ -69,7 +69,10 @@ func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	pedido.UpdateStatus(PedidoStatusReadyForDelivery)
+	err = pedido.UpdateStatus(PedidoStatusReadyForDelivery)
+	if err != nil {
+		return err
+	}
 
 	s.repository.Update(pedido)
 
@@ -89,7 +92,10 @@ func (s *PedidoService) InitiateDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	pedido.UpdateStatus(PedidoStatusInDelivery)
+	err = pedido.UpdateStatus(PedidoStatusInDelivery)
+	if err != nil {
+		return err
+	}
 
 	s.repository.Update(pedido)
 
@@ -109,7 +115,11 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 		return err
 	}
 
-	pedido.UpdateStatus(PedidoStatusDeliveryFinished)
+	err = pedido.UpdateStatus(PedidoStatusDeliveryFinished)
+	if err != nil {
+		return err
+	}
+
 	s.repository.Update(pedido)
 
 	s.publisher.Publish(infra.Event{
