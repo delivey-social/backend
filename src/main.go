@@ -13,22 +13,26 @@ func main() {
 	eventBus := eventbus.NewEventBus()
 
 	notificacoes.NewNotificacoesService(eventBus)
-	
+
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
 	pedidoService := pedido.NewPedidoService(
-		pedidoRepo, 
-		adapters.NewCardapioPedidoAdapter(restauranteService), 
+		pedidoRepo,
+		adapters.NewCardapioPedidoAdapter(restauranteService),
 		eventBus,
 	)
+
+	bairroRepo := pedido.NewInMemoryBairroRepository()
+	bairroService := pedido.NewBairroService(bairroRepo)
 
 	initializeRestaurante(restauranteService)
 
 	api.Start([]api.Handlers{
 		restaurante.NewRestaurantHandler(*restauranteService),
 		pedido.NewPedidoHandler(*pedidoService),
+		pedido.NewBairroHandler(bairroService),
 	})
 }
 
