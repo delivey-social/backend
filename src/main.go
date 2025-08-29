@@ -6,6 +6,7 @@ import (
 	"comida.app/src/infra/eventbus"
 	"comida.app/src/internal/notificacoes"
 	"comida.app/src/internal/pedido"
+	"comida.app/src/internal/pedido/bairro"
 	"comida.app/src/internal/restaurante"
 )
 
@@ -17,8 +18,8 @@ func main() {
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 
-	bairroRepo := pedido.NewInMemoryBairroRepository()
-	bairroService := pedido.NewBairroService(bairroRepo)
+	bairroRepo := bairro.NewInMemoryBairroRepository()
+	bairroService := bairro.NewBairroService(bairroRepo)
 
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
 	pedidoService := pedido.NewPedidoService(
@@ -33,7 +34,7 @@ func main() {
 	api.Start([]api.Handlers{
 		restaurante.NewRestaurantHandler(*restauranteService),
 		pedido.NewPedidoHandler(*pedidoService),
-		pedido.NewBairroHandler(bairroService),
+		bairro.NewBairroHandler(bairroService),
 	})
 }
 

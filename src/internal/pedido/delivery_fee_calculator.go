@@ -1,8 +1,10 @@
 package pedido
 
+import "comida.app/src/internal/pedido/bairro"
+
 // Contains the info needed to calculate the delivery fee
 type DeliveryFeeContext struct {
-	bairro Bairro
+	bairro bairro.Bairro
 }
 
 type DeliveryFeeCalculator interface {

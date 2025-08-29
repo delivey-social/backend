@@ -3,6 +3,7 @@ package pedido
 import (
 	"net/http"
 
+	"comida.app/src/internal/pedido/bairro"
 	"github.com/gin-gonic/gin"
 )
 
@@ -87,7 +88,7 @@ func createUserVO(email string, phone string, name string) (*Usuario, error) {
 	return &usuario, nil
 }
 
-func createAddressVO(data AddressDTO, bairro Bairro) (*Endereco, error) {
+func createAddressVO(data AddressDTO, bairro bairro.Bairro) (*Endereco, error) {
 	cep, err := NewCEP(data.CEP)
 	if err != nil {
 		return nil, err

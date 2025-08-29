@@ -2,6 +2,8 @@ package pedido
 
 import (
 	"errors"
+
+	"comida.app/src/internal/pedido/bairro"
 )
 
 var (
@@ -11,7 +13,7 @@ var (
 type Endereco struct {
 	CEP         CEP
 	Rua         string
-	Bairro      Bairro
+	Bairro      bairro.Bairro
 	Numero      string
 	Complemento string
 	// Cidade      string
@@ -22,7 +24,7 @@ type Endereco struct {
 func NewEndereco(
 	cep CEP,
 	rua string,
-	bairro Bairro,
+	bairro bairro.Bairro,
 	numero string,
 	complemento string) (Endereco, error) {
 

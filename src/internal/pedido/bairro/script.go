@@ -1,4 +1,4 @@
-package pedido
+package bairro
 
 var level1Bairros = []string{
 	"Água Verde",

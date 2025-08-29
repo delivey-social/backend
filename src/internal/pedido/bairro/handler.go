@@ -1,4 +1,4 @@
-package pedido
+package bairro
 
 import (
 	"net/http"
