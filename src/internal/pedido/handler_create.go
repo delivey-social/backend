@@ -3,6 +3,7 @@ package pedido
 import (
 	"net/http"
 
+	"comida.app/src/internal/pedido/bairro"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,7 +33,15 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	endereco, err := createAddressVO(body.Address)
+	bairro, err := h.service.bairroService.FindByID(body.Address.Neighborhood)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	endereco, err := createAddressVO(body.Address, *bairro)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
@@ -79,13 +88,13 @@ func createUserVO(email string, phone string, name string) (*Usuario, error) {
 	return &usuario, nil
 }
 
-func createAddressVO(data AddressDTO) (*Endereco, error) {
+func createAddressVO(data AddressDTO, bairro bairro.Bairro) (*Endereco, error) {
 	cep, err := NewCEP(data.CEP)
 	if err != nil {
 		return nil, err
 	}
 
-	address, err := NewEndereco(cep, data.Street, data.Neighborhood, data.Number, data.Observation)
+	address, err := NewEndereco(cep, data.Street, bairro, data.Number, data.Observation)
 	if err != nil {
 		return nil, err
 	}

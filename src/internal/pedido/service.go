@@ -4,19 +4,22 @@ import (
 	"errors"
 
 	"comida.app/src/infra"
+	"comida.app/src/internal/pedido/bairro"
 	"github.com/google/uuid"
 )
 
 type PedidoService struct {
 	repository      PedidoRepository
 	cardapioService RestauranteService
+	bairroService   bairro.BairroService
 	publisher       EventPublisher
 }
 
-func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService, publisher EventPublisher) *PedidoService {
+func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService, bairroService bairro.BairroService, publisher EventPublisher) *PedidoService {
 	return &PedidoService{
 		repository,
 		cardapioService,
+		bairroService,
 		publisher,
 	}
 }
