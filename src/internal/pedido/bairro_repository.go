@@ -2,6 +2,7 @@ package pedido
 
 import (
 	"fmt"
+	"sort"
 	"sync"
 
 	"github.com/google/uuid"
@@ -40,6 +41,11 @@ func (r *InMemoryBairroRepository) List() []Bairro {
 	for _, bairro := range r.store {
 		bairros = append(bairros, *bairro)
 	}
+
+	sort.Slice(bairros, func(i, j int) bool {
+		return bairros[i].Nome < bairros[j].Nome
+	})
+
 	return bairros
 }
 
