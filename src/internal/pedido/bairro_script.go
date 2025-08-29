@@ -52,7 +52,7 @@ var level3Bairros = []string{
 	"Boqueirão",
 	"Xaxim",
 	"Pinheirinho",
-	"Cidade Insustrial",
+	"Cidade Industrial",
 	"Santa Felicidade",
 }
 

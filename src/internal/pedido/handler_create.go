@@ -37,6 +37,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"message": err.Error(),
 		})
+		return
 	}
 
 	endereco, err := createAddressVO(body.Address, *bairro)
