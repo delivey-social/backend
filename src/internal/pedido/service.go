@@ -10,13 +10,15 @@ import (
 type PedidoService struct {
 	repository      PedidoRepository
 	cardapioService RestauranteService
+	bairroService   BairroService
 	publisher       EventPublisher
 }
 
-func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService, publisher EventPublisher) *PedidoService {
+func NewPedidoService(repository PedidoRepository, cardapioService RestauranteService, bairroService BairroService, publisher EventPublisher) *PedidoService {
 	return &PedidoService{
 		repository,
 		cardapioService,
+		bairroService,
 		publisher,
 	}
 }

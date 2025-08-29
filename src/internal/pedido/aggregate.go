@@ -38,7 +38,7 @@ func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMe
 		Customer:              customer,
 		Address:               Address,
 		PaymentMethod:         paymentMethod,
-		DeliveryFeeCalculator: NewFixedRateCalculator(500),
+		DeliveryFeeCalculator: NewFixedRateCalculator(),
 	}
 }
 
@@ -52,9 +52,11 @@ func (p *Pedido) CalculateTotal() PedidoTotal {
 	}
 
 	return PedidoTotal{
-		Itens:       itemsTotal,
-		TaxaApp:     uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
-		TaxaEntrega: p.DeliveryFeeCalculator.Calculate(DeliveryFeeContext{}),
+		Itens:   itemsTotal,
+		TaxaApp: uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
+		TaxaEntrega: p.DeliveryFeeCalculator.Calculate(DeliveryFeeContext{
+			bairro: p.Address.Bairro,
+		}),
 	}
 }
 

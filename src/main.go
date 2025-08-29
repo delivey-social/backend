@@ -17,15 +17,16 @@ func main() {
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 
+	bairroRepo := pedido.NewInMemoryBairroRepository()
+	bairroService := pedido.NewBairroService(bairroRepo)
+
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
 	pedidoService := pedido.NewPedidoService(
 		pedidoRepo,
 		adapters.NewCardapioPedidoAdapter(restauranteService),
+		bairroService,
 		eventBus,
 	)
-
-	bairroRepo := pedido.NewInMemoryBairroRepository()
-	bairroService := pedido.NewBairroService(bairroRepo)
 
 	initializeRestaurante(restauranteService)
 

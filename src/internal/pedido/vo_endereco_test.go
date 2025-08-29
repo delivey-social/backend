@@ -4,12 +4,17 @@ import (
 	"testing"
 
 	"comida.app/src/internal/pedido"
+	"github.com/google/uuid"
 )
 
 func TestEndereco(t *testing.T) {
 	validCEP, _ := pedido.NewCEP("80000000")
 	validRua := "Rua Teste"
-	validBairro := "Bairro Teste"
+	validBairro := pedido.Bairro{
+		ID:          uuid.New(),
+		Nome:        "Bairro de teste",
+		TaxaEntrega: 500,
+	}
 	validNumero := "100"
 	validComplemento := "Apto 1"
 	// validCidade := "Cidade Teste"
