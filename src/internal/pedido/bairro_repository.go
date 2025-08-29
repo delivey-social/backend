@@ -1,6 +1,7 @@
 package pedido
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/google/uuid"
@@ -9,6 +10,8 @@ import (
 type BairroRepository interface {
 	Save(bairro Bairro)
 	List() []Bairro
+
+	FindByID(id uuid.UUID) (*Bairro, error)
 }
 
 type InMemoryBairroRepository struct {
@@ -38,4 +41,16 @@ func (r *InMemoryBairroRepository) List() []Bairro {
 		bairros = append(bairros, *bairro)
 	}
 	return bairros
+}
+
+func (r *InMemoryBairroRepository) FindByID(id uuid.UUID) (*Bairro, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	bairro := r.store[id]
+	if bairro == nil {
+		return nil, fmt.Errorf("bairro não encontrado")
+	}
+
+	return bairro, nil
 }
