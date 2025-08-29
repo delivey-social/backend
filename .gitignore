@@ -34,3 +34,5 @@ go.work.sum
 models.asta.lock
 cover.html
 cover.prof
+
+tmp

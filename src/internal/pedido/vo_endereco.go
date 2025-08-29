@@ -1,4 +1,4 @@
-package shared
+package pedido
 
 import "errors"
 
@@ -12,10 +12,9 @@ type Endereco struct {
 	Bairro      string
 	Numero      string
 	Complemento string
-	Cidade      string
+	// Cidade      string
 	// TODO: Make UF it's own type (enum)
-	UF         string
-	Coordenada Coordenada
+	// UF string
 }
 
 func NewEndereco(
@@ -23,12 +22,9 @@ func NewEndereco(
 	rua string,
 	bairro string,
 	numero string,
-	complemento string,
-	cidade string,
-	uf string,
-	coordenada Coordenada) (Endereco, error) {
+	complemento string) (Endereco, error) {
 
-	if rua == "" || bairro == "" || numero == "" || cidade == "" || uf == "" {
+	if rua == "" || bairro == "" || numero == "" {
 		return Endereco{}, ErrInvalidField
 	}
 
@@ -38,8 +34,7 @@ func NewEndereco(
 		Bairro:      bairro,
 		Numero:      numero,
 		Complemento: complemento,
-		Cidade:      cidade,
-		UF:          uf,
-		Coordenada:  coordenada,
+		// Cidade:      cidade,
+		// UF:          uf,
 	}, nil
 }

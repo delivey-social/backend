@@ -1,9 +1,9 @@
-package valueobject_test
+package restaurante_test
 
 import (
 	"testing"
 
-	"comida.app/src/restaurante/valueobject"
+	"comida.app/src/internal/restaurante"
 )
 
 var (
@@ -87,7 +87,7 @@ var valueTestCase = []CNPJTest{
 func TestCNPJ(t *testing.T) {
 	t.Run("Valid CNPJs", func(t *testing.T) {
 		for _, input := range validCNPJ {
-			_, err := valueobject.NewCNPJ(input)
+			_, err := restaurante.NewCNPJ(input)
 			if err != nil {
 				t.Errorf("Unexpected error for %s: %v", input, err)
 			}
@@ -96,7 +96,7 @@ func TestCNPJ(t *testing.T) {
 
 	t.Run("Invalid CNPJs", func(t *testing.T) {
 		for _, input := range invalidCNPJ {
-			_, err := valueobject.NewCNPJ(input)
+			_, err := restaurante.NewCNPJ(input)
 			if err == nil {
 				t.Errorf("Expected error for %s, got nothing", input)
 			}
@@ -105,7 +105,7 @@ func TestCNPJ(t *testing.T) {
 
 	t.Run("String value", func(t *testing.T) {
 		for _, testCase := range valueTestCase {
-			cnpj, err := valueobject.NewCNPJ(testCase.Value)
+			cnpj, err := restaurante.NewCNPJ(testCase.Value)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -118,7 +118,7 @@ func TestCNPJ(t *testing.T) {
 
 	t.Run("Formatted value", func(t *testing.T) {
 		for _, testCase := range valueTestCase {
-			cnpj, err := valueobject.NewCNPJ(testCase.Value)
+			cnpj, err := restaurante.NewCNPJ(testCase.Value)
 			if err != nil {
 				t.Fatal(err)
 			}

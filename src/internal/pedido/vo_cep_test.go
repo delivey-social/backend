@@ -1,9 +1,9 @@
-package shared_test
+package pedido_test
 
 import (
 	"testing"
 
-	"comida.app/src/shared"
+	"comida.app/src/internal/pedido"
 )
 
 var validCeps = []string{"80230000", "80.230-000", "80.230000", "80230-000"}
@@ -25,7 +25,7 @@ func TestCep(t *testing.T) {
 	t.Run("valid CEPs", func(t *testing.T) {
 		t.Parallel()
 		for _, cep := range validCeps {
-			_, err := shared.NewCEP(cep)
+			_, err := pedido.NewCEP(cep)
 			if err != nil {
 				t.Errorf("Unexpected error %v", err)
 			}
@@ -35,7 +35,7 @@ func TestCep(t *testing.T) {
 	t.Run("Invalid CEPs", func(t *testing.T) {
 		t.Parallel()
 		for _, cep := range invalidCeps {
-			_, err := shared.NewCEP(cep)
+			_, err := pedido.NewCEP(cep)
 			if err == nil {
 				t.Errorf("Expected error, got nothing %s", cep)
 			}
@@ -44,7 +44,7 @@ func TestCep(t *testing.T) {
 
 	t.Run("cpf.String", func(t *testing.T) {
 		t.Parallel()
-		cepObj, err := shared.NewCEP(mockCpf.Input)
+		cepObj, err := pedido.NewCEP(mockCpf.Input)
 		if err != nil {
 			t.Errorf("Unexpected error %v", err)
 		}
@@ -55,7 +55,7 @@ func TestCep(t *testing.T) {
 
 	t.Run("cpf.Format", func(t *testing.T) {
 		t.Parallel()
-		cepObj, err := shared.NewCEP(mockCpf.Input)
+		cepObj, err := pedido.NewCEP(mockCpf.Input)
 		if err != nil {
 			t.Fatal("Unexpected Error")
 		}
