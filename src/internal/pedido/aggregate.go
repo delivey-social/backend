@@ -9,13 +9,12 @@ import (
 )
 
 type Pedido struct {
-	id                    uuid.UUID
-	Items                 []PedidoItem
-	Status                PedidoStatus
-	Customer              Usuario
-	Address               Endereco
-	PaymentMethod         PaymentMethod
-	DeliveryFeeCalculator DeliveryFeeCalculator
+	id            uuid.UUID
+	Items         []PedidoItem
+	Status        PedidoStatus
+	Customer      Usuario
+	Address       Endereco
+	PaymentMethod PaymentMethod
 }
 
 type PedidoItem struct {
@@ -32,19 +31,18 @@ type PedidoTotal struct {
 
 func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
 	return Pedido{
-		id:                    uuid.New(),
-		Items:                 items,
-		Status:                PedidoStatusCreated,
-		Customer:              customer,
-		Address:               Address,
-		PaymentMethod:         paymentMethod,
-		DeliveryFeeCalculator: NewFixedRateCalculator(),
+		id:            uuid.New(),
+		Items:         items,
+		Status:        PedidoStatusCreated,
+		Customer:      customer,
+		Address:       Address,
+		PaymentMethod: paymentMethod,
 	}
 }
 
 const APP_FEE_PERCENTAGE = float64(10) / 100
 
-func (p *Pedido) CalculateTotal() PedidoTotal {
+func (p *Pedido) CalculateTotal(deliveryFeeCalculator DeliveryFeeCalculator) PedidoTotal {
 	var itemsTotal uint32
 
 	for _, item := range p.Items {
@@ -54,7 +52,7 @@ func (p *Pedido) CalculateTotal() PedidoTotal {
 	return PedidoTotal{
 		Itens:   itemsTotal,
 		TaxaApp: uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
-		TaxaEntrega: p.DeliveryFeeCalculator.Calculate(DeliveryFeeContext{
+		TaxaEntrega: deliveryFeeCalculator.Calculate(DeliveryFeeContext{
 			bairro: p.Address.Bairro,
 		}),
 	}
