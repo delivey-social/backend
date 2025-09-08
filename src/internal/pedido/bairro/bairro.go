@@ -13,8 +13,12 @@ type Bairro struct {
 }
 
 func NewBairro(nome string, taxaEntrega uint32) (Bairro, error) {
-	if nome == "" || taxaEntrega == 0 {
-		return Bairro{}, fmt.Errorf("invariant failed: criando bairro")
+	if nome == "" {
+		return Bairro{}, fmt.Errorf("nome do bairro não pode ser vazio")
+	}
+
+	if taxaEntrega == 0 {
+		return Bairro{}, fmt.Errorf("taxa de entrega não pode ser zero")
 	}
 
 	return Bairro{
