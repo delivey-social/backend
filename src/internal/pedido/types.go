@@ -29,11 +29,11 @@ type UserDTO struct {
 }
 
 type AddressDTO struct {
-	Street       string `json:"rua" binding:"required"`
-	Neighborhood string `json:"bairro" binding:"required"`
-	Number       string `json:"numero" binding:"required"`
-	Observation  string `json:"observacao"`
-	CEP          string `json:"CEP" binding:"required"`
+	Street       string    `json:"rua" binding:"required"`
+	Neighborhood uuid.UUID `json:"bairro" binding:"required"`
+	Number       string    `json:"numero" binding:"required"`
+	CEP          string    `json:"CEP" binding:"required"`
+	Observation  string    `json:"observacao"`
 }
 
 type RestauranteService interface {

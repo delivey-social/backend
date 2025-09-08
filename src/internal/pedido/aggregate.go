@@ -24,8 +24,9 @@ type PedidoItem struct {
 }
 
 type PedidoTotal struct {
-	Itens   uint32 `json:"itens"`
-	TaxaApp uint32 `json:"taxa_aplicativo"`
+	Itens       uint32 `json:"itens"`
+	TaxaApp     uint32 `json:"taxa_aplicativo"`
+	TaxaEntrega uint32 `json:"taxa_entrega"`
 }
 
 func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
@@ -41,7 +42,7 @@ func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMe
 
 const APP_FEE_PERCENTAGE = float64(10) / 100
 
-func (p *Pedido) CalculateTotal() PedidoTotal {
+func (p *Pedido) CalculateTotal(deliveryFeeCalculator DeliveryFeeCalculator) PedidoTotal {
 	var itemsTotal uint32
 
 	for _, item := range p.Items {
@@ -51,6 +52,9 @@ func (p *Pedido) CalculateTotal() PedidoTotal {
 	return PedidoTotal{
 		Itens:   itemsTotal,
 		TaxaApp: uint32(math.Round(float64(itemsTotal) * APP_FEE_PERCENTAGE)),
+		TaxaEntrega: deliveryFeeCalculator.Calculate(DeliveryFeeContext{
+			bairro: p.Address.Bairro,
+		}),
 	}
 }
 

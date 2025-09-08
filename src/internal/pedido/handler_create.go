@@ -3,6 +3,7 @@ package pedido
 import (
 	"net/http"
 
+	"comida.app/src/internal/pedido/bairro"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,7 +33,15 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	endereco, err := createAddressVO(body.Address)
+	bairro, err := h.service.bairroService.FindByID(body.Address.Neighborhood)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	endereco, err := createAddressVO(body.Address, *bairro)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
@@ -40,15 +49,7 @@ func (h *PedidoHandler) create(c *gin.Context) {
 		return
 	}
 
-	id, err := h.service.Create(body.RestaurantID, body.Items, *usuario, *endereco, metodoPagamento)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err.Error(),
-		})
-		return
-	}
-
-	pedido, err := h.service.FindByID(id)
+	pedido, err := h.service.Create(body.RestaurantID, body.Items, *usuario, *endereco, metodoPagamento)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
@@ -58,8 +59,8 @@ func (h *PedidoHandler) create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"mensagem": "Pedido criado com sucesso!",
-		"id":       id,
-		"preco":    pedido.CalculateTotal(),
+		"id":       pedido.GetId(),
+		"preco":    pedido.CalculateTotal(NewFixedRateCalculator()),
 	})
 }
 
@@ -79,13 +80,13 @@ func createUserVO(email string, phone string, name string) (*Usuario, error) {
 	return &usuario, nil
 }
 
-func createAddressVO(data AddressDTO) (*Endereco, error) {
+func createAddressVO(data AddressDTO, bairro bairro.Bairro) (*Endereco, error) {
 	cep, err := NewCEP(data.CEP)
 	if err != nil {
 		return nil, err
 	}
 
-	address, err := NewEndereco(cep, data.Street, data.Neighborhood, data.Number, data.Observation)
+	address, err := NewEndereco(cep, data.Street, bairro, data.Number, data.Observation)
 	if err != nil {
 		return nil, err
 	}

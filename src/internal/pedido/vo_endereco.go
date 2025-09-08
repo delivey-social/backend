@@ -1,6 +1,10 @@
 package pedido
 
-import "errors"
+import (
+	"errors"
+
+	"comida.app/src/internal/pedido/bairro"
+)
 
 var (
 	ErrInvalidField = errors.New("invalid field")
@@ -9,7 +13,7 @@ var (
 type Endereco struct {
 	CEP         CEP
 	Rua         string
-	Bairro      string
+	Bairro      bairro.Bairro
 	Numero      string
 	Complemento string
 	// Cidade      string
@@ -20,11 +24,11 @@ type Endereco struct {
 func NewEndereco(
 	cep CEP,
 	rua string,
-	bairro string,
+	bairro bairro.Bairro,
 	numero string,
 	complemento string) (Endereco, error) {
 
-	if rua == "" || bairro == "" || numero == "" {
+	if rua == "" || numero == "" {
 		return Endereco{}, ErrInvalidField
 	}
 

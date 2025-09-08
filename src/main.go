@@ -6,6 +6,7 @@ import (
 	"comida.app/src/infra/eventbus"
 	"comida.app/src/internal/notificacoes"
 	"comida.app/src/internal/pedido"
+	"comida.app/src/internal/pedido/bairro"
 	"comida.app/src/internal/restaurante"
 )
 
@@ -13,14 +14,18 @@ func main() {
 	eventBus := eventbus.NewEventBus()
 
 	notificacoes.NewNotificacoesService(eventBus)
-	
+
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 
+	bairroRepo := bairro.NewInMemoryBairroRepository()
+	bairroService := bairro.NewBairroService(bairroRepo)
+
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
 	pedidoService := pedido.NewPedidoService(
-		pedidoRepo, 
-		adapters.NewCardapioPedidoAdapter(restauranteService), 
+		pedidoRepo,
+		adapters.NewCardapioPedidoAdapter(restauranteService),
+		bairroService,
 		eventBus,
 	)
 
@@ -29,6 +34,7 @@ func main() {
 	api.Start([]api.Handlers{
 		restaurante.NewRestaurantHandler(*restauranteService),
 		pedido.NewPedidoHandler(*pedidoService),
+		bairro.NewBairroHandler(bairroService),
 	})
 }
 
