@@ -30,14 +30,14 @@ func (s *PedidoService) Create(
 	usuario Usuario,
 	endereco Endereco,
 	metodoPagamento PaymentMethod,
-) (uuid.UUID, error) {
+) (Pedido, error) {
 	if len(items) == 0 {
-		return uuid.UUID{}, errors.New("é necessário que o pedido tenha ao menos um item")
+		return Pedido{}, errors.New("é necessário que o pedido tenha ao menos um item")
 	}
 
 	for _, item := range items {
 		if item.Quantity <= 0 {
-			return uuid.UUID{}, errors.New("algum item possuí quantidade inválida")
+			return Pedido{}, errors.New("algum item possuí quantidade inválida")
 		}
 	}
 
@@ -48,11 +48,12 @@ func (s *PedidoService) Create(
 
 	menuItems, err := s.cardapioService.GetItemsByIDS(restaurantID, itemsIDs)
 	if err != nil {
-		return uuid.UUID{}, err
+		return Pedido{}, err
 	}
 
 	// Creates the pedido
 	pedido := NewPedido(joinItems(items, menuItems), usuario, endereco, metodoPagamento)
+
 	id := pedido.GetId()
 	s.repository.Save(pedido)
 
@@ -63,7 +64,7 @@ func (s *PedidoService) Create(
 		},
 	})
 
-	return id, nil
+	return pedido, nil
 }
 
 func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
