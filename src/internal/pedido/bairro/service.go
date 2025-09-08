@@ -16,10 +16,15 @@ func NewBairroService(repository BairroRepository) BairroService {
 	return service
 }
 
-func (s *BairroService) CreateBairro(nome string, taxaEntrega uint32) {
-	bairro := NewBairro(nome, taxaEntrega)
+func (s *BairroService) CreateBairro(nome string, taxaEntrega uint32) error {
+	bairro, err := NewBairro(nome, taxaEntrega)
+	if err != nil {
+		return err
+	}
 
 	s.repo.Save(bairro)
+
+	return nil
 }
 
 func (s *BairroService) ListBairros() []Bairro {

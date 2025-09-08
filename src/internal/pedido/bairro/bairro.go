@@ -1,6 +1,10 @@
 package bairro
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type Bairro struct {
 	ID          uuid.UUID `json:"id"`
@@ -8,10 +12,14 @@ type Bairro struct {
 	TaxaEntrega uint32    `json:"taxa_entrega"`
 }
 
-func NewBairro(nome string, taxaEntrega uint32) Bairro {
+func NewBairro(nome string, taxaEntrega uint32) (Bairro, error) {
+	if nome == "" || taxaEntrega == 0 {
+		return Bairro{}, fmt.Errorf("invariant failed: criando bairro")
+	}
+
 	return Bairro{
 		ID:          uuid.New(),
 		Nome:        nome,
 		TaxaEntrega: taxaEntrega,
-	}
+	}, nil
 }
