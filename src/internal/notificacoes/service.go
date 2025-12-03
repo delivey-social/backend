@@ -12,9 +12,10 @@ type Channel interface {
 	Subscriptions() map[infra.EventType]func(infra.Event)
 }
 
-func NewNotificacoesService(subscriber EventSubscriber)  {
+func NewNotificacoesService(subscriber EventSubscriber) {
 	channels := []Channel{
 		NewLoggerChannel(),
+		NewEmailChannel(),
 	}
 
 	for _, ch := range channels {

@@ -58,7 +58,8 @@ func (s *PedidoService) Create(
 	id := pedido.GetId()
 	s.repository.Save(pedido)
 
-	s.publisher.Publish(infra.Event{
+	// TODO: Handle errors after sending email
+	go s.publisher.Publish(infra.Event{
 		Type: infra.OrderCreated,
 		Payload: infra.OrderCreatedPayload{
 			OrderID: id,
