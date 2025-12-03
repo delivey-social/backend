@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"comida.app/src/adapters"
 	"comida.app/src/cmd/api"
 	"comida.app/src/infra/eventbus"
@@ -8,9 +10,15 @@ import (
 	"comida.app/src/internal/pedido"
 	"comida.app/src/internal/pedido/bairro"
 	"comida.app/src/internal/restaurante"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading dotenv", err)
+	}
+
 	eventBus := eventbus.NewEventBus()
 
 	notificacoes.NewNotificacoesService(eventBus)
