@@ -15,6 +15,7 @@ type Pedido struct {
 	Customer      Usuario
 	Address       Endereco
 	PaymentMethod PaymentMethod
+	Observation   string
 }
 
 type PedidoItem struct {
@@ -29,14 +30,15 @@ type PedidoTotal struct {
 	TaxaEntrega uint32 `json:"taxa_entrega"`
 }
 
-func NewPedido(items []PedidoItem, customer Usuario, Address Endereco, paymentMethod PaymentMethod) Pedido {
+func NewPedido(items []PedidoItem, customer Usuario, address Endereco, paymentMethod PaymentMethod, observation string) Pedido {
 	return Pedido{
 		id:            uuid.New(),
 		Items:         items,
 		Status:        PedidoStatusCreated,
 		Customer:      customer,
-		Address:       Address,
+		Address:       address,
 		PaymentMethod: paymentMethod,
+		Observation:   observation,
 	}
 }
 

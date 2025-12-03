@@ -15,6 +15,7 @@ type CreatePedidoDTO struct {
 	User          UserDTO               `json:"usuario" binding:"required"`
 	Address       AddressDTO            `json:"endereco" binding:"required"`
 	PaymentMethod string                `json:"metodo_pagamento" binding:"required"`
+	Observation   string                `json:"observacao,omitempty"`
 }
 
 type CreatePedidoDTOItem struct {

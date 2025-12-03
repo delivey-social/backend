@@ -30,6 +30,7 @@ func (s *PedidoService) Create(
 	usuario Usuario,
 	endereco Endereco,
 	metodoPagamento PaymentMethod,
+	observation string,
 ) (Pedido, error) {
 	if len(items) == 0 {
 		return Pedido{}, errors.New("é necessário que o pedido tenha ao menos um item")
@@ -52,7 +53,7 @@ func (s *PedidoService) Create(
 	}
 
 	// Creates the pedido
-	pedido := NewPedido(joinItems(items, menuItems), usuario, endereco, metodoPagamento)
+	pedido := NewPedido(joinItems(items, menuItems), usuario, endereco, metodoPagamento, observation)
 
 	id := pedido.GetId()
 	s.repository.Save(pedido)
