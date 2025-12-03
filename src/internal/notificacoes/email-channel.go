@@ -2,19 +2,22 @@ package notificacoes
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/smtp"
 	"os"
+	"path/filepath"
 
 	"comida.app/src/infra"
 )
 
 type EmailChannel struct {
-	host     string
-	port     string
-	sender   string
-	password string
-	auth     smtp.Auth
+	host      string
+	port      string
+	sender    string
+	password  string
+	auth      smtp.Auth
+	templates *template.Template
 }
 
 func NewEmailChannel() Channel {
@@ -30,12 +33,20 @@ func NewEmailChannel() Channel {
 		log.Panicf("failed to create email channel: missing required env variables")
 	}
 
+	templatesPath := filepath.Join("src", "emails", "*.html")
+	templates, err := template.ParseGlob(templatesPath)
+
+	if err != nil {
+		panic("failed to load email templates: " + err.Error())
+	}
+
 	return &EmailChannel{
 		host,
 		port,
 		sender,
 		password,
 		auth,
+		templates,
 	}
 }
 
@@ -55,7 +66,7 @@ func (c *EmailChannel) onOrderCreated(evt infra.Event) {
 
 	c.sendEmail(SendEmail{
 		receivers: []string{"admin@comida.app.br"},
-		subject:   "Order created",
+		subject:   "Novo pedido no seu restaurante!",
 		content:   payload.OrderID.String(),
 	})
 
@@ -108,7 +119,7 @@ func (c *EmailChannel) sendEmail(data SendEmail) {
 	msg := []byte(fmt.Sprintf(
 		"To: %s\r\n"+
 			"Subject: %s\r\n"+
-			"\r\n"+
+			"MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"+
 			"%s\r\n",
 		data.receivers[0], data.subject, data.content,
 	))
