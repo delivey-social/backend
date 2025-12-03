@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <h1>Oba! Tem pedido novo no seu retaurante!</h1>
+
+    <p>Nome: {{.ClientName}}</p>
+    <p>email: {{.ClientEmail}}</p>
+    <p>Endereço: {{.OrderAddress}}</p>
+    <p>Data: {{.OrderDate}}</p>
+
+    <p><strong>Itens</strong></p>
+
+    {{range .Items}}
+    <p>{{.Name}} - {{.Quantity}} - {{.Price}}</p>
+    {{end}}
+
+    <p>Observações: {{.Observation}}</p>
+
+    <p>Total dos itens: {{.ItemsTotal}}</p>
+    <p>Taxa de entrega: {{.DeliveryFee}}</p>
+    <p>Taxa do aplicativo: {{.AppFee}}</p>
+    <p><strong>Total: {{.OrderTotal}}</strong></p>
+
+    <p>Forma de pagamento: {{.PaymentMethod}}</p>
+
+    <a href="{{.OrderReadyURI}}">Clique aqui quando o pedido estiver pronto</a>
+
+    <p>id: {{.OrderId}}</p>
+  </body>
+</html>
