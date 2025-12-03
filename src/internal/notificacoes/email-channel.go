@@ -43,6 +43,9 @@ func (c *EmailChannel) Subscriptions() map[infra.EventType]func(infra.Event) {
 	res := make(map[infra.EventType]func(infra.Event))
 
 	res[infra.OrderCreated] = c.onOrderCreated
+	res[infra.OrderReadyForDelivery] = c.onOrderReadyForDelivery
+	res[infra.OrderInDelivery] = c.onOrderInDeliveryRoute
+	res[infra.OrderDelivered] = c.onOrderInDelivered
 
 	return res
 }
@@ -52,11 +55,47 @@ func (c *EmailChannel) onOrderCreated(evt infra.Event) {
 
 	c.sendEmail(SendEmail{
 		receivers: []string{"admin@comida.app.br"},
-		subject:   "Test Email",
+		subject:   "Order created",
 		content:   payload.OrderID.String(),
 	})
 
 	log.Println("Order created email sent for order", payload.OrderID)
+}
+
+func (c *EmailChannel) onOrderReadyForDelivery(evt infra.Event) {
+	payload := evt.Payload.(infra.OrderUpdatedPayload)
+
+	c.sendEmail(SendEmail{
+		receivers: []string{"admin@comida.app.br"},
+		subject:   "Order ready for delivery",
+		content:   payload.OrderID.String(),
+	})
+
+	log.Println("Order ready for delivery email sent for order", payload.OrderID)
+}
+
+func (c *EmailChannel) onOrderInDeliveryRoute(evt infra.Event) {
+	payload := evt.Payload.(infra.OrderUpdatedPayload)
+
+	c.sendEmail(SendEmail{
+		receivers: []string{"admin@comida.app.br"},
+		subject:   "Order in delivery route",
+		content:   payload.OrderID.String(),
+	})
+
+	log.Println("Order in delivery route email sent for order", payload.OrderID)
+}
+
+func (c *EmailChannel) onOrderInDelivered(evt infra.Event) {
+	payload := evt.Payload.(infra.OrderUpdatedPayload)
+
+	c.sendEmail(SendEmail{
+		receivers: []string{"admin@comida.app.br"},
+		subject:   "Order delivered",
+		content:   payload.OrderID.String(),
+	})
+
+	log.Println("Order delivered email sent for order", payload.OrderID)
 }
 
 type SendEmail struct {
