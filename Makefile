@@ -1,7 +1,10 @@
 .PHONY: dev test coverage
 
 dev:
-	docker compose up
+	docker compose up backend-dev db
+
+build:
+	docker compose up backend-build db
 
 test:
 	go test ./...
