@@ -1,10 +1,23 @@
-.PHONY: test coverage
+.PHONY: docker-build docker-run docker-build-dev docker-run-dev test coverage
 
-build:
-	docker build -t comida-app-backend .
+DEV_CONTAINER=comida-app-backend-container-dev
+DEV_NAME=comida-app-backend-dev
 
-run:
-	docker run -it --rm -p 3001:3001  --name comida-app-backend-container comida-app-backend
+PROD_CONTAINER=comida-app-backend-container
+PROD_NAME=comida-app-backend
+PORT=3001
+
+docker-build:
+	docker build -t $(PROD_NAME) . -f Dockerfile
+
+docker-run:
+	docker run -it --rm -p $(PORT):$(PORT)  --name $(PROD_CONTAINER) $(PROD_NAME)
+
+docker-build-dev:
+	docker build -t $(DEV_NAME) . -f Dockerfile.dev
+
+docker-run-dev:
+	docker run -it --rm -p $(PORT):$(PORT)  --name $(DEV_CONTAINER) $(DEV_NAME)
 
 test:
 	go test ./...
