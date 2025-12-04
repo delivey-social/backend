@@ -1,0 +1,24 @@
+# Ignore binary files and build artifacts
+*.exe
+*.bin
+bin/
+pkg/
+
+# Ignore Docker-related files (if not needed in the final image)
+Dockerfile
+docker-compose.yml
+
+# Ignore IDE-specific files and directories
+.idea/
+.vscode/
+
+# Ignore Git-related files
+.git/
+.gitignore
+
+# Ignore log files
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
