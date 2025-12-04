@@ -2,22 +2,22 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
-
-const PORT = "3001"
 
 type Handlers interface {
 	RegisterRoutes(r *gin.Engine)
 }
 
 func Start(handlers []Handlers) {
+	PORT := os.Getenv("PORT")
 	router := gin.Default()
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Service is online",
+			"message": "Service is online!",
 		})
 	})
 

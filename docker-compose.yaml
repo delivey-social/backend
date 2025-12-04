@@ -3,7 +3,7 @@ services:
     image: cosmtrek/air
     working_dir: /app
     ports:
-      - 3001:8080
+      - ${PORT}:${PORT}
     volumes:
       - ./:/app
     command: ["air", "-c", "/app/.air.toml"]
@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 3001:3001
+      - ${PORT}:${PORT}
     command: ["./main"]
     depends_on:
       - db

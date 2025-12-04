@@ -43,9 +43,9 @@ tmp_dir = "/app/tmp/air"
   clean_on_exit = false
 
 [proxy]
-  enabled = true
-  app_port = 3001
-	proxy_port = 8080
+  enabled = false
+  app_port = 0
+	proxy_port = 0
 
 [screen]
   clear_on_rebuild = false
