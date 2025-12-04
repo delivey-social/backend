@@ -1,6 +1,8 @@
 services:
   backend-dev:
-    image: cosmtrek/air
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     working_dir: /app
     ports:
       - ${PORT}:${PORT}
