@@ -27,4 +27,3 @@ func Start(handlers []Handlers) {
 
 	router.Run(":" + PORT)
 }
-

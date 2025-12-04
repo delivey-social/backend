@@ -1,11 +1,11 @@
-root = "."
+root = "/app"
 testdata_dir = "testdata"
-tmp_dir = "tmp"
+tmp_dir = "/app/tmp/air"
 
 [build]
   args_bin = []
-  bin = "tmp\\main.exe"
-  cmd = "go build -o ./tmp/main.exe src/main.go"
+  bin = "/app/tmp/main"
+  cmd = "go build -o /app/tmp/main ./src/main.go"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
@@ -18,8 +18,8 @@ tmp_dir = "tmp"
   include_file = []
   kill_delay = "0s"
   log = "build-errors.log"
-  poll = false
-  poll_interval = 0
+  poll = true
+  poll_interval = 500
   post_cmd = []
   pre_cmd = []
   rerun = false
@@ -43,9 +43,9 @@ tmp_dir = "tmp"
   clean_on_exit = false
 
 [proxy]
-  app_port = 0
-  enabled = false
-  proxy_port = 0
+  enabled = true
+  app_port = 3001
+	proxy_port = 8080
 
 [screen]
   clear_on_rebuild = false
