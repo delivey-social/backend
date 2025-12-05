@@ -2,8 +2,8 @@ package api
 
 import (
 	"net/http"
-	"os"
 
+	"comida.app/src/infra/environment"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +12,6 @@ type Handlers interface {
 }
 
 func Start(handlers []Handlers) {
-	PORT := os.Getenv("PORT")
 	router := gin.Default()
 
 	router.GET("/", func(c *gin.Context) {
@@ -25,5 +24,5 @@ func Start(handlers []Handlers) {
 		handler.RegisterRoutes(router)
 	}
 
-	router.Run(":" + PORT)
+	router.Run(":" + environment.PORT)
 }
