@@ -3,10 +3,9 @@ package api
 import (
 	"net/http"
 
+	"comida.app/src/infra/environment"
 	"github.com/gin-gonic/gin"
 )
-
-const PORT = "3001"
 
 type Handlers interface {
 	RegisterRoutes(r *gin.Engine)
@@ -17,7 +16,7 @@ func Start(handlers []Handlers) {
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Service is online",
+			"message": "Service is online!",
 		})
 	})
 
@@ -25,6 +24,5 @@ func Start(handlers []Handlers) {
 		handler.RegisterRoutes(router)
 	}
 
-	router.Run(":" + PORT)
+	router.Run(":" + environment.PORT)
 }
-
