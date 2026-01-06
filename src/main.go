@@ -3,6 +3,7 @@ package main
 import (
 	"comida.app/src/adapters"
 	"comida.app/src/cmd/api"
+	"comida.app/src/infra/environment"
 	"comida.app/src/infra/eventbus"
 	"comida.app/src/internal/notificacoes"
 	"comida.app/src/internal/pedido"
@@ -11,6 +12,8 @@ import (
 )
 
 func main() {
+	environment.Load()
+
 	eventBus := eventbus.NewEventBus()
 
 	notificacoes.NewNotificacoesService(eventBus)
