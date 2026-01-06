@@ -17,12 +17,12 @@ func NewRestaurantHandler(service RestauranteService) *RestauranteHandler {
 	}
 }
 
-func (h *RestauranteHandler) RegisterRoutes(router *gin.Engine) {
+func (h RestauranteHandler) RegisterRoutes(router *gin.Engine) {
 	router.GET("/restaurante", h.list)
 	router.GET("/restaurante/:id/menu", h.getMenu)
 }
 
-func (h *RestauranteHandler) list(c *gin.Context) {
+func (h RestauranteHandler) list(c *gin.Context) {
 	restaurantes := h.service.List()
 
 	c.JSON(http.StatusOK, gin.H{
@@ -30,20 +30,19 @@ func (h *RestauranteHandler) list(c *gin.Context) {
 	})
 }
 
-func (h *RestauranteHandler) getMenu(c *gin.Context) {
+func (h RestauranteHandler) getMenu(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid id",
+			"message": "id inválido",
 		})
 		return
 	}
 
 	menu, err := h.service.GetMenu(id)
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Repository error",
+			"message": "Cardápio não encontrado",
 		})
 		return
 	}

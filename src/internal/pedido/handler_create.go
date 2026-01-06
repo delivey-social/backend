@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO: This handler is doing too much
 func (h *PedidoHandler) create(c *gin.Context) {
 	var body CreatePedidoDTO
 
