@@ -60,7 +60,7 @@ func (s *PedidoService) Create(
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderCreated,
-		Payload: infra.OrderCreatedPayload{
+		Payload: infra.OrderPayload{
 			OrderID: id,
 		},
 	})
@@ -83,7 +83,7 @@ func (s *PedidoService) ReadyForDelivery(id uuid.UUID) error {
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderReadyForDelivery,
-		Payload: infra.OrderUpdatedPayload{
+		Payload: infra.OrderPayload{
 			OrderID: id,
 		},
 	})
@@ -106,7 +106,7 @@ func (s *PedidoService) InitiateDelivery(id uuid.UUID) error {
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderInDelivery,
-		Payload: infra.OrderUpdatedPayload{
+		Payload: infra.OrderPayload{
 			OrderID: id,
 		},
 	})
@@ -129,7 +129,7 @@ func (s *PedidoService) FinishDelivery(id uuid.UUID) error {
 
 	s.publisher.Publish(infra.Event{
 		Type: infra.OrderDelivered,
-		Payload: infra.OrderUpdatedPayload{
+		Payload: infra.OrderPayload{
 			OrderID: id,
 		},
 	})

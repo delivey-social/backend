@@ -2,24 +2,20 @@ package infra
 
 import "github.com/google/uuid"
 
-type EventType int
+type EventType string
 
 const (
-	OrderCreated EventType = iota
-	OrderReadyForDelivery
-	OrderInDelivery
-	OrderDelivered
+	OrderCreated          EventType = "ORDER CREATED"
+	OrderReadyForDelivery EventType = "ORDER READY FOR DELIVERY"
+	OrderInDelivery       EventType = "ORDER IN DELIVERY"
+	OrderDelivered        EventType = "ORDER DELIVERED"
 )
 
 type Event struct {
 	Type    EventType
-	Payload any
+	Payload OrderPayload
 }
 
-type OrderCreatedPayload struct {
-	OrderID uuid.UUID
-}
-
-type OrderUpdatedPayload struct {
+type OrderPayload struct {
 	OrderID uuid.UUID
 }

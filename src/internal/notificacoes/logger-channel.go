@@ -1,48 +1,32 @@
 package notificacoes
 
 import (
-	"fmt"
+	"log/slog"
 
 	"comida.app/src/infra"
 )
 
-type LoggerChannel struct{}
+type LoggerChannel struct {
+	logger *slog.Logger
+}
 
 func NewLoggerChannel() Channel {
-	return &LoggerChannel{}
+	return &LoggerChannel{
+		logger: slog.Default(),
+	}
 }
 
 func (c *LoggerChannel) Subscriptions() map[infra.EventType]func(infra.Event) {
 	res := make(map[infra.EventType]func(infra.Event))
 
-	res[infra.OrderCreated] = c.onOrderCreated
-	res[infra.OrderReadyForDelivery] = c.onOrderReadyForDelivery
-	res[infra.OrderInDelivery] = c.onOrderInDelivery
-	res[infra.OrderDelivered] = c.onOrderDelivered
+	res[infra.OrderCreated] = c.log
+	res[infra.OrderReadyForDelivery] = c.log
+	res[infra.OrderInDelivery] = c.log
+	res[infra.OrderDelivered] = c.log
 
 	return res
 }
 
-func (c *LoggerChannel) onOrderCreated(evt infra.Event) {
-	payload := evt.Payload.(infra.OrderCreatedPayload)
-
-	fmt.Println("ORDER CREATED", payload.OrderID)
-}
-
-func (c *LoggerChannel) onOrderReadyForDelivery(evt infra.Event) {
-	payload := evt.Payload.(infra.OrderUpdatedPayload)
-
-	fmt.Println("ORDER READY FOR DELIVERY", payload)
-}
-
-func (c *LoggerChannel) onOrderInDelivery(evt infra.Event) {
-	payload := evt.Payload.(infra.OrderUpdatedPayload)
-
-	fmt.Println("ORDER IN DELIVERY", payload)
-}
-
-func (c *LoggerChannel) onOrderDelivered(evt infra.Event) {
-	payload := evt.Payload.(infra.OrderUpdatedPayload)
-
-	fmt.Println("ORDER DELIVERED", payload)
+func (c *LoggerChannel) log(evt infra.Event) {
+	c.logger.Info("[NOTIFICATION]", "type", evt.Type, "id", evt.Payload.OrderID)
 }

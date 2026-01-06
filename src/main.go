@@ -15,7 +15,6 @@ func main() {
 	environment.Load()
 
 	eventBus := eventbus.NewEventBus()
-
 	notificacoes.NewNotificacoesService(eventBus)
 
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
