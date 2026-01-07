@@ -12,17 +12,22 @@ import (
 )
 
 func main() {
+	// Infra
 	environment.Load()
-
 	eventBus := eventbus.NewEventBus()
+
+	// Notifications Context
 	notificacoes.NewNotificacoesService(eventBus)
 
+	// Restaurant Context
 	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 
+	// Localization Context
 	bairroRepo := bairro.NewInMemoryBairroRepository()
 	bairroService := bairro.NewBairroService(bairroRepo)
 
+	// Orders context
 	pedidoRepo := pedido.NewInMemoryPedidoRepository()
 	pedidoService := pedido.NewPedidoService(
 		pedidoRepo,
@@ -31,11 +36,13 @@ func main() {
 		eventBus,
 	)
 
+	// Populates Restaurant Context
 	initializeRestaurante(restauranteService)
 
+	// API Handlers
 	api.Start([]api.Handlers{
-		restaurante.NewRestaurantHandler(*restauranteService),
-		pedido.NewPedidoHandler(*pedidoService),
+		restaurante.NewRestaurantHandler(restauranteService),
+		pedido.NewPedidoHandler(pedidoService),
 		bairro.NewBairroHandler(bairroService),
 	})
 }

@@ -8,10 +8,10 @@ import (
 )
 
 type RestauranteHandler struct {
-	service RestauranteService
+	service *RestauranteService
 }
 
-func NewRestaurantHandler(service RestauranteService) *RestauranteHandler {
+func NewRestaurantHandler(service *RestauranteService) *RestauranteHandler {
 	return &RestauranteHandler{
 		service,
 	}

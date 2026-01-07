@@ -8,10 +8,10 @@ import (
 )
 
 type PedidoHandler struct {
-	service PedidoService
+	service *PedidoService
 }
 
-func NewPedidoHandler(service PedidoService) *PedidoHandler {
+func NewPedidoHandler(service *PedidoService) *PedidoHandler {
 	return &PedidoHandler{
 		service,
 	}
