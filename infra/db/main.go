@@ -3,8 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"log/slog"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -12,12 +14,28 @@ import (
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 
-	_, err := Connect()
+	db, err := Connect()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
+	}
+
+	files, err := os.ReadDir("migration")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		path := filepath.Join("migration", file.Name())
+		script, err := os.ReadFile(path)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		db.Exec(string(script))
 	}
 }
 
