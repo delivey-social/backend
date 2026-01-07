@@ -13,3 +13,6 @@ coverage:
 	go test -coverprofile cover.prof ./...
 	covreport -o cover.html
 	cmd.exe /c start cover.html
+
+migrate:
+	go run infra/db/main.go
