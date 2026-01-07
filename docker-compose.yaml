@@ -25,13 +25,23 @@ services:
     container_name: backend_db
     restart: always
     ports:
-      - ${POSTGRES_PORT}:5432
+      - ${DB_PORT}:5432
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  migrate:
+    image: golang:1.24
+    working_dir: /app
+    volumes:
+      - ./infra/db:/app
+      - .env:/app/.env
+    command: ["go", "run", "main.go"]
+    depends_on:
+      - db
 
 volumes:
   postgres_data:

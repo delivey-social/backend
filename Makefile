@@ -1,4 +1,4 @@
-.PHONY: dev test coverage
+.PHONY: dev test coverage migrate
 
 dev:
 	docker compose up backend-dev db
@@ -15,4 +15,4 @@ coverage:
 	cmd.exe /c start cover.html
 
 migrate:
-	go run infra/db/main.go
+	docker compose up migrate db
