@@ -1,1 +1,3 @@
-DROP TABLE restaurantes;
+DROP TABLE IF EXISTS restaurantes CASCADE;
+
+DROP TABLE IF EXISTS cardapio_itens;

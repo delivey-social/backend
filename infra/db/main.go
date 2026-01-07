@@ -62,7 +62,10 @@ func main() {
 		}
 
 		log.Printf("[MIGRATION] executing file %s", file.Name())
-		db.Exec(string(script))
+		_, err = db.Exec(string(script))
+		if err != nil {
+			log.Fatalf("[MIGRATION] Error while executing %s: %s\n", file.Name(), err.Error())
+		}
 	}
 }
 
