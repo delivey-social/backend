@@ -1,7 +1,7 @@
 package environment
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -16,17 +16,27 @@ var (
 	DB_NAME string
 )
 
-func Load() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Panicf("Error loading .env file: %v", err)
+func Load() error {
+	if err := godotenv.Load(); err != nil {
+		return err
 	}
 
-	PORT = os.Getenv("PORT")
+	vars := map[string]*string{
+		"PORT":    &PORT,
+		"DB_HOST": &DB_HOST,
+		"DB_PORT": &DB_PORT,
+		"DB_USER": &DB_USER,
+		"DB_PASS": &DB_PASS,
+		"DB_NAME": &DB_NAME,
+	}
 
-	DB_HOST = os.Getenv("DB_HOST")
-	DB_PORT = os.Getenv("DB_PORT")
-	DB_USER = os.Getenv("DB_USER")
-	DB_PASS = os.Getenv("DB_PASS")
-	DB_NAME = os.Getenv("DB_NAME")
+	for key, target := range vars {
+		value := os.Getenv(key)
+		if value == "" {
+			return fmt.Errorf("could not find env variable %s", key)
+		}
+		*target = value
+	}
+
+	return nil
 }

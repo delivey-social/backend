@@ -30,14 +30,14 @@ func Connect() (*sql.DB, error) {
 
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		return nil, fmt.Errorf("[DB] Error connecting: %w", err)
+		return nil, err
 	}
 
 	slog.Info("[DB] Connected. Pinging...")
 
 	err = db.Ping()
 	if err != nil {
-		return nil, fmt.Errorf("[DB] Error pinging: %w", err)
+		return nil, err
 
 	}
 

@@ -16,12 +16,16 @@ import (
 
 func main() {
 	// Infra
-	environment.Load()
-	_, err := db.Connect()
+	err := environment.Load()
 	if err != nil {
-		log.Fatal(err)
-		return
+		log.Fatalf("[ENV] Error while loading environment: %v", err)
 	}
+
+	_, err = db.Connect()
+	if err != nil {
+		log.Fatalf("[DB] Error connecting to database: %v", err)
+	}
+
 	eventBus := eventbus.NewEventBus()
 
 	// Notifications Context
