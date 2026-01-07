@@ -65,7 +65,11 @@ func initializeRestaurante(s *restaurante.RestauranteService) {
 		panic(err)
 	}
 
-	id := s.Create(cnpj, "Santo Crepe")
+	id, err := s.Create(cnpj, "Santo Crepe")
+	if err != nil {
+		log.Fatalf("Could not create restaurant %s", err.Error())
+	}
+
 	s.Create(cnpj, "Santo Crepe")
 	itemID, err := s.CreateMenuItem(id, restaurante.MenuItemParams{
 		Name:     "Item de teste",

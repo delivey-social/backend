@@ -1,6 +1,8 @@
 package restaurante
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 )
 
@@ -18,8 +20,13 @@ func (s *RestauranteService) List() []Restaurante {
 	return s.repo.List()
 }
 
-func (s *RestauranteService) Create(CNPJ CNPJ, Name string) uuid.UUID {
-	return s.repo.Create(CNPJ, Name)
+func (s *RestauranteService) Create(CNPJ CNPJ, Name string) (uuid.UUID, error) {
+	id, err := s.repo.Create(CNPJ, Name)
+	if err != nil {
+		return id, fmt.Errorf("service: failed to create restaurante: %w", err)
+	}
+
+	return id, nil
 }
 
 func (s *RestauranteService) GetMenu(restaurantID uuid.UUID) (*Cardapio, error) {

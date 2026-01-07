@@ -20,7 +20,7 @@ func NewSQLRestauranteRepository(db *sql.DB) RestauranteRepository {
 func (r SQLRestauranteRepository) List() []Restaurante {
 	return make([]Restaurante, 0)
 }
-func (r SQLRestauranteRepository) Create(cnpj CNPJ, name string) uuid.UUID {
+func (r SQLRestauranteRepository) Create(cnpj CNPJ, name string) (uuid.UUID, error) {
 	var id uuid.UUID
 
 	err := r.db.QueryRow(`
@@ -29,11 +29,10 @@ func (r SQLRestauranteRepository) Create(cnpj CNPJ, name string) uuid.UUID {
         RETURNING id
     `, cnpj.String(), name).Scan(&id)
 	if err != nil {
-		fmt.Errorf("error inserting into database: %w", err)
-		return id
+		return id, fmt.Errorf("error inserting into database: %w", err)
 	}
 
-	return id
+	return id, nil
 }
 func (r SQLRestauranteRepository) GetMenu(restauranteId uuid.UUID) (*Cardapio, error) {
 	var cardapio Cardapio

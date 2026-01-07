@@ -25,7 +25,7 @@ func (r *InMemoryRestauranteRepository) List() []Restaurante {
 	return r.store
 }
 
-func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID {
+func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) (uuid.UUID, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -37,7 +37,7 @@ func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) uuid.UUID
 		Cardapio: []CardapioItem{},
 	})
 
-	return id
+	return id, nil
 }
 
 func (r *InMemoryRestauranteRepository) GetItemsByIDs(restaurantID uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error) {

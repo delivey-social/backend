@@ -4,7 +4,7 @@ import "github.com/google/uuid"
 
 type RestauranteRepository interface {
 	List() []Restaurante
-	Create(CNPJ CNPJ, Name string) uuid.UUID
+	Create(CNPJ CNPJ, Name string) (uuid.UUID, error)
 	GetMenu(restaurantID uuid.UUID) (*Cardapio, error)
 
 	GetItemsByIDs(restaurantID uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error)
