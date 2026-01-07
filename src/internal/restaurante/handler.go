@@ -1,6 +1,7 @@
 package restaurante
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,14 @@ func (h RestauranteHandler) RegisterRoutes(router *gin.Engine) {
 }
 
 func (h RestauranteHandler) list(c *gin.Context) {
-	restaurantes := h.service.List()
+	restaurantes, err := h.service.List()
+	if err != nil {
+		log.Panicf("%s\n", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Houve um erro desconhecido ao listar os restaurantes",
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"restaurantes": restaurantes,

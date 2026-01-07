@@ -16,8 +16,13 @@ func NewRestauranteService(repo RestauranteRepository) *RestauranteService {
 	}
 }
 
-func (s *RestauranteService) List() []Restaurante {
-	return s.repo.List()
+func (s *RestauranteService) List() ([]Restaurante, error) {
+	restaurantes, err := s.repo.List()
+	if err != nil {
+		return nil, fmt.Errorf("service: failed to fetch restaurantes: %w", err)
+	}
+
+	return restaurantes, nil
 }
 
 func (s *RestauranteService) Create(CNPJ CNPJ, Name string) (uuid.UUID, error) {

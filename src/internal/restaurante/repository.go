@@ -3,7 +3,7 @@ package restaurante
 import "github.com/google/uuid"
 
 type RestauranteRepository interface {
-	List() []Restaurante
+	List() ([]Restaurante, error)
 	Create(CNPJ CNPJ, Name string) (uuid.UUID, error)
 	GetMenu(restaurantID uuid.UUID) (*Cardapio, error)
 

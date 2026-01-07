@@ -17,8 +17,40 @@ func NewSQLRestauranteRepository(db *sql.DB) RestauranteRepository {
 	}
 }
 
-func (r SQLRestauranteRepository) List() []Restaurante {
-	return make([]Restaurante, 0)
+func (r SQLRestauranteRepository) List() ([]Restaurante, error) {
+	var res []*Restaurante = make([]*Restaurante, 0)
+
+	rows, err := r.db.Query(`
+        SELECT id, cnpj, nome
+        FROM restaurantes
+    `)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching restaurantes: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var i Restaurante
+
+		if err := rows.Scan(&i.ID, &i.CNPJ, &i.Name); err != nil {
+			return nil, err
+		}
+
+		res = append(res, &i)
+	}
+
+	var response []Restaurante
+	for _, restaurante := range res {
+		menu, err := r.GetMenu(restaurante.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		restaurante.Cardapio = *menu
+		response = append(response, *restaurante)
+	}
+
+	return response, nil
 }
 func (r SQLRestauranteRepository) Create(cnpj CNPJ, name string) (uuid.UUID, error) {
 	var id uuid.UUID
@@ -35,8 +67,29 @@ func (r SQLRestauranteRepository) Create(cnpj CNPJ, name string) (uuid.UUID, err
 	return id, nil
 }
 func (r SQLRestauranteRepository) GetMenu(restauranteId uuid.UUID) (*Cardapio, error) {
-	var cardapio Cardapio
-	return &cardapio, nil
+	var res Cardapio = make(Cardapio, 0)
+
+	rows, err := r.db.Query(`
+        SELECT id, nome, preco, categoria
+        FROM cardapio_itens
+        WHERE restaurante_id = $1
+    `, restauranteId)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching menu: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var item CardapioItem
+
+		if err := rows.Scan(&item.ID, &item.Name, &item.Price, &item.Category); err != nil {
+			return nil, err
+		}
+
+		res = append(res, item)
+	}
+
+	return &res, nil
 }
 func (r SQLRestauranteRepository) GetItemsByIDs(restauranteId uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error) {
 	var res []CardapioItem = make([]CardapioItem, 0, len(ids))

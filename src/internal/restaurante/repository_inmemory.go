@@ -18,11 +18,11 @@ func NewInMemoryRestauranteRepository() RestauranteRepository {
 	}
 }
 
-func (r *InMemoryRestauranteRepository) List() []Restaurante {
+func (r *InMemoryRestauranteRepository) List() ([]Restaurante, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	return r.store
+	return r.store, nil
 }
 
 func (r *InMemoryRestauranteRepository) Create(CNPJ CNPJ, Name string) (uuid.UUID, error) {
