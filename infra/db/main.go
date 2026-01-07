@@ -15,6 +15,8 @@ import (
 const UP_INDICATION = "_up.sql"
 const DOWN_INDICATION = "_down.sql"
 
+type Direction string
+
 const UP = "up"
 const DOWN = "down"
 
@@ -24,9 +26,8 @@ func main() {
 		log.Fatal("Please provide a direction argument (up or down)")
 	}
 
-	direction := args[1]
-
-	if direction != "up" && direction != "down" {
+	direction, ok := newDirection(args[1])
+	if !ok {
 		log.Fatalf("Invalid argument: Expected 'up' or 'down' got %s\n", direction)
 	}
 
@@ -47,16 +48,17 @@ func main() {
 	for _, file := range files {
 		path := filepath.Join("migration", file.Name())
 		script, err := os.ReadFile(path)
-
-		if !isUpFile(file.Name()) && direction == "up" {
-			continue
-		}
-		if isUpFile(file.Name()) && direction == "down" {
-			continue
-		}
-
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("Error reading file %s", file.Name())
+		}
+
+		fileDirection, ok := getFileDirection(file.Name())
+		if !ok {
+			log.Fatalf("[MIGRATION] File with invalid direction detected %s\n", file.Name())
+		}
+
+		if fileDirection != direction {
+			continue
 		}
 
 		log.Printf("[MIGRATION] executing file %s", file.Name())
@@ -102,6 +104,21 @@ func connectToDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func isUpFile(name string) bool {
-	return name[len(name)-len(UP_INDICATION):] == UP_INDICATION
+func newDirection(try string) (Direction, bool) {
+	return Direction(try), try == UP || try == DOWN
+}
+
+func getFileDirection(fileName string) (Direction, bool) {
+	isUp := fileName[len(fileName)-len(UP_INDICATION):] == UP_INDICATION
+	isDown := fileName[len(fileName)-len(DOWN_INDICATION):] == DOWN_INDICATION
+
+	if isUp {
+		return UP, true
+	}
+
+	if isDown {
+		return DOWN, true
+	}
+
+	return "", false
 }
