@@ -69,5 +69,13 @@ func (r SQLRestauranteRepository) UpdateMenuItem(restauranteId uuid.UUID, id uui
 	return nil
 }
 func (r SQLRestauranteRepository) DeleteMenuItem(restauranteId uuid.UUID, id uuid.UUID) error {
+	err := r.db.QueryRow(`
+        DELETE FROM cardapio_itens
+        WHERE id = $1 AND restaurante_id = $2
+    `, id, restauranteId).Scan()
+	if err != nil {
+		return fmt.Errorf("error deleting menu item: %w", err)
+	}
+
 	return nil
 }
