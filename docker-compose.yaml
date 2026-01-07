@@ -33,13 +33,22 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  migrate:
+  migrate-up:
     image: golang:1.24
     working_dir: /app
     volumes:
       - ./infra/db:/app
       - .env:/app/.env
-    command: ["go", "run", "main.go"]
+    command: ["go", "run", "main.go", "up"]
+    depends_on:
+      - db
+  migrate-down:
+    image: golang:1.24
+    working_dir: /app
+    volumes:
+      - ./infra/db:/app
+      - .env:/app/.env
+    command: ["go", "run", "main.go", "down"]
     depends_on:
       - db
 

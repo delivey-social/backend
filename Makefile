@@ -1,4 +1,4 @@
-.PHONY: dev test coverage migrate
+.PHONY: dev test coverage migrate-up
 
 dev:
 	docker compose up backend-dev db
@@ -14,5 +14,8 @@ coverage:
 	covreport -o cover.html
 	cmd.exe /c start cover.html
 
-migrate:
-	docker compose up migrate db
+migrate-up:
+	docker compose up migrate-up
+
+migrate-down:
+	docker compose up migrate-down
