@@ -1,8 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"comida.app/src/adapters"
 	"comida.app/src/cmd/api"
+	"comida.app/src/infra/db"
 	"comida.app/src/infra/environment"
 	"comida.app/src/infra/eventbus"
 	"comida.app/src/internal/notificacoes"
@@ -14,6 +17,11 @@ import (
 func main() {
 	// Infra
 	environment.Load()
+	_, err := db.Connect()
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 	eventBus := eventbus.NewEventBus()
 
 	// Notifications Context
