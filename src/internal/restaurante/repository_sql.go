@@ -39,8 +39,27 @@ func (r SQLRestauranteRepository) GetMenu(restauranteId uuid.UUID) (*Cardapio, e
 	return &cardapio, nil
 }
 func (r SQLRestauranteRepository) GetItemsByIDs(restauranteId uuid.UUID, ids []uuid.UUID) (*[]CardapioItem, error) {
-	var items []CardapioItem
-	return &items, nil
+	var res []CardapioItem = make([]CardapioItem, 0, len(ids))
+
+	rows, err := r.db.Query(`
+        SELECT id, nome, preco, categoria
+        FROM cardapio_itens
+        WHERE id = ANY($1)
+    `, ids)
+	if err != nil {
+		return &res, fmt.Errorf("error fetching items: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var item CardapioItem
+		if err := rows.Scan(&item.ID, &item.Name, &item.Price, &item.Category); err != nil {
+			return nil, err
+		}
+		res = append(res, item)
+	}
+
+	return &res, nil
 }
 func (r SQLRestauranteRepository) CreateMenuItem(restauranteId uuid.UUID, data MenuItemParams) (uuid.UUID, error) {
 	var id uuid.UUID
