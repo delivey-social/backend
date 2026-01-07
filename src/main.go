@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("[ENV] Error while loading environment: %v", err)
 	}
 
-	_, err = db.Connect()
+	dbInstance, err := db.Connect()
 	if err != nil {
 		log.Fatalf("[DB] Error connecting to database: %v", err)
 	}
@@ -32,7 +32,7 @@ func main() {
 	notificacoes.NewNotificacoesService(eventBus)
 
 	// Restaurant Context
-	restauranteRepo := restaurante.NewInMemoryRestauranteRepository()
+	restauranteRepo := restaurante.NewSQLRestauranteRepository(dbInstance)
 	restauranteService := restaurante.NewRestauranteService(restauranteRepo)
 
 	// Localization Context
