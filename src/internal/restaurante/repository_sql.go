@@ -57,6 +57,15 @@ func (r SQLRestauranteRepository) CreateMenuItem(restauranteId uuid.UUID, data M
 	return id, nil
 }
 func (r SQLRestauranteRepository) UpdateMenuItem(restauranteId uuid.UUID, id uuid.UUID, data MenuItemParams) error {
+	err := r.db.QueryRow(`
+        UPDATE cardapio_itens
+        SET nome = $1, preco = $2, categoria = $3
+        WHERE id = $4 AND restaurante_id = $5
+    `, data.Name, data.Price, data.Category, id, restauranteId).Scan()
+	if err != nil {
+		return fmt.Errorf("error updating menu item: %w", err)
+	}
+
 	return nil
 }
 func (r SQLRestauranteRepository) DeleteMenuItem(restauranteId uuid.UUID, id uuid.UUID) error {
