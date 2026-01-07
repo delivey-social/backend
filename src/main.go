@@ -54,6 +54,7 @@ func initializeRestaurante(s *restaurante.RestauranteService) {
 	}
 
 	id := s.Create(cnpj, "Santo Crepe")
+	s.Create(cnpj, "Santo Crepe")
 	itemID, err := s.CreateMenuItem(id, restaurante.MenuItemParams{
 		Name:     "Item de teste",
 		Price:    420,

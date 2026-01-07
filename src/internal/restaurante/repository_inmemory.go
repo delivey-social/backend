@@ -1,15 +1,10 @@
 package restaurante
 
 import (
-	"errors"
 	"sync"
 
 	"comida.app/src/utils"
 	"github.com/google/uuid"
-)
-
-var (
-	ErrUnsuported = errors.New("unsuported operation")
 )
 
 type InMemoryRestauranteRepository struct {
