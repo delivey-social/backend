@@ -15,7 +15,7 @@ coverage:
 	cmd.exe /c start cover.html
 
 migrate-up:
-	docker compose up migrate-up
+	MIGRATION_ACTION=up docker compose run migrate
 
 migrate-down:
-	docker compose up migrate-down
+	MIGRATION_ACTION=down docker compose run migrate

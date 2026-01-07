@@ -27,7 +27,7 @@ func main() {
 	direction := args[1]
 
 	if direction != "up" && direction != "down" {
-		log.Fatal("Invalid argument (up or down)")
+		log.Fatalf("Invalid argument: Expected 'up' or 'down' got %s\n", direction)
 	}
 
 	if err := godotenv.Load(); err != nil {
