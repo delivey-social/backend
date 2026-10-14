@@ -2,11 +2,14 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from src.modules.pedido.service import PedidoService
 from src.modules.pedido.types import CreatePedidoRequest
 
 
 class PedidoRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, service: PedidoService):
+        self.service = service
+
         super().__init__(prefix="/pedido", tags=["Pedido"])
 
         self.add_api_route("/", self.list_pedidos, methods=["GET"])
@@ -21,7 +24,7 @@ class PedidoRouter(APIRouter):
         return {"message": "List of pedidos"}
 
     async def create_pedido(self, request: CreatePedidoRequest):
-        print(request)
+        self.service.create_pedido(request)
 
         # Logic to create a new pedido goes here
         return {"message": "Pedido criado"}
