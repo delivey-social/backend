@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -11,4 +12,4 @@ class CreatePedidoRequestItem(BaseModel):
 class CreatePedidoRequest(BaseModel):
     user_id: UUID
     restaurant_id: UUID
-    items: list[CreatePedidoRequestItem]
+    items: Annotated[list[CreatePedidoRequestItem], Field(..., min_length=1)]

@@ -11,7 +11,11 @@ http:
     data: |-
       {
         "user_id": "{{$randomUUID}}",
-        "restaurant_id": "{{$randomUUID}}"
+        "restaurant_id": "{{$randomUUID}}",
+        "items": [{
+          "product_id": "{{$randomUUID}}",
+          "quantity": 1
+        }]
       }
   auth: inherit
 
