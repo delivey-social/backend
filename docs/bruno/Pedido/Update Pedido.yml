@@ -1,0 +1,20 @@
+info:
+  name: Update Pedido
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{api_url}}/pedido/:id"
+  params:
+    - name: id
+      value: "{{$randomUUID}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
