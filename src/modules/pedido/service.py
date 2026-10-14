@@ -11,21 +11,25 @@ class PedidoService:
         self.user_gateway = user_gateway
         self.restaurant_gateway = restaurant_gateway
 
-    def create_pedido(self, data: CreatePedidoRequest):
-        exists = self.user_gateway.exists(data.user_id)
+    async def create_pedido(self, data: CreatePedidoRequest):
+        exists = await self.user_gateway.exists(data.user_id)
 
         if not exists:
             raise ValueError(f"User with ID {data.user_id} does not exist.")
 
-        exists = self.restaurant_gateway.exists(data.restaurant_id)
+        exists = await self.restaurant_gateway.exists(data.restaurant_id)
 
         if not exists:
             raise ValueError(f"Restaurant with ID {data.restaurant_id} does not exist.")
 
-        exists = all(
-            self.restaurant_gateway.item_exists(data.restaurant_id, item.product_id)
-            for item in data.items
-        )
+        exists = True
+
+        for item in data.items:
+            if not await self.restaurant_gateway.item_exists(
+                data.restaurant_id, item.product_id
+            ):
+                exists = False
+                break
 
         if not exists:
             raise ValueError(

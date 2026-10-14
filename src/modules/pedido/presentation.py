@@ -44,7 +44,7 @@ class PedidoRouter(APIRouter):
         return {"message": "List of pedidos"}
 
     async def create_pedido(self, request: CreatePedidoRequest):
-        self.service.create_pedido(request)
+        await self.service.create_pedido(request)
 
         # Logic to create a new pedido goes here
         return {"message": "Pedido criado"}
