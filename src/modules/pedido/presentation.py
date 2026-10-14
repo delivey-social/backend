@@ -12,11 +12,31 @@ class PedidoRouter(APIRouter):
 
         super().__init__(prefix="/pedido", tags=["Pedido"])
 
-        self.add_api_route("/", self.list_pedidos, methods=["GET"])
-        self.add_api_route("/", self.create_pedido, methods=["POST"])
-        self.add_api_route("/{pedido_id}", self.get_pedido, methods=["GET"])
-        self.add_api_route("/{pedido_id}", self.update_pedido, methods=["PUT"])
-        self.add_api_route("/{pedido_id}", self.delete_pedido, methods=["DELETE"])
+        self.add_api_route(
+            "/",
+            self.list_pedidos,
+            methods=["GET"],
+        )
+        self.add_api_route(
+            "/",
+            self.create_pedido,
+            methods=["POST"],
+        )
+        self.add_api_route(
+            "/{pedido_id}",
+            self.get_pedido,
+            methods=["GET"],
+        )
+        self.add_api_route(
+            "/{pedido_id}",
+            self.update_pedido,
+            methods=["PUT"],
+        )
+        self.add_api_route(
+            "/{pedido_id}",
+            self.delete_pedido,
+            methods=["DELETE"],
+        )
 
     async def list_pedidos(self):
 

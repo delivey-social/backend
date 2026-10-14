@@ -1,7 +1,21 @@
+from abc import ABC, abstractmethod
 from typing import Annotated
 from uuid import UUID
 
 from pydantic import BaseModel, Field
+
+
+class UserGateway(ABC):
+    @abstractmethod
+    def exists(self, user_id: UUID) -> bool: ...
+
+
+class RestaurantGateway(ABC):
+    @abstractmethod
+    def exists(self, restaurant_id: UUID) -> bool: ...
+
+    @abstractmethod
+    def item_exists(self, restaurant_id: UUID, product_id: UUID) -> bool: ...
 
 
 class CreatePedidoRequestItem(BaseModel):
