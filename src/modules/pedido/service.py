@@ -1,3 +1,4 @@
+from src.modules.pedido.domain.pedido import Pedido, PedidoItem
 from src.modules.pedido.types import CreatePedidoRequest, RestaurantGateway, UserGateway
 
 
@@ -31,4 +32,17 @@ class PedidoService:
                 f"One or more items do not exist in the restaurant {data.restaurant_id}."
             )
 
-        print(f"Creating pedido with data: {data}")
+        pedido = Pedido(
+            user_id=data.user_id,
+            restaurant_id=data.restaurant_id,
+            items=[
+                PedidoItem(
+                    product_id=item.product_id,
+                    quantity=item.quantity,
+                    price_snapshot=0.0,
+                )
+                for item in data.items
+            ],
+        )
+
+        print(f"Creating pedido with data: {pedido}")
