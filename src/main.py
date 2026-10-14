@@ -6,21 +6,26 @@ from src.modules.pedido.types import RestaurantGateway, UserGateway
 
 from .modules.pedido.presentation import PedidoRouter
 from .modules.pedido.service import PedidoService
+from .modules.pedido.types import RestaurantItem
 
 app = FastAPI(title="Comida App Backend")
 
 
 class DummyUserGateway(UserGateway):
-    def exists(self, user_id: UUID) -> bool:
+    async def exists(self, user_id: UUID) -> bool:
         return True
 
 
 class DummyRestaurantGateway(RestaurantGateway):
-    def exists(self, restaurant_id: UUID) -> bool:
+    async def exists(self, restaurant_id: UUID) -> bool:
         return True
 
-    def item_exists(self, restaurant_id: UUID, product_id: UUID) -> bool:
-        return True
+    async def get_item(self, restaurant_id: UUID, product_id: UUID) -> RestaurantItem:
+        return RestaurantItem(
+            product_id=product_id,
+            name="Dummy Item",
+            price=100,
+        )
 
 
 pedido_service = PedidoService(DummyUserGateway(), DummyRestaurantGateway())

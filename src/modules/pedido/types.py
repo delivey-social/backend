@@ -10,12 +10,20 @@ class UserGateway(ABC):
     async def exists(self, user_id: UUID) -> bool: ...
 
 
+class RestaurantItem(BaseModel):
+    product_id: UUID
+    name: str
+    price: int
+
+
 class RestaurantGateway(ABC):
     @abstractmethod
     async def exists(self, restaurant_id: UUID) -> bool: ...
 
     @abstractmethod
-    async def item_exists(self, restaurant_id: UUID, product_id: UUID) -> bool: ...
+    async def get_item(
+        self, restaurant_id: UUID, product_id: UUID
+    ) -> RestaurantItem: ...
 
 
 class CreatePedidoRequestItem(BaseModel):

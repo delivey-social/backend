@@ -1,5 +1,9 @@
 from src.modules.pedido.domain.pedido import Pedido, PedidoItem
-from src.modules.pedido.types import CreatePedidoRequest, RestaurantGateway, UserGateway
+from src.modules.pedido.types import (
+    CreatePedidoRequest,
+    RestaurantGateway,
+    UserGateway,
+)
 
 
 class PedidoService:
@@ -22,14 +26,20 @@ class PedidoService:
         if not exists:
             raise ValueError(f"Restaurant with ID {data.restaurant_id} does not exist.")
 
-        exists = True
+        items: list[PedidoItem] = []
 
         for item in data.items:
-            if not await self.restaurant_gateway.item_exists(
+            item_domain = await self.restaurant_gateway.get_item(
                 data.restaurant_id, item.product_id
-            ):
-                exists = False
-                break
+            )
+
+            items.append(
+                PedidoItem(
+                    product_id=item_domain.product_id,
+                    quantity=item.quantity,
+                    price_snapshot=item_domain.price,
+                )
+            )
 
         if not exists:
             raise ValueError(
