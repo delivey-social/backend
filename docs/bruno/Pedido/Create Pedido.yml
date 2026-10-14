@@ -6,6 +6,13 @@ info:
 http:
   method: POST
   url: "{{api_url}}/pedido/"
+  body:
+    type: json
+    data: |-
+      {
+        "user_id": "{{$randomUUID}}",
+        "restaurant_id": "{{$randomUUID}}"
+      }
   auth: inherit
 
 settings:
