@@ -1,0 +1,20 @@
+info:
+  name: Delete Restaurante
+  type: http
+  seq: 4
+
+http:
+  method: DELETE
+  url: "{{api_url}}/restaurante/:id"
+  params:
+    - name: id
+      value: "{{$randomUUID}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

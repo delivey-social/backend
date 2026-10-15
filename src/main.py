@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import FastAPI
 
 from src.modules.pedido.types import RestaurantGateway, UserGateway
+from src.modules.restaurante.presentation import RestauranteRouter
 
 from .modules.pedido.presentation import PedidoRouter
 from .modules.pedido.service import PedidoService
@@ -28,10 +29,13 @@ class DummyRestaurantGateway(RestaurantGateway):
         )
 
 
+restaurant_router = RestauranteRouter()
+
 pedido_service = PedidoService(DummyUserGateway(), DummyRestaurantGateway())
 pedido_router = PedidoRouter(pedido_service)
 
 app.include_router(pedido_router)
+app.include_router(restaurant_router)
 
 
 @app.get("/")
