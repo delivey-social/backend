@@ -2,10 +2,14 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from .service import RestauranteService
+
 
 class RestauranteRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, service: RestauranteService):
         super().__init__(prefix="/restaurante", tags=["Restaurante"])
+
+        self.service = service
 
         self.add_api_route(
             "/",
@@ -37,21 +41,22 @@ class RestauranteRouter(APIRouter):
         )
 
     async def list_restaurantes(self):
-        # Logic to list restaurantes goes here
-        return {"message": "List of restaurantes"}
+        return await self.service.list_restaurantes()
 
     async def get_restaurante(self, restaurante_id: UUID):
-        # Logic to get a specific restaurante by ID goes here
-        return {"message": f"Details of restaurante {restaurante_id}"}
+        return await self.service.get_restaurante(restaurante_id)
 
     async def create_restaurante(self):
-        # Logic to create a new restaurante goes here
-        return {"message": "Restaurante criado"}
+        await self.service.create_restaurante()
+
+        return {"message": "Restaurante created successfully"}
 
     async def update_restaurante(self, restaurante_id: UUID):
-        # Logic to update a specific restaurante by ID goes here
+        await self.service.update_restaurante(restaurante_id)
+
         return {"message": f"Restaurante {restaurante_id} updated"}
 
     async def delete_restaurante(self, restaurante_id: UUID):
-        # Logic to delete a specific restaurante by ID goes here
+        await self.service.delete_restaurante(restaurante_id)
+
         return {"message": f"Restaurante {restaurante_id} deleted"}

@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from src.modules.pedido.types import RestaurantGateway, UserGateway
 from src.modules.restaurante.presentation import RestauranteRouter
+from src.modules.restaurante.service import RestauranteService
 
 from .modules.pedido.presentation import PedidoRouter
 from .modules.pedido.service import PedidoService
@@ -29,7 +30,8 @@ class DummyRestaurantGateway(RestaurantGateway):
         )
 
 
-restaurant_router = RestauranteRouter()
+restaurant_service = RestauranteService()
+restaurant_router = RestauranteRouter(restaurant_service)
 
 pedido_service = PedidoService(DummyUserGateway(), DummyRestaurantGateway())
 pedido_router = PedidoRouter(pedido_service)
