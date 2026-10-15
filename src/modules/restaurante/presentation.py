@@ -2,6 +2,11 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from src.modules.restaurante.types import (
+    CreateRestauranteRequest,
+    UpdateRestauranteRequest,
+)
+
 from .service import RestauranteService
 
 
@@ -46,13 +51,20 @@ class RestauranteRouter(APIRouter):
     async def get_restaurante(self, restaurante_id: UUID):
         return await self.service.get_restaurante(restaurante_id)
 
-    async def create_restaurante(self):
-        await self.service.create_restaurante()
+    async def create_restaurante(self, data: CreateRestauranteRequest):
+        await self.service.create_restaurante(data)
 
         return {"message": "Restaurante created successfully"}
 
-    async def update_restaurante(self, restaurante_id: UUID):
-        await self.service.update_restaurante(restaurante_id)
+    async def update_restaurante(
+        self, restaurante_id: UUID, data: CreateRestauranteRequest
+    ):
+        await self.service.update_restaurante(
+            UpdateRestauranteRequest(
+                id=restaurante_id,
+                nome=data.nome,
+            )
+        )
 
         return {"message": f"Restaurante {restaurante_id} updated"}
 

@@ -1,45 +1,59 @@
-from uuid import UUID
+from uuid import UUID, uuid4
 
+from src.modules.restaurante.types import (
+    CreateRestauranteRequest,
+    UpdateRestauranteRequest,
+)
+
+from .domain.repository import RestauranteRepository
 from .domain.restaurante import Restaurante
 
 
 class RestauranteService:
-    def __init__(self):
-        pass
+    def __init__(self, repo: RestauranteRepository):
+        self.repo = repo
 
     async def list_restaurantes(self) -> list[Restaurante]:
-        print("Listing restaurantes")
+        print("[RestauranteService] Listando restaurantes...")
 
-        return [
-            Restaurante(
-                id=UUID("12345678-1234-1234-1234-123456789012"),
-                nome="Sample Restaurante",
-            )
-        ]
+        return await self.repo.list_restaurantes()
 
     async def get_restaurante(self, restaurante_id: UUID) -> Restaurante:
-        print(f"Getting restaurante with ID: {restaurante_id}")
+        print(f"[RestauranteService] Obtendo restaurante com ID: {restaurante_id}")
 
-        return Restaurante(
-            id=restaurante_id,
-            nome="Sample Restaurante",
+        return await self.repo.get_restaurante_by_id(restaurante_id)
+
+    async def create_restaurante(
+        self,
+        data: CreateRestauranteRequest,
+    ) -> Restaurante:
+        print("[RestauranteService] Criando novo restaurante...")
+
+        restaurante = Restaurante(
+            id=uuid4(),
+            nome=data.nome,
         )
 
-    async def create_restaurante(self) -> Restaurante:
-        print("Creating a new restaurante")
+        await self.repo.create_restaurante(restaurante)
 
-        return Restaurante(
-            id=UUID("12345678-1234-1234-1234-123456789012"),
-            nome="Sample Restaurante",
+        return restaurante
+
+    async def update_restaurante(
+        self,
+        data: UpdateRestauranteRequest,
+    ) -> Restaurante:
+        print(f"[RestauranteService] Atualizando restaurante com ID: {data.id}")
+
+        restaurante = Restaurante(
+            id=data.id,
+            nome=data.nome,
         )
 
-    async def update_restaurante(self, restaurante_id: UUID) -> Restaurante:
-        print(f"Updating restaurante with ID: {restaurante_id}")
+        await self.repo.update_restaurante(restaurante)
 
-        return Restaurante(
-            id=restaurante_id,
-            nome="Sample Restaurante",
-        )
+        return restaurante
 
     async def delete_restaurante(self, restaurante_id: UUID):
-        print(f"Deleting restaurante with ID: {restaurante_id}")
+        print(f"[RestauranteService] Excluindo restaurante com ID: {restaurante_id}")
+
+        return await self.repo.delete_restaurante(restaurante_id)

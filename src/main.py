@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import FastAPI
 
 from src.modules.pedido.types import RestaurantGateway, UserGateway
+from src.modules.restaurante.infra.inmemory_repo import InMemoryRestauranteRepository
 from src.modules.restaurante.presentation import RestauranteRouter
 from src.modules.restaurante.service import RestauranteService
 
@@ -30,7 +31,8 @@ class DummyRestaurantGateway(RestaurantGateway):
         )
 
 
-restaurant_service = RestauranteService()
+restaurante_repo = InMemoryRestauranteRepository()
+restaurant_service = RestauranteService(restaurante_repo)
 restaurant_router = RestauranteRouter(restaurant_service)
 
 pedido_service = PedidoService(DummyUserGateway(), DummyRestaurantGateway())
