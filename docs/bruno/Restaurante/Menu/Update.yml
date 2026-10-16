@@ -1,0 +1,23 @@
+info:
+  name: Update
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{api_url}}/menu/:restaurante_id/:item_id"
+  params:
+    - name: item_id
+      value: "{{$randomUUID}}"
+      type: path
+    - name: restaurante_id
+      value: "{{$randomUUID}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
