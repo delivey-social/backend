@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.pool import StaticPool
 
 engine: AsyncEngine = create_async_engine(
-    "sqlite+aiosqlite:///:memory:",
+    "sqlite+aiosqlite:///./data/sqlite.db",
     echo=False,
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
