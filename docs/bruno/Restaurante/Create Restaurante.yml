@@ -6,6 +6,12 @@ info:
 http:
   method: POST
   url: "{{api_url}}/restaurante"
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "{{$randomCompanyName}}"
+      }
   auth: inherit
 
 settings:

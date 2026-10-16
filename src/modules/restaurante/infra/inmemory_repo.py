@@ -8,7 +8,7 @@ class InMemoryRestauranteRepository(RestauranteRepository):
     def __init__(self):
         self.restaurantes: dict[UUID, Restaurante] = {}
 
-    async def list_restaurantes(self):
+    async def list_restaurantes(self) -> list[Restaurante]:
         return list(self.restaurantes.values())
 
     async def get_restaurante(self, restaurante_id: UUID):
@@ -17,10 +17,7 @@ class InMemoryRestauranteRepository(RestauranteRepository):
     async def create_restaurante(self, data: Restaurante):
         self.restaurantes[data.id] = data
 
-    async def update_restaurante(
-        self,
-        data: Restaurante,
-    ):
+    async def update_restaurante(self, data: Restaurante):
         if data.id in self.restaurantes:
             self.restaurantes[data.id] = data
 

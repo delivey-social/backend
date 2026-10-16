@@ -10,6 +10,12 @@ http:
     - name: id
       value: "{{$randomUUID}}"
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "{{$randomCompanyName}}"
+      }
   auth: inherit
 
 settings:
