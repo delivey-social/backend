@@ -1,6 +1,7 @@
+from collections.abc import AsyncIterator, Callable
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from src.modules.restaurante.menu_service import MenuService
 from src.modules.restaurante.types import (
@@ -10,69 +11,111 @@ from src.modules.restaurante.types import (
 
 from .service import RestauranteService
 
+RestauranteServiceDependency = Callable[
+    ..., AsyncIterator[RestauranteService]
+]
+
 
 class RestauranteRouter(APIRouter):
-    def __init__(self, service: RestauranteService):
+    def __init__(
+        self,
+        service_dependency: RestauranteServiceDependency,
+    ):
         super().__init__(prefix="/restaurante", tags=["Restaurante"])
-
-        self.service = service
 
         self.add_api_route(
             "/",
-            self.list_restaurantes,
+            self.list_restaurantes_endpoint(service_dependency),
             methods=["GET"],
         )
         self.add_api_route(
             "/{restaurante_id}",
-            self.get_restaurante,
+            self.get_restaurante_endpoint(service_dependency),
             methods=["GET"],
         )
 
         self.add_api_route(
             "/",
-            self.create_restaurante,
+            self.create_restaurante_endpoint(service_dependency),
             methods=["POST"],
         )
 
         self.add_api_route(
             "/{restaurante_id}",
-            self.update_restaurante,
+            self.update_restaurante_endpoint(service_dependency),
             methods=["PUT"],
         )
 
         self.add_api_route(
             "/{restaurante_id}",
-            self.delete_restaurante,
+            self.delete_restaurante_endpoint(service_dependency),
             methods=["DELETE"],
         )
 
-    async def list_restaurantes(self):
-        return await self.service.list_restaurantes()
-
-    async def get_restaurante(self, restaurante_id: UUID):
-        return await self.service.get_restaurante(restaurante_id)
-
-    async def create_restaurante(self, data: CreateRestauranteRequest):
-        await self.service.create_restaurante(data)
-
-        return {"message": "Restaurante created successfully"}
-
-    async def update_restaurante(
-        self, restaurante_id: UUID, data: CreateRestauranteRequest
+    @staticmethod
+    def list_restaurantes_endpoint(
+        service_dependency: RestauranteServiceDependency,
     ):
-        await self.service.update_restaurante(
-            UpdateRestauranteRequest(
-                id=restaurante_id,
-                nome=data.nome,
+        async def endpoint(
+            service: RestauranteService = Depends(service_dependency),
+        ):
+            return await service.list_restaurantes()
+
+        return endpoint
+
+    @staticmethod
+    def get_restaurante_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            service: RestauranteService = Depends(service_dependency),
+        ):
+            return await service.get_restaurante(restaurante_id)
+
+        return endpoint
+
+    @staticmethod
+    def create_restaurante_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            data: CreateRestauranteRequest,
+            service: RestauranteService = Depends(service_dependency),
+        ):
+            await service.create_restaurante(data)
+            return {"message": "Restaurante created successfully"}
+
+        return endpoint
+
+    @staticmethod
+    def update_restaurante_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            data: CreateRestauranteRequest,
+            service: RestauranteService = Depends(service_dependency),
+        ):
+            await service.update_restaurante(
+                UpdateRestauranteRequest(id=restaurante_id, nome=data.nome)
             )
-        )
+            return {"message": f"Restaurante {restaurante_id} updated"}
 
-        return {"message": f"Restaurante {restaurante_id} updated"}
+        return endpoint
 
-    async def delete_restaurante(self, restaurante_id: UUID):
-        await self.service.delete_restaurante(restaurante_id)
+    @staticmethod
+    def delete_restaurante_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            service: RestauranteService = Depends(service_dependency),
+        ):
+            await service.delete_restaurante(restaurante_id)
+            return {"message": f"Restaurante {restaurante_id} deleted"}
 
-        return {"message": f"Restaurante {restaurante_id} deleted"}
+        return endpoint
 
 
 class MenuRouter(APIRouter):

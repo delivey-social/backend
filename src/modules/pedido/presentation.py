@@ -1,62 +1,90 @@
+from collections.abc import Awaitable, Callable
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from src.modules.pedido.service import PedidoService
 from src.modules.pedido.types import CreatePedidoRequest
 
+PedidoServiceDependency = Callable[..., Awaitable[PedidoService]]
+
 
 class PedidoRouter(APIRouter):
-    def __init__(self, service: PedidoService):
-        self.service = service
-
+    def __init__(self, service_dependency: PedidoServiceDependency):
         super().__init__(prefix="/pedido", tags=["Pedido"])
 
         self.add_api_route(
             "/",
-            self.list_pedidos,
+            self.list_pedidos_endpoint(service_dependency),
             methods=["GET"],
         )
         self.add_api_route(
             "/",
-            self.create_pedido,
+            self.create_pedido_endpoint(service_dependency),
             methods=["POST"],
         )
         self.add_api_route(
             "/{pedido_id}",
-            self.get_pedido,
+            self.get_pedido_endpoint(service_dependency),
             methods=["GET"],
         )
         self.add_api_route(
             "/{pedido_id}",
-            self.update_pedido,
+            self.update_pedido_endpoint(service_dependency),
             methods=["PUT"],
         )
         self.add_api_route(
             "/{pedido_id}",
-            self.delete_pedido,
+            self.delete_pedido_endpoint(service_dependency),
             methods=["DELETE"],
         )
 
-    async def list_pedidos(self):
+    @staticmethod
+    def list_pedidos_endpoint(service_dependency: PedidoServiceDependency):
+        async def endpoint(
+            service: PedidoService = Depends(service_dependency),
+        ):
+            return {"message": "List of pedidos"}
 
-        # Logic to list pedidos goes here
-        return {"message": "List of pedidos"}
+        return endpoint
 
-    async def create_pedido(self, request: CreatePedidoRequest):
-        await self.service.create_pedido(request)
+    @staticmethod
+    def create_pedido_endpoint(service_dependency: PedidoServiceDependency):
+        async def endpoint(
+            request: CreatePedidoRequest,
+            service: PedidoService = Depends(service_dependency),
+        ):
+            await service.create_pedido(request)
+            return {"message": "Pedido criado"}
 
-        # Logic to create a new pedido goes here
-        return {"message": "Pedido criado"}
+        return endpoint
 
-    async def get_pedido(self, pedido_id: UUID):
-        # Logic to get a specific pedido by ID goes here
-        return {"message": f"Details of pedido {pedido_id}"}
+    @staticmethod
+    def get_pedido_endpoint(service_dependency: PedidoServiceDependency):
+        async def endpoint(
+            pedido_id: UUID,
+            service: PedidoService = Depends(service_dependency),
+        ):
+            return {"message": f"Details of pedido {pedido_id}"}
 
-    async def update_pedido(self, pedido_id: UUID):
-        # Logic to update a specific pedido by ID goes here
-        return {"message": f"Pedido {pedido_id} updated"}
+        return endpoint
 
-    async def delete_pedido(self, pedido_id: UUID):
-        # Logic to delete a specific pedido by ID goes here
-        return {"message": f"Pedido {pedido_id} deleted"}
+    @staticmethod
+    def update_pedido_endpoint(service_dependency: PedidoServiceDependency):
+        async def endpoint(
+            pedido_id: UUID,
+            service: PedidoService = Depends(service_dependency),
+        ):
+            return {"message": f"Pedido {pedido_id} updated"}
+
+        return endpoint
+
+    @staticmethod
+    def delete_pedido_endpoint(service_dependency: PedidoServiceDependency):
+        async def endpoint(
+            pedido_id: UUID,
+            service: PedidoService = Depends(service_dependency),
+        ):
+            return {"message": f"Pedido {pedido_id} deleted"}
+
+        return endpoint
