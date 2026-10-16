@@ -8,8 +8,12 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import StaticPool
 
+from src.constants import DB_PATH
+
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+
 engine: AsyncEngine = create_async_engine(
-    "sqlite+aiosqlite:///./data/sqlite.db",
+    f"sqlite+aiosqlite:///{DB_PATH}",
     echo=False,
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
