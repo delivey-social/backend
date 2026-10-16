@@ -1,0 +1,20 @@
+info:
+  name: Get Menu
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{api_url}}/menu/:restaurante_id"
+  params:
+    - name: restaurante_id
+      value: "{{$randomUUID}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
