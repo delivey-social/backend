@@ -1,6 +1,8 @@
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from src.core.errors import DomainError
+from src.modules.restaurante.domain.restaurante import MenuItem
+from src.modules.restaurante.types import CreateMenuItemRequest
 
 from .domain.repository import MenuRepository
 
@@ -16,3 +18,13 @@ class MenuService:
             raise DomainError("Menu not found for the given restaurante_id")
 
         return menu
+
+    async def create_menu_item(self, restaurante_id: UUID, data: CreateMenuItemRequest):
+        await self.menu_repo.create_item(
+            restaurante_id,
+            MenuItem(
+                id=uuid4(),
+                nome=data.nome,
+                preco=data.preco,
+            ),
+        )

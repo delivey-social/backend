@@ -1,0 +1,20 @@
+info:
+  name: Create Menu Item
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{api_url}}/menu/:restaurante_id"
+  params:
+    - name: restaurante_id
+      value: "{{$randomUUID}}"
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

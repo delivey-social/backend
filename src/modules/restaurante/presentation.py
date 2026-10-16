@@ -5,15 +5,14 @@ from fastapi import APIRouter, Depends
 
 from src.modules.restaurante.menu_service import MenuService
 from src.modules.restaurante.types import (
+    CreateMenuItemRequest,
     CreateRestauranteRequest,
     UpdateRestauranteRequest,
 )
 
 from .service import RestauranteService
 
-RestauranteServiceDependency = Callable[
-    ..., AsyncIterator[RestauranteService]
-]
+RestauranteServiceDependency = Callable[..., AsyncIterator[RestauranteService]]
 
 
 class RestauranteRouter(APIRouter):
@@ -130,5 +129,16 @@ class MenuRouter(APIRouter):
             methods=["GET"],
         )
 
+        self.add_api_route(
+            "/{restaurante_id}",
+            self.create_menu_item,
+            methods=["POST"],
+        )
+
     async def get_menu(self, restaurante_id: UUID):
         return await self.service.get_menu(restaurante_id)
+
+    async def create_menu_item(self, restaurante_id: UUID, data: CreateMenuItemRequest):
+        await self.service.create_menu_item(restaurante_id, data)
+
+        return {"message": "Menu item created successfully"}

@@ -1,7 +1,7 @@
 from uuid import UUID, uuid4
 
 from ..domain.repository import MenuRepository
-from ..domain.restaurante import Menu
+from ..domain.restaurante import Menu, MenuItem
 
 
 class InMemoryMenuRepository(MenuRepository):
@@ -17,3 +17,11 @@ class InMemoryMenuRepository(MenuRepository):
 
     async def get_by_restaurante_id(self, restaurante_id: UUID) -> Menu | None:
         return self.menus.get(restaurante_id)
+
+    async def create_item(self, restaurante_id: UUID, data: MenuItem):
+        menu = self.menus.get(restaurante_id)
+
+        if menu is None:
+            raise ValueError("Menu not found for the given restaurante_id")
+
+        menu.itens.append(data)

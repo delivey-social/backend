@@ -10,3 +10,8 @@ class CreateRestauranteRequest(BaseModel):
 class UpdateRestauranteRequest(BaseModel):
     id: UUID
     nome: str
+
+
+class CreateMenuItemRequest(BaseModel):
+    nome: str
+    preco: int
