@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from .restaurante import Restaurante
+from .restaurante import Menu, Restaurante
 
 
 class RestauranteRepository(ABC):
@@ -29,4 +29,8 @@ class RestauranteRepository(ABC):
 class MenuRepository(ABC):
     @abstractmethod
     async def create_menu(self, restaurante_id: UUID):
+        pass
+
+    @abstractmethod
+    async def get_menu_by_restaurante_id(self, restaurante_id: UUID) -> Menu | None:
         pass

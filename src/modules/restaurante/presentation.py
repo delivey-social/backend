@@ -2,6 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from src.modules.restaurante.menu_service import MenuService
 from src.modules.restaurante.types import (
     CreateRestauranteRequest,
     UpdateRestauranteRequest,
@@ -72,3 +73,19 @@ class RestauranteRouter(APIRouter):
         await self.service.delete_restaurante(restaurante_id)
 
         return {"message": f"Restaurante {restaurante_id} deleted"}
+
+
+class MenuRouter(APIRouter):
+    def __init__(self, service: MenuService):
+        super().__init__(prefix="/menu", tags=["Menu"])
+
+        self.service = service
+
+        self.add_api_route(
+            "/{restaurante_id}",
+            self.get_menu,
+            methods=["GET"],
+        )
+
+    async def get_menu(self, restaurante_id: UUID):
+        return await self.service.get_menu(restaurante_id)

@@ -14,3 +14,6 @@ class InMemoryMenuRepository(MenuRepository):
             restaurante_id=restaurante_id,
             itens=[],
         )
+
+    async def get_menu_by_restaurante_id(self, restaurante_id: UUID) -> Menu | None:
+        return self.menus.get(restaurante_id)
