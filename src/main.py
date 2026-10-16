@@ -1,7 +1,10 @@
+from typing import Any
 from uuid import UUID
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
+from src.core.errors import DomainError
 from src.modules.pedido.types import UserGateway
 from src.modules.restaurante.infra.inmemory_repo import InMemoryRestauranteRepository
 from src.modules.restaurante.presentation import RestauranteRouter
@@ -37,3 +40,11 @@ app.include_router(restaurant_router)
 @app.get("/")
 async def ping() -> dict[str, str]:
     return {"message": "comida.app backend is alive!"}
+
+
+@app.exception_handler(DomainError)
+async def domain_error_handler(request: Any, exc: DomainError):
+    return JSONResponse(
+        status_code=400,
+        content={"message": str(exc)},
+    )

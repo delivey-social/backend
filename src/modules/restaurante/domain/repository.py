@@ -10,7 +10,7 @@ class RestauranteRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_restaurante_by_id(self, restaurante_id: UUID) -> Restaurante:
+    async def get_restaurante_by_id(self, restaurante_id: UUID) -> Restaurante | None:
         pass
 
     @abstractmethod

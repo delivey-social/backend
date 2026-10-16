@@ -1,5 +1,6 @@
 from uuid import UUID, uuid4
 
+from src.core.errors import DomainError
 from src.modules.restaurante.types import (
     CreateRestauranteRequest,
     UpdateRestauranteRequest,
@@ -21,7 +22,14 @@ class RestauranteService:
     async def get_restaurante(self, restaurante_id: UUID) -> Restaurante:
         print(f"[RestauranteService] Obtendo restaurante com ID: {restaurante_id}")
 
-        return await self.repo.get_restaurante_by_id(restaurante_id)
+        restaurant = await self.repo.get_restaurante_by_id(restaurante_id)
+
+        if not restaurant:
+            raise DomainError(
+                f"Restaurante with ID {restaurante_id} not found",
+            )
+
+        return restaurant
 
     async def create_restaurante(
         self,

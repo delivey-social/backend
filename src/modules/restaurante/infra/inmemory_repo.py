@@ -25,10 +25,7 @@ class InMemoryRestauranteRepository(RestauranteRepository):
         if restaurante_id in self.restaurantes:
             del self.restaurantes[restaurante_id]
 
-    async def get_restaurante_by_id(self, restaurante_id: UUID) -> Restaurante:
+    async def get_restaurante_by_id(self, restaurante_id: UUID) -> Restaurante | None:
         result = self.restaurantes.get(restaurante_id)
-
-        if not result:
-            raise ValueError("Restaurante not found")
 
         return result
