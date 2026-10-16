@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from ..domain.repository import RestauranteRepository
 from ..domain.restaurante import Restaurante
+from ..domain.restaurante_repository import RestauranteRepository
 
 
 class InMemoryRestauranteRepository(RestauranteRepository):

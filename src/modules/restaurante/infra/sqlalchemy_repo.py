@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.restaurante.infra.sqlalchemy_model import RestauranteModel
 
-from ..domain.repository import RestauranteRepository
 from ..domain.restaurante import Restaurante
+from ..domain.restaurante_repository import RestauranteRepository
 
 
 class SQLAlchemyRestauranteRepository(RestauranteRepository):

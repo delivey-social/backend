@@ -1,7 +1,7 @@
 from uuid import UUID, uuid4
 
-from ..domain.repository import MenuRepository
-from ..domain.restaurante import Menu, MenuItem
+from ..domain.menu import Menu, MenuItem
+from ..domain.menu_repository import MenuRepository
 
 
 class InMemoryMenuRepository(MenuRepository):

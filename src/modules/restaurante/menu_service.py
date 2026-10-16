@@ -1,10 +1,10 @@
 from uuid import UUID, uuid4
 
 from src.core.errors import DomainError
-from src.modules.restaurante.domain.restaurante import MenuItem
+from src.modules.restaurante.domain.menu import MenuItem
 from src.modules.restaurante.types import CreateMenuItemRequest
 
-from .domain.repository import MenuRepository
+from .domain.menu_repository import MenuRepository
 
 
 class MenuService:

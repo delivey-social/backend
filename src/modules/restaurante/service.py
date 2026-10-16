@@ -6,8 +6,9 @@ from src.modules.restaurante.types import (
     UpdateRestauranteRequest,
 )
 
-from .domain.repository import MenuRepository, RestauranteRepository
+from .domain.menu_repository import MenuRepository
 from .domain.restaurante import Restaurante
+from .domain.restaurante_repository import RestauranteRepository
 
 
 class RestauranteService:
