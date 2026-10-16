@@ -6,31 +6,31 @@ from .restaurante import Menu, Restaurante
 
 class RestauranteRepository(ABC):
     @abstractmethod
-    async def list_restaurantes(self) -> list[Restaurante]:
+    async def list_(self) -> list[Restaurante]:
         pass
 
     @abstractmethod
-    async def get_restaurante_by_id(self, restaurante_id: UUID) -> Restaurante | None:
+    async def get_by_id(self, restaurante_id: UUID) -> Restaurante | None:
         pass
 
     @abstractmethod
-    async def create_restaurante(self, data: Restaurante):
+    async def save(self, data: Restaurante):
         pass
 
     @abstractmethod
-    async def update_restaurante(self, data: Restaurante):
+    async def update(self, data: Restaurante):
         pass
 
     @abstractmethod
-    async def delete_restaurante(self, restaurante_id: UUID):
+    async def delete(self, restaurante_id: UUID):
         pass
 
 
 class MenuRepository(ABC):
     @abstractmethod
-    async def create_menu(self, restaurante_id: UUID):
+    async def save(self, restaurante_id: UUID):
         pass
 
     @abstractmethod
-    async def get_menu_by_restaurante_id(self, restaurante_id: UUID) -> Menu | None:
+    async def get_by_restaurante_id(self, restaurante_id: UUID) -> Menu | None:
         pass

@@ -13,7 +13,7 @@ class SQLAlchemyRestauranteRepository(RestauranteRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def list_restaurantes(self) -> list[Restaurante]:
+    async def list_(self) -> list[Restaurante]:
         result = await self.session.execute(select(RestauranteModel))
 
         return [
@@ -21,7 +21,7 @@ class SQLAlchemyRestauranteRepository(RestauranteRepository):
             for model in result.scalars().all()
         ]
 
-    async def create_restaurante(self, data: Restaurante) -> None:
+    async def save(self, data: Restaurante) -> None:
         self.session.add(
             RestauranteModel(
                 id=data.id,
@@ -29,7 +29,7 @@ class SQLAlchemyRestauranteRepository(RestauranteRepository):
             )
         )
 
-    async def get_restaurante_by_id(
+    async def get_by_id(
         self,
         restaurante_id: UUID,
     ) -> Restaurante | None:
@@ -40,13 +40,13 @@ class SQLAlchemyRestauranteRepository(RestauranteRepository):
 
         return Restaurante(id=model.id, nome=model.nome)
 
-    async def update_restaurante(self, data: Restaurante) -> None:
+    async def update(self, data: Restaurante) -> None:
         model = await self.session.get(RestauranteModel, data.id)
 
         if model is not None:
             model.nome = data.nome
 
-    async def delete_restaurante(self, restaurante_id: UUID) -> None:
+    async def delete(self, restaurante_id: UUID) -> None:
         await self.session.execute(
             delete(RestauranteModel).where(RestauranteModel.id == restaurante_id)
         )

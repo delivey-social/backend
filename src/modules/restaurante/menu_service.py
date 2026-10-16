@@ -10,7 +10,7 @@ class MenuService:
         self.menu_repo = menu_repo
 
     async def get_menu(self, restaurante_id: UUID):
-        menu = await self.menu_repo.get_menu_by_restaurante_id(restaurante_id)
+        menu = await self.menu_repo.get_by_restaurante_id(restaurante_id)
 
         if not menu:
             raise DomainError("Menu not found for the given restaurante_id")

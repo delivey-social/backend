@@ -18,12 +18,12 @@ class RestauranteService:
     async def list_restaurantes(self) -> list[Restaurante]:
         print("[RestauranteService] Listando restaurantes...")
 
-        return await self.repo.list_restaurantes()
+        return await self.repo.list_()
 
     async def get_restaurante(self, restaurante_id: UUID) -> Restaurante:
         print(f"[RestauranteService] Obtendo restaurante com ID: {restaurante_id}")
 
-        restaurant = await self.repo.get_restaurante_by_id(restaurante_id)
+        restaurant = await self.repo.get_by_id(restaurante_id)
 
         if not restaurant:
             raise DomainError(
@@ -43,8 +43,8 @@ class RestauranteService:
             nome=data.nome,
         )
 
-        await self.repo.create_restaurante(restaurante)
-        await self.menu_repo.create_menu(restaurante.id)
+        await self.repo.save(restaurante)
+        await self.menu_repo.save(restaurante.id)
 
         return restaurante
 
@@ -59,11 +59,11 @@ class RestauranteService:
             nome=data.nome,
         )
 
-        await self.repo.update_restaurante(restaurante)
+        await self.repo.update(restaurante)
 
         return restaurante
 
     async def delete_restaurante(self, restaurante_id: UUID):
         print(f"[RestauranteService] Excluindo restaurante com ID: {restaurante_id}")
 
-        return await self.repo.delete_restaurante(restaurante_id)
+        return await self.repo.delete(restaurante_id)
