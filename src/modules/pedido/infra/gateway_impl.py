@@ -10,11 +10,9 @@ class RestauranteGatewayImplementation(RestaurantGateway):
         self.service = service
 
     async def exists(self, restaurant_id: UUID) -> bool:
-        try:
-            await self.service.get_restaurante(restaurant_id)
-            return True
-        except ValueError:
-            return False
+        await self.service.get_restaurante(restaurant_id)
+
+        return True
 
     async def get_item(self, restaurant_id: UUID, product_id: UUID):
         return RestaurantItem(

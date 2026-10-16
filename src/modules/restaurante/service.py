@@ -6,13 +6,14 @@ from src.modules.restaurante.types import (
     UpdateRestauranteRequest,
 )
 
-from .domain.repository import RestauranteRepository
+from .domain.repository import MenuRepository, RestauranteRepository
 from .domain.restaurante import Restaurante
 
 
 class RestauranteService:
-    def __init__(self, repo: RestauranteRepository):
+    def __init__(self, repo: RestauranteRepository, menu_repo: MenuRepository):
         self.repo = repo
+        self.menu_repo = menu_repo
 
     async def list_restaurantes(self) -> list[Restaurante]:
         print("[RestauranteService] Listando restaurantes...")
@@ -43,6 +44,7 @@ class RestauranteService:
         )
 
         await self.repo.create_restaurante(restaurante)
+        await self.menu_repo.create_menu(restaurante.id)
 
         return restaurante
 

@@ -24,3 +24,9 @@ class RestauranteRepository(ABC):
     @abstractmethod
     async def delete_restaurante(self, restaurante_id: UUID):
         pass
+
+
+class MenuRepository(ABC):
+    @abstractmethod
+    async def create_menu(self, restaurante_id: UUID):
+        pass
