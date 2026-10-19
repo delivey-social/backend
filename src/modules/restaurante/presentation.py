@@ -2,6 +2,7 @@ from collections.abc import AsyncIterator, Callable
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 from src.modules.restaurante.menu_service import MenuService
 from src.modules.restaurante.types import (
@@ -83,7 +84,11 @@ class RestauranteRouter(APIRouter):
             service: RestauranteService = Depends(service_dependency),
         ):
             await service.create_restaurante(data)
-            return {"message": "Restaurante created successfully"}
+
+            return JSONResponse(
+                status_code=201,
+                content={"message": "Restaurante criado com sucesso!"},
+            )
 
         return endpoint
 
