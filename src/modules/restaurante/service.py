@@ -28,7 +28,8 @@ class RestauranteService:
 
         if not restaurant:
             raise DomainError(
-                f"Restaurante with ID {restaurante_id} not found",
+                "Restaurante não encontrado",
+                404,
             )
 
         return restaurant
