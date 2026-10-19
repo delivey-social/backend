@@ -5,3 +5,6 @@ dev:
 
 tests:
 	uv run pytest tests
+
+pre-commit:
+	uv run pre-commit run --all-files
