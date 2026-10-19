@@ -122,7 +122,13 @@ class RestauranteRouter(APIRouter):
             service: RestauranteService = Depends(service_dependency),
         ):
             await service.delete_restaurante(restaurante_id)
-            return {"message": f"Restaurante {restaurante_id} deleted"}
+
+            return JSONResponse(
+                status_code=204,
+                content={
+                    "message": "Restaurante deleted successfully",
+                },
+            )
 
         return endpoint
 
