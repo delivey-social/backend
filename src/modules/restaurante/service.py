@@ -55,6 +55,11 @@ class RestauranteService:
     ) -> Restaurante:
         print(f"[RestauranteService] Atualizando restaurante com ID: {data.id}")
 
+        exists = bool(await self.repo.get_by_id(data.id))
+
+        if not exists:
+            raise DomainError("Restaurante não encontrado", 404)
+
         restaurante = Restaurante(
             id=data.id,
             nome=data.nome,

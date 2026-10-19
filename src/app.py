@@ -26,7 +26,7 @@ def create_app() -> FastAPI:
     @app.exception_handler(DomainError)
     async def domain_error_handler(request: Request, exc: DomainError):
         return JSONResponse(
-            status_code=400,
+            status_code=exc.http_status_code,
             content={"message": str(exc)},
         )
 

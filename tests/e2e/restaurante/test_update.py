@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
 
@@ -20,3 +22,14 @@ async def test_update_restaurante(
 
     assert "id" in response_data
     assert "nome" in response_data
+
+
+@pytest.mark.anyio
+async def test_update_restaurante_not_found(client: AsyncClient):
+    response = await client.put(
+        f"/restaurante/{uuid4()}",
+        json={"nome": "Restaurante Atualizado"},
+    )
+
+    assert response.status_code == 404
+    assert response.json() == {"message": "Restaurante não encontrado"}
