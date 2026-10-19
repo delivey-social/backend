@@ -105,7 +105,7 @@ class RestauranteRouter(APIRouter):
             await service.update_restaurante(
                 UpdateRestauranteRequest(id=restaurante_id, nome=data.nome)
             )
-            return {"message": f"Restaurante {restaurante_id} updated"}
+            return {"message": "Restaurante atualizado com sucesso"}
 
         return endpoint
 
