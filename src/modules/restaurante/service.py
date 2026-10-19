@@ -78,4 +78,4 @@ class RestauranteService:
         if not exists:
             raise DomainError("Restaurante não encontrado", 404)
 
-        return await self.repo.delete(restaurante_id)
+        await self.repo.delete(restaurante_id)

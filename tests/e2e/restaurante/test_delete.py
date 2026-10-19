@@ -22,3 +22,18 @@ async def test_delete_restaurante_not_found(client: AsyncClient):
 
     assert response.status_code == 404
     assert response.json() == {"message": "Restaurante não encontrado"}
+
+
+@pytest.mark.anyio
+async def test_delete_restaurante_twice(
+    client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+):
+    response = await client.delete(f"/restaurante/{create_restaurante.id}")
+    assert response.status_code == 204
+
+    # Try to delete the same restaurant again
+    response = await client.delete(f"/restaurante/{create_restaurante.id}")
+
+    assert response.status_code == 404
+    assert response.json() == {"message": "Restaurante não encontrado"}

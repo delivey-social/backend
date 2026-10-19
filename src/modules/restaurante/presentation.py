@@ -1,4 +1,5 @@
 from collections.abc import AsyncIterator, Callable
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
@@ -57,7 +58,7 @@ class RestauranteRouter(APIRouter):
         service_dependency: RestauranteServiceDependency,
     ):
         async def endpoint(
-            service: RestauranteService = Depends(service_dependency),
+            service: Annotated[RestauranteService, Depends(service_dependency)],
         ):
             return await service.list_restaurantes()
 
@@ -69,7 +70,7 @@ class RestauranteRouter(APIRouter):
     ):
         async def endpoint(
             restaurante_id: UUID,
-            service: RestauranteService = Depends(service_dependency),
+            service: Annotated[RestauranteService, Depends(service_dependency)],
         ):
             return await service.get_restaurante(restaurante_id)
 
@@ -82,7 +83,7 @@ class RestauranteRouter(APIRouter):
         # TODO: Create restaurante endpoint should return the created resource
         async def endpoint(
             data: CreateRestauranteRequest,
-            service: RestauranteService = Depends(service_dependency),
+            service: Annotated[RestauranteService, Depends(service_dependency)],
         ):
             restaurante = await service.create_restaurante(data)
 
@@ -100,7 +101,7 @@ class RestauranteRouter(APIRouter):
         async def endpoint(
             restaurante_id: UUID,
             data: CreateRestauranteRequest,
-            service: RestauranteService = Depends(service_dependency),
+            service: Annotated[RestauranteService, Depends(service_dependency)],
         ):
             restaurante = await service.update_restaurante(
                 UpdateRestauranteRequest(id=restaurante_id, nome=data.nome)
@@ -119,15 +120,13 @@ class RestauranteRouter(APIRouter):
     ):
         async def endpoint(
             restaurante_id: UUID,
-            service: RestauranteService = Depends(service_dependency),
+            service: Annotated[RestauranteService, Depends(service_dependency)],
         ):
             await service.delete_restaurante(restaurante_id)
 
             return JSONResponse(
-                status_code=204,
-                content={
-                    "message": "Restaurante deleted successfully",
-                },
+                status_code=200,
+                content={"message": "Restaurante excluído com sucesso"},
             )
 
         return endpoint
