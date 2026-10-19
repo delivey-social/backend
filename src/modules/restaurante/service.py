@@ -72,4 +72,9 @@ class RestauranteService:
     async def delete_restaurante(self, restaurante_id: UUID):
         print(f"[RestauranteService] Excluindo restaurante com ID: {restaurante_id}")
 
+        exists = bool(await self.repo.get_by_id(restaurante_id))
+
+        if not exists:
+            raise DomainError("Restaurante não encontrado", 404)
+
         return await self.repo.delete(restaurante_id)
