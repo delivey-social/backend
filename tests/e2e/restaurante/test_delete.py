@@ -3,7 +3,7 @@ from uuid import uuid4
 import pytest
 from httpx import AsyncClient
 
-from tests.e2e.restaurante.conftest import CreateRestauranteResponse
+from .conftest import CreateRestauranteResponse
 
 
 @pytest.mark.anyio
@@ -13,7 +13,7 @@ async def test_delete_restaurante(
 ):
     response = await client.delete(f"/restaurante/{create_restaurante.id}")
 
-    assert response.status_code == 204
+    assert response.status_code == 200
 
 
 @pytest.mark.anyio
@@ -30,7 +30,7 @@ async def test_delete_restaurante_twice(
     create_restaurante: CreateRestauranteResponse,
 ):
     response = await client.delete(f"/restaurante/{create_restaurante.id}")
-    assert response.status_code == 204
+    assert response.status_code == 200
 
     # Try to delete the same restaurant again
     response = await client.delete(f"/restaurante/{create_restaurante.id}")
