@@ -84,11 +84,11 @@ class RestauranteRouter(APIRouter):
             data: CreateRestauranteRequest,
             service: RestauranteService = Depends(service_dependency),
         ):
-            await service.create_restaurante(data)
+            restaurante = await service.create_restaurante(data)
 
             return JSONResponse(
                 status_code=201,
-                content={"message": "Restaurante criado com sucesso!"},
+                content=restaurante.model_dump(mode="json"),
             )
 
         return endpoint

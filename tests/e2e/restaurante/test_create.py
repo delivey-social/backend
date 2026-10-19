@@ -8,5 +8,6 @@ async def test_create_restaurante(
     create_restaurante: CreateRestauranteResponse,
 ):
     assert create_restaurante.model_dump() == {
-        "message": "Restaurante criado com sucesso!",
+        "id": create_restaurante.id,
+        "nome": create_restaurante.nome,
     }

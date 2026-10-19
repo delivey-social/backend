@@ -6,7 +6,8 @@ from src.modules.restaurante.types import CreateRestauranteRequest
 
 
 class CreateRestauranteResponse(BaseModel):
-    message: str = "Restaurante criado com sucesso!"
+    id: str
+    nome: str
 
 
 @pytest.fixture
@@ -22,4 +23,4 @@ async def create_restaurante(
 
     assert response.status_code == 201
 
-    return CreateRestauranteResponse()
+    return CreateRestauranteResponse(**response.json())
