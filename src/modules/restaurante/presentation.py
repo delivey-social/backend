@@ -102,10 +102,14 @@ class RestauranteRouter(APIRouter):
             data: CreateRestauranteRequest,
             service: RestauranteService = Depends(service_dependency),
         ):
-            await service.update_restaurante(
+            restaurante = await service.update_restaurante(
                 UpdateRestauranteRequest(id=restaurante_id, nome=data.nome)
             )
-            return {"message": "Restaurante atualizado com sucesso"}
+
+            return JSONResponse(
+                status_code=200,
+                content=restaurante.model_dump(mode="json"),
+            )
 
         return endpoint
 

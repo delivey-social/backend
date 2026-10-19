@@ -15,6 +15,8 @@ async def test_update_restaurante(
     )
 
     assert response.status_code == 200
-    assert response.json() == {
-        "message": "Restaurante atualizado com sucesso",
-    }
+
+    response_data = response.json()
+
+    assert "id" in response_data
+    assert "nome" in response_data

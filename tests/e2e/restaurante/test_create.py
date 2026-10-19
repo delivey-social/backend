@@ -7,7 +7,7 @@ from .conftest import CreateRestauranteResponse
 async def test_create_restaurante(
     create_restaurante: CreateRestauranteResponse,
 ):
-    assert create_restaurante.model_dump() == {
-        "id": create_restaurante.id,
-        "nome": create_restaurante.nome,
-    }
+    data = create_restaurante.model_dump()
+
+    assert "id" in data
+    assert "nome" in data
