@@ -1,21 +1,12 @@
 import pytest
-from httpx import AsyncClient
 
-from src.modules.restaurante.types import CreateRestauranteRequest
+from .conftest import CreateRestauranteResponse
 
 
 @pytest.mark.anyio
-async def test_create_restaurante(client: AsyncClient):
-    payload = CreateRestauranteRequest(
-        nome="Restaurante Teste",
-    )
-
-    response = await client.post(
-        "/restaurante/",
-        json=payload.model_dump(),
-    )
-
-    assert response.status_code == 201
-    assert response.json() == {
+async def test_create_restaurante(
+    create_restaurante: CreateRestauranteResponse,
+):
+    assert create_restaurante.model_dump() == {
         "message": "Restaurante criado com sucesso!",
     }

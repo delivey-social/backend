@@ -79,6 +79,7 @@ class RestauranteRouter(APIRouter):
     def create_restaurante_endpoint(
         service_dependency: RestauranteServiceDependency,
     ):
+        # TODO: Create restaurante endpoint should return the created resource
         async def endpoint(
             data: CreateRestauranteRequest,
             service: RestauranteService = Depends(service_dependency),
