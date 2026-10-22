@@ -170,9 +170,15 @@ class MenuRouter(APIRouter):
         restaurante_id: UUID,
         data: CreateMenuItemRequest,
     ):
-        await self.service.create_menu_item(restaurante_id, data)
+        item = await self.service.create_menu_item(restaurante_id, data)
 
-        return {"message": "Menu item created successfully"}
+        return JSONResponse(
+            status_code=201,
+            content={
+                "message": "Menu item created successfully",
+                "item": item.model_dump(mode="json"),
+            },
+        )
 
     async def update_menu_item(
         self,

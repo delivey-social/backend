@@ -19,12 +19,17 @@ class MenuService:
 
         return menu
 
-    async def create_menu_item(self, restaurante_id: UUID, data: CreateMenuItemRequest):
-        await self.menu_repo.create_item(
-            restaurante_id,
-            MenuItem(
-                id=uuid4(),
-                nome=data.nome,
-                preco=data.preco,
-            ),
+    async def create_menu_item(
+        self,
+        restaurante_id: UUID,
+        data: CreateMenuItemRequest,
+    ) -> MenuItem:
+        item = MenuItem(
+            id=uuid4(),
+            nome=data.nome,
+            preco=data.preco,
         )
+
+        await self.menu_repo.create_item(restaurante_id, item)
+
+        return item
