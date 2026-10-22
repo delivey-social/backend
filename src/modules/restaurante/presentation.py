@@ -186,9 +186,15 @@ class MenuRouter(APIRouter):
         item_id: UUID,
         data: CreateMenuItemRequest,
     ):
-        # await self.service.update_menu_item(restaurante_id, item_id, data)
+        item = await self.service.update_menu_item(restaurante_id, item_id, data)
 
-        return {"message": "Menu item updated successfully"}
+        return JSONResponse(
+            status_code=200,
+            content={
+                "message": "Item atualizado com sucesso",
+                "item": item.model_dump(mode="json"),
+            },
+        )
 
     async def delete_menu_item(self, restaurante_id: UUID, item_id: UUID):
         # await self.service.delete_menu_item(restaurante_id, item_id)

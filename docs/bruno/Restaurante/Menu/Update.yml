@@ -13,6 +13,13 @@ http:
     - name: restaurante_id
       value: "{{$randomUUID}}"
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "{{$randomCompanyName}}",
+        "preco": 300
+      }
   auth: inherit
 
 settings:

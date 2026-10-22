@@ -38,3 +38,26 @@ class MenuService:
         await self.menu_repo.create_item(restaurante_id, item)
 
         return item
+
+    async def update_menu_item(
+        self,
+        restaurante_id: UUID,
+        item_id: UUID,
+        data: CreateMenuItemRequest,
+    ) -> MenuItem:
+        menu = await self.menu_repo.get_by_restaurante_id(restaurante_id)
+
+        if not menu:
+            raise DomainError("Menu não encontrado para o restaurante", 404)
+
+        item = next((item for item in menu.itens if item.id == item_id), None)
+
+        if not item:
+            raise DomainError("Item do menu não encontrado", 404)
+
+        item.nome = data.nome
+        item.preco = data.preco
+
+        await self.menu_repo.update_item(restaurante_id, item)
+
+        return item

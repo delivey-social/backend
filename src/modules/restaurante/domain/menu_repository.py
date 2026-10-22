@@ -14,5 +14,15 @@ class MenuRepository(ABC):
         pass
 
     @abstractmethod
+    async def get_item_by_id(
+        self, restaurante_id: UUID, item_id: UUID
+    ) -> MenuItem | None:
+        pass
+
+    @abstractmethod
     async def create_item(self, restaurante_id: UUID, data: MenuItem) -> None:
+        pass
+
+    @abstractmethod
+    async def update_item(self, restaurante_id: UUID, data: MenuItem) -> None:
         pass

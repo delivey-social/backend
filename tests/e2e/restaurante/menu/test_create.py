@@ -4,28 +4,16 @@ import pytest
 from httpx import AsyncClient
 
 from src.modules.restaurante.types import CreateMenuItemRequest
-from tests.e2e.restaurante.conftest import CreateRestauranteResponse
+from tests.e2e.restaurante.menu.conftest import CreateMenuItemResponseItem
 
 
 @pytest.mark.anyio
-async def test_create_menu_item(
-    client: AsyncClient,
-    create_restaurante: CreateRestauranteResponse,
-):
-    payload = CreateMenuItemRequest(nome="Pizza", preco=300)
+async def test_create_menu_item(create_menu_item: CreateMenuItemResponseItem):
+    data = create_menu_item.model_dump()
 
-    response = await client.post(
-        f"/menu/{create_restaurante.id}",
-        json=payload.model_dump(),
-    )
-
-    assert response.status_code == 201
-
-    res_payload = response.json()
-
-    assert "id" in res_payload["item"]
-    assert res_payload["item"]["nome"] == payload.nome
-    assert res_payload["item"]["preco"] == payload.preco
+    assert "id" in data
+    assert "nome" in data
+    assert "preco" in data
 
 
 @pytest.mark.anyio

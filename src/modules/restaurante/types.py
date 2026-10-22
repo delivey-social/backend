@@ -15,3 +15,8 @@ class UpdateRestauranteRequest(BaseModel):
 class CreateMenuItemRequest(BaseModel):
     nome: str
     preco: int
+
+
+class UpdateMenuItemRequest(BaseModel):
+    nome: str
+    preco: int
