@@ -26,3 +26,7 @@ class MenuRepository(ABC):
     @abstractmethod
     async def update_item(self, restaurante_id: UUID, data: MenuItem) -> None:
         pass
+
+    @abstractmethod
+    async def delete_item(self, restaurante_id: UUID, item_id: UUID) -> None:
+        pass

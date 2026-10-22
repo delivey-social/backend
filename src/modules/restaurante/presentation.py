@@ -197,7 +197,7 @@ class MenuRouter(APIRouter):
         )
 
     async def delete_menu_item(self, restaurante_id: UUID, item_id: UUID):
-        # await self.service.delete_menu_item(restaurante_id, item_id)
+        await self.service.delete_menu_item(restaurante_id, item_id)
 
         return JSONResponse(
             status_code=200,
