@@ -27,3 +27,5 @@ async def test_update_menu_item(
     assert item["id"] == create_menu_item.id
     assert item["nome"] == payload.nome
     assert item["preco"] == payload.preco
+
+    # TODO: Assert that the item is actually updated in the database

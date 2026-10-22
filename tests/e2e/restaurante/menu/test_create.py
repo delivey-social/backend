@@ -29,3 +29,5 @@ async def test_create_menu_item_no_restaurante(client: AsyncClient):
     assert response.json() == {
         "message": "Menu não encontrado para o restaurante",
     }
+
+    # TODO: Assert that the item is actually created in the database

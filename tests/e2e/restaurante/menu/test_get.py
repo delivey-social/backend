@@ -15,11 +15,14 @@ async def test_list_menu(
 
     assert response.status_code == 200
 
-    res = response.json()
+    data = response.json()
 
-    assert "id" in res
-    assert "restaurante_id" in res
-    assert "itens" in res
+    assert "id" in data
+    assert "restaurante_id" in data
+    assert "itens" in data
+
+    assert data["restaurante_id"] == create_restaurante.id
+    assert isinstance(data["itens"], list)
 
 
 @pytest.mark.anyio

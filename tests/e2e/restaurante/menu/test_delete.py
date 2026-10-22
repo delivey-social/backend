@@ -20,3 +20,4 @@ async def test_delete_menu_item(
     data = response.json()
 
     assert data["message"] == "Item excluído com sucesso"
+    # TODO: Assert that the item is actually deleted from the database
