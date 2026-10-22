@@ -6,8 +6,8 @@ from src.core.infra.lifespan import lifespan
 from src.modules.pedido.infra.dependencies import get_pedido_service
 from src.modules.pedido.presentation import PedidoRouter
 from src.modules.restaurante.infra.dependencies import (
+    get_menu_service,
     get_restaurante_service,
-    menu_service,
 )
 from src.modules.restaurante.presentation import MenuRouter, RestauranteRouter
 
@@ -16,7 +16,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="Comida App Backend", lifespan=lifespan)
 
     app.include_router(PedidoRouter(get_pedido_service))
-    app.include_router(MenuRouter(menu_service))
+    app.include_router(MenuRouter(get_menu_service))
     app.include_router(RestauranteRouter(get_restaurante_service))
 
     @app.get("/")

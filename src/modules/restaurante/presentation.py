@@ -15,6 +15,7 @@ from src.modules.restaurante.types import (
 from .service import RestauranteService
 
 RestauranteServiceDependency = Callable[..., AsyncIterator[RestauranteService]]
+MenuServiceDependency = Callable[..., AsyncIterator[MenuService]]
 
 
 class RestauranteRouter(APIRouter):
@@ -133,73 +134,94 @@ class RestauranteRouter(APIRouter):
 
 
 class MenuRouter(APIRouter):
-    def __init__(self, service: MenuService):
+    def __init__(self, service: MenuServiceDependency):
         super().__init__(prefix="/menu", tags=["Menu"])
-
-        self.service = service
 
         self.add_api_route(
             "/{restaurante_id}",
-            self.get_menu,
+            self.get_menu_endpoint(service),
             methods=["GET"],
         )
 
         self.add_api_route(
             "/{restaurante_id}",
-            self.create_menu_item,
+            self.create_menu_item_endpoint(service),
             methods=["POST"],
         )
 
         self.add_api_route(
             "/{restaurante_id}/{item_id}",
-            self.update_menu_item,
+            self.update_menu_item_endpoint(service),
             methods=["PUT"],
         )
 
         self.add_api_route(
             "/{restaurante_id}/{item_id}",
-            self.delete_menu_item,
+            self.delete_menu_item_endpoint(service),
             methods=["DELETE"],
         )
 
-    async def get_menu(self, restaurante_id: UUID):
-        return await self.service.get_menu(restaurante_id)
+    @staticmethod
+    def get_menu_endpoint(service_dependency: MenuServiceDependency):
+        async def endpoint(
+            restaurante_id: UUID,
+            service: Annotated[MenuService, Depends(service_dependency)],
+        ):
+            return await service.get_menu(restaurante_id)
 
-    async def create_menu_item(
-        self,
-        restaurante_id: UUID,
-        data: CreateMenuItemRequest,
-    ):
-        item = await self.service.create_menu_item(restaurante_id, data)
+        return endpoint
 
-        return JSONResponse(
-            status_code=201,
-            content={
-                "message": "Menu item created successfully",
-                "item": item.model_dump(mode="json"),
-            },
-        )
+    @staticmethod
+    def create_menu_item_endpoint(service_dependency: MenuServiceDependency):
+        async def endpoint(
+            restaurante_id: UUID,
+            data: CreateMenuItemRequest,
+            service: Annotated[MenuService, Depends(service_dependency)],
+        ):
+            item = await service.create_menu_item(restaurante_id, data)
 
-    async def update_menu_item(
-        self,
-        restaurante_id: UUID,
-        item_id: UUID,
-        data: CreateMenuItemRequest,
-    ):
-        item = await self.service.update_menu_item(restaurante_id, item_id, data)
+            return JSONResponse(
+                status_code=201,
+                content={
+                    "message": "Menu item created successfully",
+                    "item": item.model_dump(mode="json"),
+                },
+            )
 
-        return JSONResponse(
-            status_code=200,
-            content={
-                "message": "Item atualizado com sucesso",
-                "item": item.model_dump(mode="json"),
-            },
-        )
+        return endpoint
 
-    async def delete_menu_item(self, restaurante_id: UUID, item_id: UUID):
-        await self.service.delete_menu_item(restaurante_id, item_id)
+    @staticmethod
+    def update_menu_item_endpoint(service_dependency: MenuServiceDependency):
+        async def endpoint(
+            restaurante_id: UUID,
+            item_id: UUID,
+            data: CreateMenuItemRequest,
+            service: Annotated[MenuService, Depends(service_dependency)],
+        ):
+            item = await service.update_menu_item(restaurante_id, item_id, data)
 
-        return JSONResponse(
-            status_code=200,
-            content={"message": "Item excluído com sucesso"},
-        )
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Item atualizado com sucesso",
+                    "item": item.model_dump(mode="json"),
+                },
+            )
+
+        return endpoint
+
+    @staticmethod
+    def delete_menu_item_endpoint(service_dependency: MenuServiceDependency):
+        async def endpoint(
+            restaurante_id: UUID,
+            item_id: UUID,
+            service: Annotated[MenuService, Depends(service_dependency)],
+        ):
+            await service.delete_menu_item(restaurante_id, item_id)
+
+            return JSONResponse(
+                status_code=200,
+                content={"message": "Item excluído com sucesso"},
+            )
+
+        return endpoint
