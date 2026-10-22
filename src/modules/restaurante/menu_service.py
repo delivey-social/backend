@@ -24,6 +24,11 @@ class MenuService:
         restaurante_id: UUID,
         data: CreateMenuItemRequest,
     ) -> MenuItem:
+        menu = await self.menu_repo.get_by_restaurante_id(restaurante_id)
+
+        if not menu:
+            raise DomainError("Menu não encontrado para o restaurante", 404)
+
         item = MenuItem(
             id=uuid4(),
             nome=data.nome,

@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
 
@@ -24,3 +26,18 @@ async def test_create_menu_item(
     assert "id" in res_payload["item"]
     assert res_payload["item"]["nome"] == payload.nome
     assert res_payload["item"]["preco"] == payload.preco
+
+
+@pytest.mark.anyio
+async def test_create_menu_item_no_restaurante(client: AsyncClient):
+    payload = CreateMenuItemRequest(nome="Pizza", preco=300)
+
+    response = await client.post(
+        f"/menu/{uuid4()}",
+        json=payload.model_dump(),
+    )
+
+    assert response.status_code == 404
+    assert response.json() == {
+        "message": "Menu não encontrado para o restaurante",
+    }
