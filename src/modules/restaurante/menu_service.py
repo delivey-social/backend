@@ -74,3 +74,11 @@ class MenuService:
             raise DomainError("Item do menu não encontrado", 404)
 
         await self.menu_repo.delete_item(restaurante_id, item_id)
+
+    async def get_menu_item(self, restaurante_id: UUID, item_id: UUID) -> MenuItem:
+        item = await self.menu_repo.get_item_by_id(restaurante_id, item_id)
+
+        if not item:
+            raise DomainError("Item não encontrado", 404)
+
+        return item

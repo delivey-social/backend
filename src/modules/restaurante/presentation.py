@@ -81,7 +81,6 @@ class RestauranteRouter(APIRouter):
     def create_restaurante_endpoint(
         service_dependency: RestauranteServiceDependency,
     ):
-        # TODO: Create restaurante endpoint should return the created resource
         async def endpoint(
             data: CreateRestauranteRequest,
             service: Annotated[RestauranteService, Depends(service_dependency)],
@@ -161,6 +160,12 @@ class MenuRouter(APIRouter):
             methods=["DELETE"],
         )
 
+        self.add_api_route(
+            "/{restaurante_id}/{item_id}",
+            self.get_menu_item_endpoint(service),
+            methods=["GET"],
+        )
+
     @staticmethod
     def get_menu_endpoint(service_dependency: MenuServiceDependency):
         async def endpoint(
@@ -223,5 +228,16 @@ class MenuRouter(APIRouter):
                 status_code=200,
                 content={"message": "Item excluído com sucesso"},
             )
+
+        return endpoint
+
+    @staticmethod
+    def get_menu_item_endpoint(service_dependency: MenuServiceDependency):
+        async def endpoint(
+            restaurante_id: UUID,
+            item_id: UUID,
+            service: Annotated[MenuService, Depends(service_dependency)],
+        ):
+            return await service.get_menu_item(restaurante_id, item_id)
 
         return endpoint
