@@ -1,9 +1,14 @@
+from uuid import UUID
+
 import pytest
 from httpx import AsyncClient
 
 from src.modules.restaurante.types import UpdateMenuItemRequest
 from tests.e2e.restaurante.conftest import CreateRestauranteResponse
-from tests.e2e.restaurante.menu.conftest import CreateMenuItemResponseItem
+from tests.e2e.restaurante.menu.conftest import (
+    CreateMenuItemResponseItem,
+    GetMenuItemFixture,
+)
 
 
 @pytest.mark.anyio
@@ -11,6 +16,7 @@ async def test_update_menu_item(
     client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
     create_menu_item: CreateMenuItemResponseItem,
+    get_menu_item: GetMenuItemFixture,
 ):
     payload = UpdateMenuItemRequest(nome="Pizza", preco=300)
 
@@ -28,4 +34,10 @@ async def test_update_menu_item(
     assert item["nome"] == payload.nome
     assert item["preco"] == payload.preco
 
-    # TODO: Assert that the item is actually updated in the database
+    res = await get_menu_item(UUID(create_menu_item.id))
+
+    assert res.status_code == 200
+
+    assert res.data.id == create_menu_item.id
+    assert res.data.nome == payload.nome
+    assert res.data.preco == payload.preco
