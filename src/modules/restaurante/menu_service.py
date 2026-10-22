@@ -53,7 +53,7 @@ class MenuService:
         item = next((item for item in menu.itens if item.id == item_id), None)
 
         if not item:
-            raise DomainError("Item do menu não encontrado", 404)
+            raise DomainError("Item não encontrado", 404)
 
         item.nome = data.nome
         item.preco = data.preco
@@ -71,7 +71,7 @@ class MenuService:
         item = next((item for item in menu.itens if item.id == item_id), None)
 
         if not item:
-            raise DomainError("Item do menu não encontrado", 404)
+            raise DomainError("Item não encontrado", 404)
 
         await self.menu_repo.delete_item(restaurante_id, item_id)
 

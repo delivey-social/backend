@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
 
@@ -21,3 +23,17 @@ async def test_delete_menu_item(
 
     assert data["message"] == "Item excluído com sucesso"
     # TODO: Assert that the item is actually deleted from the database
+
+
+@pytest.mark.anyio
+async def test_delete_menu_item_not_found(
+    client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+):
+    response = await client.delete(f"/menu/{create_restaurante.id}/{uuid4()}")
+
+    assert response.status_code == 404
+
+    data = response.json()
+
+    assert data["message"] == "Item não encontrado"
