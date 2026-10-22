@@ -1,15 +1,19 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from httpx import AsyncClient
 
-from tests.e2e.restaurante.conftest import CreateRestauranteResponse
+from tests.e2e.restaurante.conftest import (
+    CreateRestauranteResponse,
+    GetRestauranteFixture,
+)
 
 
 @pytest.mark.anyio
 async def test_update_restaurante(
     client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
+    get_restaurante: GetRestauranteFixture,
 ):
     response = await client.put(
         f"/restaurante/{create_restaurante.id}",
@@ -18,10 +22,17 @@ async def test_update_restaurante(
 
     assert response.status_code == 200
 
-    response_data = response.json()
+    data = response.json()
 
-    assert "id" in response_data
-    assert "nome" in response_data
+    assert "id" in data
+    assert "nome" in data
+
+    response = await get_restaurante(UUID(data["id"]))
+
+    assert response.status_code == 200
+
+    assert response.data.id == data["id"]
+    assert response.data.nome == data["nome"]
 
 
 @pytest.mark.anyio

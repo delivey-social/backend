@@ -1,19 +1,24 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from httpx import AsyncClient
 
-from .conftest import CreateRestauranteResponse
+from .conftest import CreateRestauranteResponse, GetRestauranteFixture
 
 
 @pytest.mark.anyio
 async def test_delete_restaurante(
     client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
+    get_restaurante: GetRestauranteFixture,
 ):
     response = await client.delete(f"/restaurante/{create_restaurante.id}")
 
     assert response.status_code == 200
+
+    res = await get_restaurante(UUID(create_restaurante.id))
+
+    assert res.status_code == 404
 
 
 @pytest.mark.anyio
