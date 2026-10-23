@@ -2,6 +2,7 @@ from collections.abc import Awaitable, Callable
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 from src.modules.pedido.service import PedidoService
 from src.modules.pedido.types import CreatePedidoRequest
@@ -44,7 +45,7 @@ class PedidoRouter(APIRouter):
         async def endpoint(
             service: PedidoService = Depends(service_dependency),
         ):
-            return {"message": "List of pedidos"}
+            return JSONResponse(content={"pedidos": []})
 
         return endpoint
 
