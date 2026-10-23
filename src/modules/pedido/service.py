@@ -24,6 +24,8 @@ class PedidoService:
         return pedidos
 
     async def create_pedido(self, data: CreatePedidoRequest):
+        print("[PedidoService] Creating pedido")
+
         exists = await self.user_gateway.exists(data.user_id)
 
         if not exists:
@@ -67,4 +69,4 @@ class PedidoService:
             ],
         )
 
-        print(f"Creating pedido with data: {pedido}")
+        await self.repo.save(pedido)

@@ -58,6 +58,7 @@ class PedidoRouter(APIRouter):
             service: PedidoService = Depends(service_dependency),
         ):
             await service.create_pedido(request)
+
             return {"message": "Pedido criado"}
 
         return endpoint
