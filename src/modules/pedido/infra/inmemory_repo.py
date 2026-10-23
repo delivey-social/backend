@@ -22,3 +22,13 @@ class InMemoryPedidoRepository(PedidoRepository):
         print(f"[InMemoryPedidoRepository] Getting pedido with ID {pedido_id}")
 
         return self.pedidos.get(pedido_id)
+
+    async def delete_pedido(self, pedido_id: UUID):
+        print(f"[InMemoryPedidoRepository] Deleting pedido with ID {pedido_id}")
+
+        if pedido_id in self.pedidos:
+            del self.pedidos[pedido_id]
+        else:
+            print(f"[InMemoryPedidoRepository] Pedido with ID {pedido_id} not found")
+
+            raise ValueError(f"Pedido with ID {pedido_id} does not exist.")

@@ -97,6 +97,8 @@ class PedidoRouter(APIRouter):
             pedido_id: UUID,
             service: PedidoService = Depends(service_dependency),
         ):
-            return {"message": f"Pedido {pedido_id} deleted"}
+            await service.delete_pedido(pedido_id)
+
+            return {"message": "Pedido excluído com sucesso"}
 
         return endpoint

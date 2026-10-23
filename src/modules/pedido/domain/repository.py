@@ -16,3 +16,7 @@ class PedidoRepository(ABC):
     @abstractmethod
     async def get_pedido(self, pedido_id: UUID) -> Pedido | None:
         pass
+
+    @abstractmethod
+    async def delete_pedido(self, pedido_id: UUID):
+        pass
