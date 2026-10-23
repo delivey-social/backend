@@ -20,14 +20,14 @@ class PedidoRouter(APIRouter):
             methods=["GET"],
         )
         self.add_api_route(
-            "/",
-            self.create_pedido_endpoint(service_dependency),
-            methods=["POST"],
-        )
-        self.add_api_route(
             "/{pedido_id}",
             self.get_pedido_endpoint(service_dependency),
             methods=["GET"],
+        )
+        self.add_api_route(
+            "/",
+            self.create_pedido_endpoint(service_dependency),
+            methods=["POST"],
         )
         self.add_api_route(
             "/{pedido_id}",
@@ -52,6 +52,16 @@ class PedidoRouter(APIRouter):
         return endpoint
 
     @staticmethod
+    def get_pedido_endpoint(service_dependency: PedidoServiceDependency):
+        async def endpoint(
+            pedido_id: UUID,
+            service: PedidoService = Depends(service_dependency),
+        ):
+            return {"message": f"Details of pedido {pedido_id}"}
+
+        return endpoint
+
+    @staticmethod
     def create_pedido_endpoint(service_dependency: PedidoServiceDependency):
         async def endpoint(
             request: CreatePedidoRequest,
@@ -60,16 +70,6 @@ class PedidoRouter(APIRouter):
             pedido = await service.create_pedido(request)
 
             return JSONResponse(content={"pedido": pedido}, status_code=201)
-
-        return endpoint
-
-    @staticmethod
-    def get_pedido_endpoint(service_dependency: PedidoServiceDependency):
-        async def endpoint(
-            pedido_id: UUID,
-            service: PedidoService = Depends(service_dependency),
-        ):
-            return {"message": f"Details of pedido {pedido_id}"}
 
         return endpoint
 
