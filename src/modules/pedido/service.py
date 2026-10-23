@@ -102,3 +102,16 @@ class PedidoService:
             )
 
         await self.repo.delete_pedido(pedido_id)
+
+    async def update_pedido(self, pedido_id: UUID):
+        pedido = await self.repo.get_pedido(pedido_id)
+
+        if not pedido:
+            print(f"[PedidoService] Pedido with ID {pedido_id} not found")
+
+            raise DomainError(
+                "Pedido não encontrado",
+                404,
+            )
+
+        return pedido

@@ -87,6 +87,8 @@ class PedidoRouter(APIRouter):
             pedido_id: UUID,
             service: PedidoService = Depends(service_dependency),
         ):
+            await service.update_pedido(pedido_id)
+
             return {"message": f"Pedido {pedido_id} updated"}
 
         return endpoint
