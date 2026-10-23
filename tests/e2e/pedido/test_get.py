@@ -5,9 +5,9 @@ from httpx import AsyncClient
 
 
 @pytest.mark.anyio
-async def test_get_pedido(
+async def test_get_pedido_not_found(
     client: AsyncClient,
 ):
     response = await client.get(f"/pedido/{uuid4()}")
 
-    assert response.status_code == 200
+    assert response.status_code == 404

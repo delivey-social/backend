@@ -1,3 +1,7 @@
+from uuid import UUID
+
+from src.core.errors import DomainError
+
 from .domain.pedido import Pedido, PedidoItem
 from .domain.repository import PedidoRepository
 from .types import (
@@ -70,3 +74,14 @@ class PedidoService:
         )
 
         await self.repo.save(pedido)
+
+    async def get_pedido(self, pedido_id: UUID) -> Pedido:
+        pedido = await self.repo.get_pedido(pedido_id)
+
+        if not pedido:
+            raise DomainError(
+                "Pedido não encontrado",
+                404,
+            )
+
+        return pedido

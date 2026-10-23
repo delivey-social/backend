@@ -57,6 +57,8 @@ class PedidoRouter(APIRouter):
             pedido_id: UUID,
             service: PedidoService = Depends(service_dependency),
         ):
+            pedido = await service.get_pedido(pedido_id)
+
             return {"message": f"Details of pedido {pedido_id}"}
 
         return endpoint
