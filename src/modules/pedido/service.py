@@ -1,5 +1,6 @@
-from src.modules.pedido.domain.pedido import Pedido, PedidoItem
-from src.modules.pedido.types import (
+from .domain.pedido import Pedido, PedidoItem
+from .domain.repository import PedidoRepository
+from .types import (
     CreatePedidoRequest,
     RestaurantGateway,
     UserGateway,
@@ -9,11 +10,18 @@ from src.modules.pedido.types import (
 class PedidoService:
     def __init__(
         self,
+        repo: PedidoRepository,
         user_gateway: UserGateway,
         restaurant_gateway: RestaurantGateway,
     ):
+        self.repo = repo
         self.user_gateway = user_gateway
         self.restaurant_gateway = restaurant_gateway
+
+    async def list_pedidos(self) -> list[Pedido]:
+        pedidos = await self.repo.list_pedidos()
+
+        return pedidos
 
     async def create_pedido(self, data: CreatePedidoRequest):
         exists = await self.user_gateway.exists(data.user_id)

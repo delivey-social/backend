@@ -45,7 +45,9 @@ class PedidoRouter(APIRouter):
         async def endpoint(
             service: PedidoService = Depends(service_dependency),
         ):
-            return JSONResponse(content={"pedidos": []})
+            pedidos = await service.list_pedidos()
+
+            return JSONResponse(content={"pedidos": pedidos})
 
         return endpoint
 

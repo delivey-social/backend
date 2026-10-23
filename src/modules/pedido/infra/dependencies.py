@@ -3,11 +3,12 @@ from uuid import UUID
 
 from fastapi import Depends
 
-from src.modules.pedido.service import PedidoService
-from src.modules.pedido.types import UserGateway
 from src.modules.restaurante.infra.dependencies import get_restaurante_service
 from src.modules.restaurante.service import RestauranteService
 
+from ..infra.inmemory_repo import InMemoryPedidoRepository
+from ..service import PedidoService
+from ..types import UserGateway
 from .gateway_impl import RestauranteGatewayImplementation
 
 
@@ -22,6 +23,7 @@ async def get_pedido_service(
     ],
 ) -> PedidoService:
     return PedidoService(
+        InMemoryPedidoRepository(),
         DummyUserGateway(),
         RestauranteGatewayImplementation(restaurante_service),
     )
