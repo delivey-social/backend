@@ -9,10 +9,16 @@ class InMemoryPedidoRepository(PedidoRepository):
         self.pedidos: dict[UUID, Pedido] = {}
 
     async def list_pedidos(self) -> list[Pedido]:
+        print("[InMemoryPedidoRepository] Listing all pedidos")
+
         return list(self.pedidos.values())
 
     async def save(self, pedido: Pedido):
+        print(f"[InMemoryPedidoRepository] Saving pedido with ID {pedido.id}")
+
         self.pedidos[pedido.id] = pedido
 
     async def get_pedido(self, pedido_id: UUID) -> Pedido | None:
+        print(f"[InMemoryPedidoRepository] Getting pedido with ID {pedido_id}")
+
         return self.pedidos.get(pedido_id)

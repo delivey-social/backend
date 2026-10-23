@@ -75,10 +75,14 @@ class PedidoService:
 
         await self.repo.save(pedido)
 
+        return pedido
+
     async def get_pedido(self, pedido_id: UUID) -> Pedido:
         pedido = await self.repo.get_pedido(pedido_id)
 
         if not pedido:
+            print(f"[PedidoService] Pedido with ID {pedido_id} not found")
+
             raise DomainError(
                 "Pedido não encontrado",
                 404,

@@ -47,7 +47,11 @@ class PedidoRouter(APIRouter):
         ):
             pedidos = await service.list_pedidos()
 
-            return JSONResponse(content={"pedidos": pedidos})
+            return JSONResponse(
+                content={
+                    "pedidos": [pedido.model_dump(mode="json") for pedido in pedidos]
+                }
+            )
 
         return endpoint
 
@@ -71,7 +75,9 @@ class PedidoRouter(APIRouter):
         ):
             pedido = await service.create_pedido(request)
 
-            return JSONResponse(content={"pedido": pedido}, status_code=201)
+            return JSONResponse(
+                content={**pedido.model_dump(mode="json")}, status_code=201
+            )
 
         return endpoint
 

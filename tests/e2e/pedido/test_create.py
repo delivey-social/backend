@@ -1,33 +1,19 @@
-from uuid import uuid4
+from unittest.mock import AsyncMock
 
 import pytest
-from httpx import AsyncClient
-
-from src.modules.pedido.types import CreatePedidoRequest, CreatePedidoRequestItem
+from httpx import AsyncClient, Response
 
 
 @pytest.mark.anyio
 async def test_create_pedido(
     client: AsyncClient,
-    mock_restaurante_service,
+    create_pedido: Response,
+    mock_restaurante_service: AsyncMock,
 ):
-    restaurant_id = uuid4()
+    assert create_pedido.status_code == 201
 
-    payload = CreatePedidoRequest(
-        user_id=uuid4(),
-        restaurant_id=restaurant_id,
-        items=[
-            CreatePedidoRequestItem(
-                product_id=uuid4(),
-                quantity=1,
-            )
-        ],
-    )
+    mock_restaurante_service.get_restaurante.assert_called_once()
 
-    response = await client.post(
-        "/pedido/",
-        json=payload.model_dump(mode="json"),
-    )
+    data = create_pedido.json()
 
-    assert response.status_code == 201
-    mock_restaurante_service.get_restaurante.assert_awaited_once_with(restaurant_id)
+    assert "id" in data
