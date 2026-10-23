@@ -16,3 +16,7 @@ repos:
         language: system
         pass_filenames: true
         always_run: true
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.414
+    hooks:
+      - id: pyright
