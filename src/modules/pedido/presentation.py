@@ -57,9 +57,9 @@ class PedidoRouter(APIRouter):
             request: CreatePedidoRequest,
             service: PedidoService = Depends(service_dependency),
         ):
-            await service.create_pedido(request)
+            pedido = await service.create_pedido(request)
 
-            return {"message": "Pedido criado"}
+            return JSONResponse(content={"pedido": pedido}, status_code=201)
 
         return endpoint
 
