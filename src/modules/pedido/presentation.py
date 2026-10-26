@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from src.modules.pedido.service import PedidoService
-from src.modules.pedido.types import CreatePedidoRequest
+from src.modules.pedido.types import CreatePedidoRequest, UpdatePedidoRequest
 
 PedidoServiceDependency = Callable[..., Awaitable[PedidoService]]
 
@@ -87,11 +87,12 @@ class PedidoRouter(APIRouter):
     def update_pedido_endpoint(service_dependency: PedidoServiceDependency):
         async def endpoint(
             pedido_id: UUID,
+            request: UpdatePedidoRequest,
             service: PedidoService = Depends(service_dependency),
         ):
-            await service.update_pedido(pedido_id)
+            await service.update_pedido(pedido_id, request)
 
-            return {"message": f"Pedido {pedido_id} updated"}
+            return {"message": "Pedido atualizado com sucesso"}
 
         return endpoint
 

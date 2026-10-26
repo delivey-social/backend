@@ -32,3 +32,13 @@ class InMemoryPedidoRepository(PedidoRepository):
             print(f"[InMemoryPedidoRepository] Pedido with ID {pedido_id} not found")
 
             raise ValueError(f"Pedido with ID {pedido_id} does not exist.")
+
+    async def update_pedido(self, pedido: Pedido):
+        print(f"[InMemoryPedidoRepository] Updating pedido with ID {pedido.id}")
+
+        if pedido.id in self.pedidos:
+            self.pedidos[pedido.id] = pedido
+        else:
+            print(f"[InMemoryPedidoRepository] Pedido with ID {pedido.id} not found")
+
+            raise ValueError(f"Pedido with ID {pedido.id} does not exist.")

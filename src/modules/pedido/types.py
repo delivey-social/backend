@@ -35,3 +35,9 @@ class CreatePedidoRequest(BaseModel):
     user_id: UUID
     restaurant_id: UUID
     items: Annotated[list[CreatePedidoRequestItem], Field(..., min_length=1)]
+
+
+class UpdatePedidoRequest(BaseModel):
+    user_id: UUID
+    restaurant_id: UUID
+    items: Annotated[list[CreatePedidoRequestItem], Field(..., min_length=1)]

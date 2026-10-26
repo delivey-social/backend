@@ -7,6 +7,7 @@ from .domain.repository import PedidoRepository
 from .types import (
     CreatePedidoRequest,
     RestaurantGateway,
+    UpdatePedidoRequest,
     UserGateway,
 )
 
@@ -103,7 +104,11 @@ class PedidoService:
 
         await self.repo.delete_pedido(pedido_id)
 
-    async def update_pedido(self, pedido_id: UUID):
+    async def update_pedido(
+        self,
+        pedido_id: UUID,
+        data: UpdatePedidoRequest,
+    ):
         pedido = await self.repo.get_pedido(pedido_id)
 
         if not pedido:
@@ -113,5 +118,21 @@ class PedidoService:
                 "Pedido não encontrado",
                 404,
             )
+
+        updated_pedido = Pedido(
+            id=pedido.id,
+            user_id=data.user_id,
+            restaurant_id=data.restaurant_id,
+            items=[
+                PedidoItem(
+                    product_id=item.product_id,
+                    quantity=item.quantity,
+                    price_snapshot=0.0,
+                )
+                for item in data.items
+            ],
+        )
+
+        await self.repo.update_pedido(updated_pedido)
 
         return pedido
