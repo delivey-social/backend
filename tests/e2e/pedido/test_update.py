@@ -56,4 +56,10 @@ async def test_update_result(client: AsyncClient, create_pedido: Response):
     assert response.status_code == 200
     assert response.json() == {"message": "Pedido atualizado com sucesso"}
 
-    await client.get(f"/pedido/{pedido_id}")
+    response = await client.get(f"/pedido/{pedido_id}")
+
+    assert response.status_code == 200
+
+    assert response.json()["user_id"] == str(payload.user_id)
+    assert response.json()["restaurant_id"] == str(payload.restaurant_id)
+    assert response.json()["items"][0]["product_id"] == str(payload.items[0].product_id)
