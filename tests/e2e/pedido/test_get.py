@@ -26,4 +26,8 @@ async def test_get_pedido_success(
     assert response.status_code == 200
 
     data = response.json()
-    assert data["message"] == f"Details of pedido {pedido_id}"
+
+    assert data["id"] == pedido_id
+    assert "user_id" in data
+    assert "restaurant_id" in data
+    assert "items" in data

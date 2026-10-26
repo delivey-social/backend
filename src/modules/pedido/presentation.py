@@ -63,7 +63,9 @@ class PedidoRouter(APIRouter):
         ):
             pedido = await service.get_pedido(pedido_id)
 
-            return {"message": f"Details of pedido {pedido_id}"}
+            return JSONResponse(
+                content={**pedido.model_dump(mode="json")}, status_code=200
+            )
 
         return endpoint
 
