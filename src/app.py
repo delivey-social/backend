@@ -1,8 +1,10 @@
 import os
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from src.constants import ROOT_PATH
 from src.core.errors import DomainError
 from src.core.infra.lifespan import lifespan
 from src.modules.pedido.infra.dependencies import get_pedido_service
@@ -12,6 +14,8 @@ from src.modules.restaurante.infra.dependencies import (
     get_restaurante_service,
 )
 from src.modules.restaurante.presentation import MenuRouter, RestauranteRouter
+
+load_dotenv(ROOT_PATH / ".env")
 
 
 def create_app() -> FastAPI:
