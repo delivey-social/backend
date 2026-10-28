@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from src.constants import ROOT_PATH
 from src.core.errors import DomainError
 from src.core.infra.lifespan import lifespan
+from src.core.scripts.get_app_version import get_app_version
 from src.modules.pedido.infra.dependencies import get_pedido_service
 from src.modules.pedido.presentation import PedidoRouter
 from src.modules.restaurante.infra.dependencies import (
@@ -16,10 +17,6 @@ from src.modules.restaurante.infra.dependencies import (
 from src.modules.restaurante.presentation import MenuRouter, RestauranteRouter
 
 load_dotenv(ROOT_PATH / ".env")
-
-
-def get_app_version() -> str:
-    return "0.0.0"
 
 
 def create_app() -> FastAPI:
