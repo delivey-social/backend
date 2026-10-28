@@ -8,3 +8,10 @@ tests:
 
 pre-commit:
 	uv run pre-commit run --all-files
+
+build:
+	uv build
+	uv pip install -e .
+
+start:
+	.venv/bin/start

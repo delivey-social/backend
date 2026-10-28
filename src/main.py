@@ -1,3 +1,3 @@
-from .app import app
+from .app import app, start_server
 
-__all__ = ["app"]
+__all__ = ["app", "start_server"]

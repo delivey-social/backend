@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -31,6 +33,15 @@ def create_app() -> FastAPI:
         )
 
     return app
+
+
+def start_server():
+    import uvicorn
+
+    HOST = os.getenv("HOST", "0.0.0.0")
+    PORT = int(os.getenv("PORT", "8000"))
+
+    uvicorn.run(app, host=HOST, port=PORT)
 
 
 app = create_app()

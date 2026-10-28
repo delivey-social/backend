@@ -11,6 +11,13 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.1.4",
 ]
 
+[project.scripts]
+start = "src.main:start_server"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
