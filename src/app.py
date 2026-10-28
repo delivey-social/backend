@@ -18,6 +18,10 @@ from src.modules.restaurante.presentation import MenuRouter, RestauranteRouter
 load_dotenv(ROOT_PATH / ".env")
 
 
+def get_app_version() -> str:
+    return "0.0.0"
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="Comida App Backend", lifespan=lifespan)
 
@@ -28,6 +32,10 @@ def create_app() -> FastAPI:
     @app.get("/")
     async def ping() -> dict[str, str]:
         return {"message": "comida.app backend is alive!"}
+
+    @app.get("/version")
+    async def version() -> dict[str, str]:
+        return {"version": get_app_version()}
 
     @app.exception_handler(DomainError)
     async def domain_error_handler(request: Request, exc: DomainError):
