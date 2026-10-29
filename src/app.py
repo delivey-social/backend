@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from src.constants import ROOT_PATH
@@ -43,6 +44,16 @@ def create_app() -> FastAPI:
         return JSONResponse(
             status_code=exc.http_status_code,
             content={"message": str(exc)},
+        )
+
+    ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+
+    if ENVIRONMENT == "development":
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+            allow_methods=["*"],
+            allow_headers=["*"],
         )
 
     return app
