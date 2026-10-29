@@ -34,6 +34,10 @@ def create_app() -> FastAPI:
     async def version() -> dict[str, str]:
         return {"version": get_app_version()}
 
+    @app.get("/schema")
+    async def schema():
+        return app.openapi()
+
     @app.exception_handler(DomainError)
     async def domain_error_handler(request: Request, exc: DomainError):
         return JSONResponse(
