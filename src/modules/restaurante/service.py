@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 
 from fastapi import UploadFile
 
+from src.constants import IMAGE_PATH
 from src.core.errors import DomainError
 
 from .domain.image_repository import FileRepository
@@ -16,6 +17,7 @@ from .types import (
 
 MAX_IMAGE_SIZE_MB = 5
 MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024  # 5MB
+ACCEPTED_IMAGE_FORMATS = ["jpg", "jpeg", "png", "gif", "webp"]
 
 
 class RestauranteService:
@@ -107,7 +109,7 @@ class RestauranteService:
 
         extension = file.filename.split(".")[-1].lower()
 
-        if extension not in ["jpg", "jpeg", "png", "gif", "webp"]:
+        if extension not in ACCEPTED_IMAGE_FORMATS:
             raise DomainError("Formato de imagem não suportado", 400)
 
         if file.size is None or file.size == 0:
@@ -130,3 +132,23 @@ class RestauranteService:
             data=await file.read(),
             relative_path=path,
         )
+
+    async def get_restaurante_image(self, restaurante_id: UUID) -> Path:
+        print(
+            f"[RestauranteService] Obtendo imagem do restaurante com ID: {restaurante_id}"
+        )
+
+        exists = bool(await self.repo.get_by_id(restaurante_id))
+
+        if not exists:
+            raise DomainError("Restaurante não encontrado", 404)
+
+        path = Path("logos")
+
+        for ext in ACCEPTED_IMAGE_FORMATS:
+            file_path = path / f"{restaurante_id}.{ext}"
+
+            if (IMAGE_PATH / file_path).exists():
+                return IMAGE_PATH / file_path
+
+        raise DomainError("Imagem do restaurante não encontrada", 404)
