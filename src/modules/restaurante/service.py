@@ -1,3 +1,4 @@
+from pathlib import Path
 from uuid import UUID, uuid4
 
 from src.core.errors import DomainError
@@ -92,4 +93,7 @@ class RestauranteService:
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
 
-        await self.file_repo.upload(data=b"fake_image_data")
+        await self.file_repo.upload(
+            data=b"fake_image_data",
+            relative_path=Path("logos") / f"{restaurante_id}.txt",
+        )
