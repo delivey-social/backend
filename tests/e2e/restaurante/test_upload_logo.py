@@ -108,3 +108,73 @@ async def test_upload_logo_restaurante_not_found(
     assert res.json() == {
         "message": "Restaurante não encontrado",
     }
+
+
+@pytest.mark.anyio
+async def test_upload_logo_unsupported_format(
+    client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+):
+    data = create_restaurante.model_dump()
+    id = data.get("id")
+
+    file = b"fake image data"
+
+    res = await client.put(
+        f"/restaurante/{id}/logo",
+        files={"file": ("logo.txt", file, "text/plain")},
+    )
+
+    print(res.json())
+
+    assert res.status_code == 400
+    assert res.json() == {
+        "message": "Formato de imagem não suportado",
+    }
+
+
+@pytest.mark.anyio
+async def test_upload_logo_empty_file(
+    client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+):
+    data = create_restaurante.model_dump()
+    id = data.get("id")
+
+    empty_file = b""
+
+    res = await client.put(
+        f"/restaurante/{id}/logo",
+        files={"file": ("logo.png", empty_file, "image/png")},
+    )
+
+    print(res.json())
+
+    assert res.status_code == 400
+    assert res.json() == {
+        "message": "Arquivo de imagem vazio",
+    }
+
+
+@pytest.mark.anyio
+async def test_upload_logo_too_large_file(
+    client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+):
+    data = create_restaurante.model_dump()
+    id = data.get("id")
+
+    # Simulating a large file (e.g., 10MB)
+    large_file = b"a" * (10 * 1024 * 1024)
+
+    res = await client.put(
+        f"/restaurante/{id}/logo",
+        files={"file": ("logo.png", large_file, "image/png")},
+    )
+
+    print(res.json())
+
+    assert res.status_code == 400
+    assert res.json() == {
+        "message": "Arquivo de imagem muito grande (máximo 5MB)",
+    }
