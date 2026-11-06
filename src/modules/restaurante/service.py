@@ -99,6 +99,11 @@ class RestauranteService:
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
 
+        exists = bool(await self.repo.get_by_id(restaurante_id))
+
+        if not exists:
+            raise DomainError("Restaurante não encontrado", 404)
+
         if file.size is None or file.size == 0:
             raise DomainError("Arquivo de imagem vazio", 400)
 
