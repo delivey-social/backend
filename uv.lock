@@ -232,6 +232,7 @@ dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "pre-commit" },
     { name = "python-dotenv" },
+    { name = "python-multipart" },
     { name = "sqlalchemy", extra = ["asyncio"] },
 ]
 
@@ -248,6 +249,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.143.1" },
     { name = "pre-commit", specifier = ">=4.7.0" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
+    { name = "python-multipart", specifier = ">=0.0.32" },
     { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.1.4" },
 ]
 

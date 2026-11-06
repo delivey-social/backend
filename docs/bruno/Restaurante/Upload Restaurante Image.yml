@@ -1,0 +1,28 @@
+info:
+  name: Upload Restaurante Image
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{api_url}}/restaurante/:id/logo"
+  params:
+    - name: id
+      value: ee12999a-9f0c-4202-b3c5-77b756f59bfe
+      type: path
+  body:
+    type: multipart-form
+    data:
+      - name: file
+        type: file
+        value:
+          - C:\Users\thiago.tolotti\Downloads\the-who-sell-out-back.jpg
+        contentType: image/jpeg
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
