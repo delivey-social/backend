@@ -1,6 +1,8 @@
 from pathlib import Path
 from uuid import UUID, uuid4
 
+from fastapi import UploadFile
+
 from src.core.errors import DomainError
 
 from .domain.image_repository import FileRepository
@@ -88,12 +90,24 @@ class RestauranteService:
 
         await self.repo.delete(restaurante_id)
 
-    async def upload_restaurante_image(self, restaurante_id: UUID):
+    async def upload_restaurante_image(
+        self,
+        restaurante_id: UUID,
+        file: UploadFile,
+    ):
         print(
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
 
+        if not file.filename:
+            raise DomainError("Arquivo de imagem não fornecido", 400)
+
+        extension = file.filename.split(".")[-1].lower()
+
+        if extension not in ["jpg", "jpeg", "png", "gif"]:
+            raise DomainError("Formato de imagem não suportado", 400)
+
         await self.file_repo.upload(
-            data=b"fake_image_data",
-            relative_path=Path("logos") / f"{restaurante_id}.txt",
+            data=await file.read(),
+            relative_path=Path("logos") / f"{restaurante_id}.{extension}",
         )

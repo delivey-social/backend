@@ -2,7 +2,7 @@ from collections.abc import AsyncIterator, Callable
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 from fastapi.responses import JSONResponse
 
 from src.modules.restaurante.menu_service import MenuService
@@ -142,12 +142,13 @@ class RestauranteRouter(APIRouter):
     ):
         async def endpoint(
             restaurante_id: UUID,
+            file: UploadFile,
             service: Annotated[
                 RestauranteService,
                 Depends(service_dependency),
             ],
         ):
-            await service.upload_restaurante_image(restaurante_id)
+            await service.upload_restaurante_image(restaurante_id, file)
 
             return JSONResponse(
                 status_code=200,
