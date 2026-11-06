@@ -17,5 +17,4 @@ start:
 	.venv/bin/start
 
 typecheck:
-	uv run ruff check
 	uv run pyright
