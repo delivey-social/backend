@@ -4,6 +4,7 @@ from uuid import uuid4
 import pytest
 from httpx import AsyncClient
 
+from src.modules.restaurante.service import MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_MB
 from tests.e2e.restaurante.conftest import CreateRestauranteResponse
 
 
@@ -186,8 +187,7 @@ async def test_upload_logo_too_large_file(
     data = create_restaurante.model_dump()
     id = data.get("id")
 
-    # Simulating a large file (e.g., 10MB)
-    large_file = b"a" * (10 * 1024 * 1024)
+    large_file = b"a" * (MAX_IMAGE_SIZE + 1)
 
     res = await client.put(
         f"/restaurante/{id}/logo",
@@ -196,7 +196,7 @@ async def test_upload_logo_too_large_file(
 
     assert res.status_code == 400
     assert res.json() == {
-        "message": "Arquivo de imagem muito grande (máximo 5MB)",
+        "message": f"Arquivo de imagem muito grande (máximo {MAX_IMAGE_SIZE_MB}MB)",
     }
 
     logo_paths = Path(tmp_path) / "logos"

@@ -14,6 +14,9 @@ from .types import (
     UpdateRestauranteRequest,
 )
 
+MAX_IMAGE_SIZE_MB = 5
+MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024  # 5MB
+
 
 class RestauranteService:
     def __init__(
@@ -99,20 +102,6 @@ class RestauranteService:
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
 
-        exists = bool(await self.repo.get_by_id(restaurante_id))
-
-        if not exists:
-            raise DomainError("Restaurante não encontrado", 404)
-
-        if file.size is None or file.size == 0:
-            raise DomainError("Arquivo de imagem vazio", 400)
-
-        if file.size > 5 * 1024 * 1024:  # 5MB
-            raise DomainError(
-                "Arquivo de imagem muito grande (máximo 5MB)",
-                400,
-            )
-
         if not file.filename:
             raise DomainError("Arquivo de imagem não fornecido", 400)
 
@@ -120,6 +109,20 @@ class RestauranteService:
 
         if extension not in ["jpg", "jpeg", "png", "gif", "webp"]:
             raise DomainError("Formato de imagem não suportado", 400)
+
+        if file.size is None or file.size == 0:
+            raise DomainError("Arquivo de imagem vazio", 400)
+
+        if file.size > MAX_IMAGE_SIZE:
+            raise DomainError(
+                f"Arquivo de imagem muito grande (máximo {MAX_IMAGE_SIZE_MB}MB)",
+                400,
+            )
+
+        exists = bool(await self.repo.get_by_id(restaurante_id))
+
+        if not exists:
+            raise DomainError("Restaurante não encontrado", 404)
 
         path = Path("logos") / f"{restaurante_id}.{extension}"
 
