@@ -202,3 +202,42 @@ async def test_upload_logo_too_large_file(
     logo_paths = Path(tmp_path) / "logos"
 
     assert not logo_paths.exists() or not any(logo_paths.iterdir())
+
+
+@pytest.mark.anyio
+async def test_replace_existing_logo(
+    client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+    tmp_path: str,
+):
+    data = create_restaurante.model_dump()
+    id = data.get("id")
+
+    file1 = b"fake image data 1"
+    file2 = b"fake image data 2"
+
+    # Upload the first logo
+    res1 = await client.put(
+        f"/restaurante/{id}/logo",
+        files={"file": ("logo.png", file1, "image/png")},
+    )
+
+    assert res1.status_code == 200
+
+    expected_file_path = Path(tmp_path) / "logos" / f"{id}.png"
+    assert expected_file_path.exists()
+    assert expected_file_path.read_bytes() == file1
+
+    # Upload the second logo to replace the first one
+    res2 = await client.put(
+        f"/restaurante/{id}/logo",
+        files={"file": ("logo.jpg", file2, "image/png")},
+    )
+
+    new_expected_file_path = Path(tmp_path) / "logos" / f"{id}.jpg"
+
+    assert res2.status_code == 200
+
+    assert not expected_file_path.exists()  # The old file should be removed
+    assert new_expected_file_path.exists()
+    assert new_expected_file_path.read_bytes() == file2
