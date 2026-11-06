@@ -41,6 +41,11 @@ class RestauranteRouter(APIRouter):
             self.create_restaurante_endpoint(service_dependency),
             methods=["POST"],
         )
+        self.add_api_route(
+            "/{restaurante_id}/image",
+            self.upload_restaurante_image_endpoint(service_dependency),
+            methods=["PUT"],
+        )
 
         self.add_api_route(
             "/{restaurante_id}",
@@ -127,6 +132,28 @@ class RestauranteRouter(APIRouter):
             return JSONResponse(
                 status_code=200,
                 content={"message": "Restaurante excluído com sucesso"},
+            )
+
+        return endpoint
+
+    @staticmethod
+    def upload_restaurante_image_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            service: Annotated[
+                RestauranteService,
+                Depends(service_dependency),
+            ],
+        ):
+            await service.upload_restaurante_image(restaurante_id)
+
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Imagem do restaurante enviada com sucesso",
+                },
             )
 
         return endpoint

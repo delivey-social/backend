@@ -12,7 +12,11 @@ from .domain.restaurante_repository import RestauranteRepository
 
 
 class RestauranteService:
-    def __init__(self, repo: RestauranteRepository, menu_repo: MenuRepository):
+    def __init__(
+        self,
+        repo: RestauranteRepository,
+        menu_repo: MenuRepository,
+    ):
         self.repo = repo
         self.menu_repo = menu_repo
 
@@ -79,3 +83,8 @@ class RestauranteService:
             raise DomainError("Restaurante não encontrado", 404)
 
         await self.repo.delete(restaurante_id)
+
+    async def upload_restaurante_image(self, restaurante_id: UUID):
+        print(
+            f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
+        )

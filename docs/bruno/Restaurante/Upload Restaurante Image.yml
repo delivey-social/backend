@@ -1,0 +1,20 @@
+info:
+  name: Upload Restaurante Image
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{api_url}}/restaurante/:id/image"
+  params:
+    - name: id
+      value: ""
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
