@@ -142,13 +142,24 @@ class RestauranteRouter(APIRouter):
     ):
         async def endpoint(
             restaurante_id: UUID,
-            file: UploadFile,
+            file: list[UploadFile],
             service: Annotated[
                 RestauranteService,
                 Depends(service_dependency),
             ],
         ):
-            await service.upload_restaurante_image(restaurante_id, file)
+            if len(file) != 1:
+                return JSONResponse(
+                    status_code=400,
+                    content={
+                        "message": "Apenas um arquivo de imagem deve ser enviado",
+                    },
+                )
+
+            await service.upload_restaurante_image(
+                restaurante_id,
+                file[0],
+            )
 
             return JSONResponse(
                 status_code=200,

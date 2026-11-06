@@ -12,8 +12,13 @@ class DiskFileRepository(FileRepository):
         print("[DiskFileRepository] Uploading file to disk...")
 
         path = IMAGE_PATH / relative_path
+        path_folder = path.parent
 
-        path.parent.mkdir(parents=True, exist_ok=True)
+        path_folder.mkdir(parents=True, exist_ok=True)
+
+        for image in path_folder.iterdir():
+            if image.is_file() and image.stem == path.stem:
+                image.unlink()
 
         async with await anyio.open_file(path, "wb") as f:
             await f.write(data)

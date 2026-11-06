@@ -113,10 +113,12 @@ class RestauranteService:
 
         extension = file.filename.split(".")[-1].lower()
 
-        if extension not in ["jpg", "jpeg", "png", "gif"]:
+        if extension not in ["jpg", "jpeg", "png", "gif", "webp"]:
             raise DomainError("Formato de imagem não suportado", 400)
+
+        path = Path("logos") / f"{restaurante_id}.{extension}"
 
         await self.file_repo.upload(
             data=await file.read(),
-            relative_path=Path("logos") / f"{restaurante_id}.{extension}",
+            relative_path=path,
         )
