@@ -1,14 +1,15 @@
 from uuid import UUID, uuid4
 
 from src.core.errors import DomainError
-from src.modules.restaurante.types import (
-    CreateRestauranteRequest,
-    UpdateRestauranteRequest,
-)
 
+from .domain.image_repository import FileRepository
 from .domain.menu_repository import MenuRepository
 from .domain.restaurante import Restaurante
 from .domain.restaurante_repository import RestauranteRepository
+from .types import (
+    CreateRestauranteRequest,
+    UpdateRestauranteRequest,
+)
 
 
 class RestauranteService:
@@ -16,9 +17,11 @@ class RestauranteService:
         self,
         repo: RestauranteRepository,
         menu_repo: MenuRepository,
+        file_repo: FileRepository,
     ):
         self.repo = repo
         self.menu_repo = menu_repo
+        self.file_repo = file_repo
 
     async def list_restaurantes(self) -> list[Restaurante]:
         print("[RestauranteService] Listando restaurantes...")
@@ -88,3 +91,5 @@ class RestauranteService:
         print(
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
+
+        await self.file_repo.upload(data=b"fake_image_data")
