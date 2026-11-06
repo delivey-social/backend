@@ -1,4 +1,4 @@
-.PHONY: dev tests
+.PHONY: dev tests pre-commit build start typecheck
 
 dev:
 	uv run fastapi dev src/main.py
@@ -15,3 +15,7 @@ build:
 
 start:
 	.venv/bin/start
+
+typecheck:
+	uv run ruff check
+	uv run pyright
