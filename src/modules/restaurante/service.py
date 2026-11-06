@@ -99,6 +99,15 @@ class RestauranteService:
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
 
+        if file.size is None or file.size == 0:
+            raise DomainError("Arquivo de imagem vazio", 400)
+
+        if file.size > 5 * 1024 * 1024:  # 5MB
+            raise DomainError(
+                "Arquivo de imagem muito grande (máximo 5MB)",
+                400,
+            )
+
         if not file.filename:
             raise DomainError("Arquivo de imagem não fornecido", 400)
 
