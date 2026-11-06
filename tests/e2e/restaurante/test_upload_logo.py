@@ -22,8 +22,6 @@ async def test_upload_logo(
         files={"file": ("logo.png", file, "image/png")},
     )
 
-    print(res.json())
-
     assert res.status_code == 200
 
     expected_file_path = Path(tmp_path) / "logos" / f"{id}.png"
