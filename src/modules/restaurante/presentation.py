@@ -42,7 +42,7 @@ class RestauranteRouter(APIRouter):
             methods=["POST"],
         )
         self.add_api_route(
-            "/{restaurante_id}/image",
+            "/{restaurante_id}/logo",
             self.upload_restaurante_image_endpoint(service_dependency),
             methods=["PUT"],
         )
