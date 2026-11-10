@@ -8,8 +8,7 @@ from src.constants import KEYCLOAK_URL
 
 @pytest.fixture()
 async def auth_token() -> str:
-    # TODO: Use environment variables for these values
-    token_url = "http://localhost:8080/realms/master/protocol/openid-connect/token"
+    token_url = f"{KEYCLOAK_URL}/realms/master/protocol/openid-connect/token"
 
     client_id = os.getenv("E2E_CLIENT_ID")
     username = os.getenv("E2E_USERNAME")
