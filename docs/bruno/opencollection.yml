@@ -15,9 +15,9 @@ config:
       bypassProxy: ""
 
 request:
-  variables:
-    - name: api_url
-      value: http://127.0.0.1:8000
+  auth:
+    type: bearer
+    token: "{{access_token}}"
 bundled: false
 extensions:
   bruno:

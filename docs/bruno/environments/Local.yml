@@ -1,0 +1,12 @@
+name: Local
+variables:
+  - name: api_url
+    value: http://localhost:8000
+  - name: keycloak_url
+    value: http://localhost:8080
+  - secret: true
+    name: kc_admin_user
+  - secret: true
+    name: kc_admin_pass
+  - secret: true
+    name: access_token

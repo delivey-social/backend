@@ -22,12 +22,12 @@ class CreateMenuItemResponse(BaseModel):
 
 @pytest.fixture
 async def create_menu_item(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
 ) -> CreateMenuItemResponseItem:
     payload = CreateMenuItemRequest(nome="Pizza", preco=300)
 
-    response = await client.post(
+    response = await admin_client.post(
         f"/menu/{create_restaurante.id}",
         json=payload.model_dump(),
     )

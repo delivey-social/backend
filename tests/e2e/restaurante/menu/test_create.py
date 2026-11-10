@@ -32,10 +32,12 @@ async def test_create_menu_item(
 
 
 @pytest.mark.anyio
-async def test_create_menu_item_no_restaurante(client: AsyncClient):
+async def test_create_menu_item_no_restaurante(
+    admin_client: AsyncClient,
+):
     payload = CreateMenuItemRequest(nome="Pizza", preco=300)
 
-    response = await client.post(
+    response = await admin_client.post(
         f"/menu/{uuid4()}",
         json=payload.model_dump(),
     )

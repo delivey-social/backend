@@ -1,7 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -9,6 +9,11 @@ from src.constants import ROOT_PATH
 from src.core.errors import DomainError
 from src.core.infra.lifespan import lifespan
 from src.core.scripts.get_app_version import get_app_version
+from src.core.security import (
+    CurrentUser,
+    admin_protected_route,
+    get_current_user,
+)
 from src.modules.pedido.infra.dependencies import get_pedido_service
 from src.modules.pedido.presentation import PedidoRouter
 from src.modules.restaurante.infra.dependencies import (
@@ -30,6 +35,14 @@ def create_app() -> FastAPI:
     @app.get("/")
     async def ping() -> dict[str, str]:
         return {"message": "comida.app backend is alive!"}
+
+    @app.get("/secured")
+    async def secured(current_user: CurrentUser = Depends(get_current_user)):
+        return {"message": "This is a secured endpoint!"}
+
+    @app.get("/admin")
+    async def admin(is_admin: bool = Depends(admin_protected_route)):
+        return {"message": "This is an admin endpoint!"}
 
     @app.get("/version")
     async def version() -> dict[str, str]:

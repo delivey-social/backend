@@ -12,13 +12,13 @@ from tests.e2e.restaurante.menu.conftest import (
 
 @pytest.mark.anyio
 async def test_delete_menu_item(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
     create_menu_item: CreateMenuItemResponseItem,
     get_menu_item: GetMenuItemFixture,
 ):
-    response = await client.delete(
-        f"/menu/{create_restaurante.id}/{create_menu_item.id}"
+    response = await admin_client.delete(
+        f"/menu/{create_restaurante.id}/{create_menu_item.id}",
     )
 
     assert response.status_code == 200
@@ -34,10 +34,12 @@ async def test_delete_menu_item(
 
 @pytest.mark.anyio
 async def test_delete_menu_item_not_found(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
 ):
-    response = await client.delete(f"/menu/{create_restaurante.id}/{uuid4()}")
+    response = await admin_client.delete(
+        f"/menu/{create_restaurante.id}/{uuid4()}",
+    )
 
     assert response.status_code == 404
 
@@ -48,17 +50,17 @@ async def test_delete_menu_item_not_found(
 
 @pytest.mark.anyio
 async def test_delete_menu_item_twice(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
     create_menu_item: CreateMenuItemResponseItem,
 ):
-    response = await client.delete(
-        f"/menu/{create_restaurante.id}/{create_menu_item.id}"
+    response = await admin_client.delete(
+        f"/menu/{create_restaurante.id}/{create_menu_item.id}",
     )
     assert response.status_code == 200
 
-    response = await client.delete(
-        f"/menu/{create_restaurante.id}/{create_menu_item.id}"
+    response = await admin_client.delete(
+        f"/menu/{create_restaurante.id}/{create_menu_item.id}",
     )
 
     assert response.status_code == 404

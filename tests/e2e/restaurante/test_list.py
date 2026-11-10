@@ -68,17 +68,17 @@ async def test_list_restaurants_after_delete(
 
 @pytest.mark.anyio
 async def test_list_restaurants_after_creating_multiple(
-    client: AsyncClient,
+    admin_client: AsyncClient,
 ):
     restaurant_names = ["Restaurante A", "Restaurante B", "Restaurante C"]
 
     for name in restaurant_names:
-        await client.post(
+        await admin_client.post(
             "/restaurante/",
             json={"nome": name},
         )
 
-    response = await client.get("/restaurante/")
+    response = await admin_client.get("/restaurante/")
 
     assert response.status_code == 200
 

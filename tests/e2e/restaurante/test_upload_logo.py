@@ -10,14 +10,16 @@ from tests.e2e.restaurante.conftest import CreateRestauranteResponse
 
 @pytest.mark.anyio
 async def test_upload_logo(
-    client: AsyncClient, create_restaurante: CreateRestauranteResponse, tmp_path: str
+    admin_client: AsyncClient,
+    create_restaurante: CreateRestauranteResponse,
+    tmp_path: str,
 ):
     data = create_restaurante.model_dump()
     id = data.get("id")
 
     file = b"fake image data"  # Simulating a fake image file
 
-    res = await client.put(
+    res = await admin_client.put(
         f"/restaurante/{id}/logo",
         files={"file": ("logo.png", file, "image/png")},
     )
@@ -81,14 +83,14 @@ async def test_upload_logo_no_file(
 
 @pytest.mark.anyio
 async def test_upload_logo_invalid_restaurante_id(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     tmp_path: str,
 ):
     invalid_id = "invalid-uuid"
 
     file = b"fake image data"
 
-    res = await client.put(
+    res = await admin_client.put(
         f"/restaurante/{invalid_id}/logo",
         files={"file": ("logo.png", file, "image/png")},
     )
@@ -102,14 +104,14 @@ async def test_upload_logo_invalid_restaurante_id(
 
 @pytest.mark.anyio
 async def test_upload_logo_restaurante_not_found(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     tmp_path: str,
 ):
     non_existent_id = uuid4()
 
     file = b"fake image data"
 
-    res = await client.put(
+    res = await admin_client.put(
         f"/restaurante/{non_existent_id}/logo",
         files={"file": ("logo.png", file, "image/png")},
     )

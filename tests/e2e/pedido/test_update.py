@@ -19,13 +19,13 @@ payload = UpdatePedidoRequest(
 
 @pytest.mark.anyio
 async def test_update(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_pedido: Response,
 ):
     pedido = create_pedido.json()
     pedido_id = pedido["id"]
 
-    response = await client.put(
+    response = await admin_client.put(
         f"/pedido/{pedido_id}",
         json=payload.model_dump(mode="json"),
     )
@@ -34,8 +34,8 @@ async def test_update(
 
 
 @pytest.mark.anyio
-async def test_update_not_found(client: AsyncClient):
-    response = await client.put(
+async def test_update_not_found(admin_client: AsyncClient):
+    response = await admin_client.put(
         f"/pedido/{uuid4()}",
         json=payload.model_dump(mode="json"),
     )
@@ -44,11 +44,14 @@ async def test_update_not_found(client: AsyncClient):
 
 
 @pytest.mark.anyio
-async def test_update_result(client: AsyncClient, create_pedido: Response):
+async def test_update_result(
+    admin_client: AsyncClient,
+    create_pedido: Response,
+):
     pedido = create_pedido.json()
     pedido_id = pedido["id"]
 
-    response = await client.put(
+    response = await admin_client.put(
         f"/pedido/{pedido_id}",
         json=payload.model_dump(mode="json"),
     )
@@ -56,7 +59,7 @@ async def test_update_result(client: AsyncClient, create_pedido: Response):
     assert response.status_code == 200
     assert response.json() == {"message": "Pedido atualizado com sucesso"}
 
-    response = await client.get(f"/pedido/{pedido_id}")
+    response = await admin_client.get(f"/pedido/{pedido_id}")
 
     assert response.status_code == 200
 

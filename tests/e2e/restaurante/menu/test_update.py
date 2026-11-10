@@ -13,14 +13,14 @@ from tests.e2e.restaurante.menu.conftest import (
 
 @pytest.mark.anyio
 async def test_update_menu_item(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_restaurante: CreateRestauranteResponse,
     create_menu_item: CreateMenuItemResponseItem,
     get_menu_item: GetMenuItemFixture,
 ):
     payload = UpdateMenuItemRequest(nome="Pizza", preco=300)
 
-    response = await client.put(
+    response = await admin_client.put(
         f"/menu/{create_restaurante.id}/{create_menu_item.id}",
         json=payload.model_dump(),
     )

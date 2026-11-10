@@ -51,7 +51,7 @@ async def mock_restaurante_service():
 
 @pytest.fixture
 async def create_pedido(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     mock_restaurante_service,
 ):
     payload = CreatePedidoRequest(
@@ -65,7 +65,7 @@ async def create_pedido(
         ],
     )
 
-    return await client.post(
+    return await admin_client.post(
         "/pedido/",
         json=payload.model_dump(mode="json"),
     )

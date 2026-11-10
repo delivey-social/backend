@@ -6,22 +6,22 @@ from httpx import AsyncClient, Response
 
 @pytest.mark.anyio
 async def test_get_pedido_not_found(
-    client: AsyncClient,
+    admin_client: AsyncClient,
 ):
-    response = await client.get(f"/pedido/{uuid4()}")
+    response = await admin_client.get(f"/pedido/{uuid4()}")
 
     assert response.status_code == 404
 
 
 @pytest.mark.anyio
 async def test_get_pedido_success(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_pedido: Response,
 ):
     data = create_pedido.json()
 
     pedido_id = data["id"]
-    response = await client.get(f"/pedido/{pedido_id}")
+    response = await admin_client.get(f"/pedido/{pedido_id}")
 
     assert response.status_code == 200
 

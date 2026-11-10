@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
+from src.core.security import admin_protected_route
 from src.modules.pedido.service import PedidoService
 from src.modules.pedido.types import CreatePedidoRequest, UpdatePedidoRequest
 
@@ -12,7 +13,11 @@ PedidoServiceDependency = Callable[..., Awaitable[PedidoService]]
 
 class PedidoRouter(APIRouter):
     def __init__(self, service_dependency: PedidoServiceDependency):
-        super().__init__(prefix="/pedido", tags=["Pedido"])
+        super().__init__(
+            prefix="/pedido",
+            tags=["Pedido"],
+            dependencies=[Depends(admin_protected_route)],
+        )
 
         self.add_api_route(
             "/",

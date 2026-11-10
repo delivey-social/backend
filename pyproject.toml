@@ -7,7 +7,9 @@ requires-python = ">=3.12"
 dependencies = [
     "aiosqlite>=0.22.0",
     "fastapi[standard]>=0.143.1",
+    "jwt>=1.4.0",
     "pre-commit>=4.7.0",
+    "pyjwt>=2.15.1",
     "python-dotenv>=1.2.4",
     "python-multipart>=0.0.32",
     "sqlalchemy[asyncio]>=2.1.4",

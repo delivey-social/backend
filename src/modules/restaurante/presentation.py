@@ -5,14 +5,15 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 
-from src.modules.restaurante.menu_service import MenuService
-from src.modules.restaurante.types import (
+from src.core.security import admin_protected_route
+
+from .menu_service import MenuService
+from .service import RestauranteService
+from .types import (
     CreateMenuItemRequest,
     CreateRestauranteRequest,
     UpdateRestauranteRequest,
 )
-
-from .service import RestauranteService
 
 RestauranteServiceDependency = Callable[..., AsyncIterator[RestauranteService]]
 MenuServiceDependency = Callable[..., AsyncIterator[MenuService]]
@@ -95,6 +96,7 @@ class RestauranteRouter(APIRouter):
         async def endpoint(
             data: CreateRestauranteRequest,
             service: Annotated[RestauranteService, Depends(service_dependency)],
+            is_admin=Depends(admin_protected_route),
         ):
             restaurante = await service.create_restaurante(data)
 
@@ -108,6 +110,7 @@ class RestauranteRouter(APIRouter):
     @staticmethod
     def update_restaurante_endpoint(
         service_dependency: RestauranteServiceDependency,
+        is_admin=Depends(admin_protected_route),
     ):
         async def endpoint(
             restaurante_id: UUID,
@@ -132,6 +135,7 @@ class RestauranteRouter(APIRouter):
         async def endpoint(
             restaurante_id: UUID,
             service: Annotated[RestauranteService, Depends(service_dependency)],
+            is_admin=Depends(admin_protected_route),
         ):
             await service.delete_restaurante(restaurante_id)
 
@@ -153,6 +157,7 @@ class RestauranteRouter(APIRouter):
                 RestauranteService,
                 Depends(service_dependency),
             ],
+            is_admin=Depends(admin_protected_route),
         ):
             if len(file) != 1:
                 return JSONResponse(
@@ -239,11 +244,14 @@ class MenuRouter(APIRouter):
         return endpoint
 
     @staticmethod
-    def create_menu_item_endpoint(service_dependency: MenuServiceDependency):
+    def create_menu_item_endpoint(
+        service_dependency: MenuServiceDependency,
+    ):
         async def endpoint(
             restaurante_id: UUID,
             data: CreateMenuItemRequest,
             service: Annotated[MenuService, Depends(service_dependency)],
+            is_admin=Depends(admin_protected_route),
         ):
             item = await service.create_menu_item(restaurante_id, data)
 
@@ -258,12 +266,15 @@ class MenuRouter(APIRouter):
         return endpoint
 
     @staticmethod
-    def update_menu_item_endpoint(service_dependency: MenuServiceDependency):
+    def update_menu_item_endpoint(
+        service_dependency: MenuServiceDependency,
+    ):
         async def endpoint(
             restaurante_id: UUID,
             item_id: UUID,
             data: CreateMenuItemRequest,
             service: Annotated[MenuService, Depends(service_dependency)],
+            is_admin=Depends(admin_protected_route),
         ):
             item = await service.update_menu_item(restaurante_id, item_id, data)
 
@@ -278,11 +289,14 @@ class MenuRouter(APIRouter):
         return endpoint
 
     @staticmethod
-    def delete_menu_item_endpoint(service_dependency: MenuServiceDependency):
+    def delete_menu_item_endpoint(
+        service_dependency: MenuServiceDependency,
+    ):
         async def endpoint(
             restaurante_id: UUID,
             item_id: UUID,
             service: Annotated[MenuService, Depends(service_dependency)],
+            is_admin=Depends(admin_protected_route),
         ):
             await service.delete_menu_item(restaurante_id, item_id)
 

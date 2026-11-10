@@ -1,0 +1,41 @@
+info:
+  name: Keycloak - Login
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: "{{keycloak_url}}/realms/master/protocol/openid-connect/token"
+  headers:
+    - name: Content-Type
+      value: application/x-www-form-urlencoded
+  body:
+    type: form-urlencoded
+    data:
+      - name: grant_type
+        value: password
+      - name: client_id
+        value: backend
+      - name: username
+        value: "{{kc_admin_user}}"
+      - name: password
+        value: "{{kc_admin_pass}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const response = res.getBody();
+
+        if (response && response.access_token) {
+          bru.setEnvVar("access_token", response.access_token)
+          console.log("Access token successfully saved to environment!");
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

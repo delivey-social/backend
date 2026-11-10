@@ -20,14 +20,17 @@ class CreateRestauranteResponse(BaseModel):
 
 @pytest.fixture
 async def create_restaurante(
-    client: AsyncClient,
+    admin_client: AsyncClient,
 ) -> CreateRestauranteResponse:
     """Fixture that creates a restaurant and returns the payload/data."""
     payload = CreateRestauranteRequest(
         nome="Restaurante Teste",
     )
 
-    response = await client.post("/restaurante/", json=payload.model_dump())
+    response = await admin_client.post(
+        "/restaurante/",
+        json=payload.model_dump(),
+    )
 
     assert response.status_code == 201
 

@@ -3,8 +3,8 @@ from httpx import AsyncClient, Response
 
 
 @pytest.mark.anyio
-async def test_list_pedidos_empty(client: AsyncClient):
-    response = await client.get("/pedido/")
+async def test_list_pedidos_empty(admin_client: AsyncClient):
+    response = await admin_client.get("/pedido/")
 
     assert response.status_code == 200
 
@@ -13,10 +13,10 @@ async def test_list_pedidos_empty(client: AsyncClient):
 
 @pytest.mark.anyio
 async def test_list_pedidos(
-    client: AsyncClient,
+    admin_client: AsyncClient,
     create_pedido: Response,
 ):
-    response = await client.get("/pedido/")
+    response = await admin_client.get("/pedido/")
 
     assert response.status_code == 200
 
