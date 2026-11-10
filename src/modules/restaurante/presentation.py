@@ -2,8 +2,8 @@ from collections.abc import AsyncIterator, Callable
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Depends, UploadFile
+from fastapi.responses import FileResponse, JSONResponse
 
 from src.modules.restaurante.menu_service import MenuService
 from src.modules.restaurante.types import (
@@ -40,6 +40,17 @@ class RestauranteRouter(APIRouter):
             "/",
             self.create_restaurante_endpoint(service_dependency),
             methods=["POST"],
+        )
+        self.add_api_route(
+            "/{restaurante_id}/logo",
+            self.upload_restaurante_image_endpoint(service_dependency),
+            methods=["PUT"],
+        )
+
+        self.add_api_route(
+            "/{restaurante_id}/logo",
+            self.get_restaurante_image_endpoint(service_dependency),
+            methods=["GET"],
         )
 
         self.add_api_route(
@@ -127,6 +138,57 @@ class RestauranteRouter(APIRouter):
             return JSONResponse(
                 status_code=200,
                 content={"message": "Restaurante excluído com sucesso"},
+            )
+
+        return endpoint
+
+    @staticmethod
+    def upload_restaurante_image_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            file: list[UploadFile],
+            service: Annotated[
+                RestauranteService,
+                Depends(service_dependency),
+            ],
+        ):
+            if len(file) != 1:
+                return JSONResponse(
+                    status_code=400,
+                    content={
+                        "message": "Apenas um arquivo de imagem deve ser enviado",
+                    },
+                )
+
+            await service.upload_restaurante_image(
+                restaurante_id,
+                file[0],
+            )
+
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Imagem do restaurante enviada com sucesso",
+                },
+            )
+
+        return endpoint
+
+    @staticmethod
+    def get_restaurante_image_endpoint(
+        service_dependency: RestauranteServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            service: Annotated[RestauranteService, Depends(service_dependency)],
+        ):
+            path = await service.get_restaurante_image(restaurante_id)
+
+            return FileResponse(
+                path=path,
+                media_type="image/*",
             )
 
         return endpoint

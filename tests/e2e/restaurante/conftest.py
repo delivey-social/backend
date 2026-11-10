@@ -61,3 +61,16 @@ async def get_restaurante(client: AsyncClient):
         return GetRestauranteResponseWrapper(response)
 
     return _get_restaurante
+
+
+@pytest.fixture(autouse=True)
+def setup_storage_mock(tmp_path: str, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr(
+        "src.modules.restaurante.infra.disk_file_repo.IMAGE_PATH", tmp_path
+    )
+    monkeypatch.setattr(
+        "src.modules.restaurante.service.IMAGE_PATH",
+        tmp_path,
+    )
+
+    return tmp_path
