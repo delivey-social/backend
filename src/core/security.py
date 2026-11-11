@@ -54,6 +54,14 @@ def get_current_user(
             status_code=401,
             detail="Invalid token",
         )
+    except jwt.PyJWKClientError as e:
+        print("[DEBUG] PyJWKClientError occurred")
+        print("[DEBUG] Error details:", e)
+
+        raise HTTPException(
+            status_code=503,
+            detail="Error connecting to JWKS endpoint",
+        )
 
     user_id = payload.get("sub")
 
