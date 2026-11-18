@@ -5,14 +5,17 @@ from uuid import UUID
 from fastapi import Depends
 
 from src.modules.pedido.domain.repository import PedidoRepository
-from src.modules.restaurante.infra.dependencies import get_restaurante_service
+from src.modules.restaurante.infra.dependencies import (
+    get_menu_service,
+    get_restaurante_service,
+)
+from src.modules.restaurante.menu_service import MenuService
 from src.modules.restaurante.service import RestauranteService
 
 from ..infra.inmemory_repo import InMemoryPedidoRepository
 from ..service import PedidoService
 from ..types import UserGateway
 from .gateway_impl import RestauranteGatewayImplementation
-
 
 pedido_repository = InMemoryPedidoRepository()
 
@@ -30,10 +33,11 @@ async def get_pedido_service(
     restaurante_service: Annotated[
         RestauranteService, Depends(get_restaurante_service)
     ],
+    menu_service: Annotated[MenuService, Depends(get_menu_service)],
     pedido_repository: Annotated[PedidoRepository, Depends(get_pedido_repo)],
 ) -> PedidoService:
     return PedidoService(
         pedido_repository,
         DummyUserGateway(),
-        RestauranteGatewayImplementation(restaurante_service),
+        RestauranteGatewayImplementation(restaurante_service, menu_service),
     )

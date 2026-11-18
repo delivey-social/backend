@@ -64,14 +64,7 @@ class PedidoService:
         pedido = Pedido(
             user_id=data.user_id,
             restaurant_id=data.restaurant_id,
-            items=[
-                PedidoItem(
-                    product_id=item.product_id,
-                    quantity=item.quantity,
-                    price_snapshot=0.0,
-                )
-                for item in data.items
-            ],
+            items=items,
         )
 
         await self.repo.save(pedido)
@@ -119,18 +112,26 @@ class PedidoService:
                 404,
             )
 
+        items: list[PedidoItem] = []
+
+        for item in data.items:
+            item_domain = await self.restaurant_gateway.get_item(
+                data.restaurant_id, item.product_id
+            )
+
+            items.append(
+                PedidoItem(
+                    product_id=item_domain.product_id,
+                    quantity=item.quantity,
+                    price_snapshot=item_domain.price,
+                )
+            )
+
         updated_pedido = Pedido(
             id=pedido.id,
             user_id=data.user_id,
             restaurant_id=data.restaurant_id,
-            items=[
-                PedidoItem(
-                    product_id=item.product_id,
-                    quantity=item.quantity,
-                    price_snapshot=0.0,
-                )
-                for item in data.items
-            ],
+            items=items,
         )
 
         await self.repo.update_pedido(updated_pedido)
