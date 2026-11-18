@@ -5,17 +5,21 @@ info:
 
 http:
   method: POST
-  url: "{{keycloak_url}}/realms/master/protocol/openid-connect/token"
+  url: "{{keycloak_url}}/realms/:realm/protocol/openid-connect/token"
   headers:
     - name: Content-Type
       value: application/x-www-form-urlencoded
+  params:
+    - name: realm
+      value: master
+      type: path
   body:
     type: form-urlencoded
     data:
       - name: grant_type
         value: password
       - name: client_id
-        value: backend
+        value: admin-cli
       - name: username
         value: "{{kc_admin_user}}"
       - name: password
