@@ -24,7 +24,6 @@ class CurrentUser(BaseModel):
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> CurrentUser:
-    print("[DEBUG] get_current_user called with credentials:", credentials)
 
     token = credentials.credentials
 
@@ -39,25 +38,17 @@ def get_current_user(
             options={"verify_aud": False},  # Disable audience verification
         )
 
-        print("[DEBUG] JWT payload:", payload)
-
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=401,
             detail="Token has expired",
         )
-    except jwt.InvalidTokenError as e:
-        print("[DEBUG] Invalid token error occurred")
-        print("[DEBUG] Error details:", e)
-
+    except jwt.InvalidTokenError:
         raise HTTPException(
             status_code=401,
             detail="Invalid token",
         )
-    except jwt.PyJWKClientError as e:
-        print("[DEBUG] PyJWKClientError occurred")
-        print("[DEBUG] Error details:", e)
-
+    except jwt.PyJWKClientError:
         raise HTTPException(
             status_code=503,
             detail="Error connecting to JWKS endpoint",
