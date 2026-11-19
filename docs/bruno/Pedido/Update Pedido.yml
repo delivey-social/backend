@@ -8,8 +8,20 @@ http:
   url: "{{api_url}}/pedido/:id"
   params:
     - name: id
-      value: "{{$randomUUID}}"
+      value: "{{pedido_id}}"
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "user_id": "{{$randomUUID}}",
+        "restaurant_id": "{{restaurant_id}}",
+        "items": [{
+          "product_id": "{{item_id}}",
+          "quantity": 1
+        }],
+        "status": "pending"
+      }
   auth: inherit
 
 settings:

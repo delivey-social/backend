@@ -8,6 +8,16 @@ http:
   url: "{{api_url}}/pedido/"
   auth: inherit
 
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const response = res.getBody();
+
+        if (response && response?.pedidos?.length) {
+          bru.setEnvVar("pedido_id", response.pedidos[0].id)
+        }
+
 settings:
   encodeUrl: true
   timeout: 0

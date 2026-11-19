@@ -8,6 +8,16 @@ http:
   url: "{{api_url}}/restaurante/"
   auth: inherit
 
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const response = res.getBody();
+
+        if (response && response.length > 0) {
+          bru.setEnvVar("restaurant_id", response[0].id)
+        }
+
 settings:
   encodeUrl: true
   timeout: 0

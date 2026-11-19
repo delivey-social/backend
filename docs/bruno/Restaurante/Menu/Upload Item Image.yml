@@ -8,10 +8,10 @@ http:
   url: "{{api_url}}/menu/:restaurante_id/:item_id/image"
   params:
     - name: item_id
-      value: ""
+      value: "{{item_id}}"
       type: path
     - name: restaurante_id
-      value: a6a6941a-2e47-4ab1-9718-02b0340341e9
+      value: "{{restaurant_id}}"
       type: path
   body:
     type: multipart-form

@@ -19,7 +19,8 @@ http:
       - name: grant_type
         value: password
       - name: client_id
-        value: admin-cli
+        value: backend
+        description: admin-cli | backend
       - name: username
         value: "{{kc_admin_user}}"
       - name: password

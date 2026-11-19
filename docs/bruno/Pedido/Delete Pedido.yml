@@ -8,7 +8,7 @@ http:
   url: "{{api_url}}/pedido/:id"
   params:
     - name: id
-      value: "{{$randomUUID}}"
+      value: "{{pedido_id}}"
       type: path
   auth: inherit
 

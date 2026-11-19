@@ -8,7 +8,7 @@ http:
   url: "{{api_url}}/menu/:restaurante_id"
   params:
     - name: restaurante_id
-      value: "{{$randomUUID}}"
+      value: "{{restaurant_id}}"
       type: path
   body:
     type: json

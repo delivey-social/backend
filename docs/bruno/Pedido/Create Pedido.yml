@@ -11,13 +11,23 @@ http:
     data: |-
       {
         "user_id": "{{$randomUUID}}",
-        "restaurant_id": "{{$randomUUID}}",
+        "restaurant_id": "{{restaurant_id}}",
         "items": [{
-          "product_id": "{{$randomUUID}}",
+          "product_id": "{{item_id}}",
           "quantity": 1
         }]
       }
   auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const response = res.getBody();
+
+        if (response && response.id) {
+          bru.setEnvVar("pedido_id", response.id)
+        }
 
 settings:
   encodeUrl: true

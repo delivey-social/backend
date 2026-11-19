@@ -8,10 +8,10 @@ http:
   url: "{{api_url}}/menu/:restaurante_id/:item_id"
   params:
     - name: restaurante_id
-      value: "{{$randomUUID}}"
+      value: "{{restaurant_id}}"
       type: path
     - name: item_id
-      value: "{{$randomUUID}}"
+      value: "{{item_id}}"
       type: path
   auth: inherit
 

@@ -8,9 +8,19 @@ http:
   url: "{{api_url}}/menu/:restaurante_id"
   params:
     - name: restaurante_id
-      value: "{{$randomUUID}}"
+      value: "{{restaurant_id}}"
       type: path
   auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const response = res.getBody();
+
+        if (response && response?.itens?.length > 0) {
+          bru.setEnvVar("item_id", response.itens[0].id)
+        }
 
 settings:
   encodeUrl: true

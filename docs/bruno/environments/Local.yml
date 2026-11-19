@@ -10,3 +10,9 @@ variables:
     name: kc_admin_pass
   - secret: true
     name: access_token
+  - name: restaurant_id
+    value: ee12999a-9f0c-4202-b3c5-77b756f59bfe
+  - name: item_id
+    value: a6a6941a-2e47-4ab1-9718-02b0340341e9
+  - name: pedido_id
+    value: e1fa3de5-b2d4-4383-aa47-dd919b74cd73

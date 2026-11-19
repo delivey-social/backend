@@ -8,10 +8,10 @@ http:
   url: "{{api_url}}/menu/:restaurante_id/:item_id"
   params:
     - name: restaurante_id
-      value: ee12999a-9f0c-4202-b3c5-77b756f59bfe
+      value: "{{restaurant_id}}"
       type: path
     - name: item_id
-      value: a6a6941a-2e47-4ab1-9718-02b0340341e9
+      value: "{{item_id}}"
       type: path
   auth: inherit
 
