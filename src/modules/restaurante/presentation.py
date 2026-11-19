@@ -233,6 +233,18 @@ class MenuRouter(APIRouter):
             methods=["GET"],
         )
 
+        self.add_api_route(
+            "/{restaurante_id}/{item_id}/image",
+            self.upload_menu_item_image_endpoint(service),
+            methods=["PUT"],
+        )
+
+        self.add_api_route(
+            "/{restaurante_id}/{item_id}/image",
+            self.get_menu_item_image_endpoint(service),
+            methods=["GET"],
+        )
+
     @staticmethod
     def get_menu_endpoint(service_dependency: MenuServiceDependency):
         async def endpoint(
@@ -315,5 +327,56 @@ class MenuRouter(APIRouter):
             service: Annotated[MenuService, Depends(service_dependency)],
         ):
             return await service.get_menu_item(restaurante_id, item_id)
+
+        return endpoint
+
+    @staticmethod
+    def upload_menu_item_image_endpoint(
+        service_dependency: MenuServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            item_id: UUID,
+            file: list[UploadFile],
+            service: Annotated[
+                MenuService,
+                Depends(service_dependency),
+            ],
+            is_admin=Depends(admin_protected_route),
+        ):
+            if len(file) != 1:
+                return JSONResponse(
+                    status_code=400,
+                    content={
+                        "message": "Apenas um arquivo de imagem deve ser enviado",
+                    },
+                )
+
+            await service.upload_menu_item_image(
+                restaurante_id=restaurante_id,
+                item_id=item_id,
+                file=file[0],
+            )
+
+        return endpoint
+
+    @staticmethod
+    def get_menu_item_image_endpoint(
+        service_dependency: MenuServiceDependency,
+    ):
+        async def endpoint(
+            restaurante_id: UUID,
+            item_id: UUID,
+            service: Annotated[MenuService, Depends(service_dependency)],
+        ):
+            path = await service.get_menu_item_image(
+                restaurante_id,
+                item_id,
+            )
+
+            return FileResponse(
+                path=path,
+                media_type="image/*",
+            )
 
         return endpoint

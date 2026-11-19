@@ -6,12 +6,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.infra.database import get_session
 from src.modules.restaurante.infra.disk_file_repo import DiskFileRepository
-from src.modules.restaurante.infra.sqlalchemy_menu_repo import SQLAlchemyMenuRepository
-from src.modules.restaurante.infra.sqlalchemy_repo import (
+
+from ..domain.image_repository import FileRepository
+from ..file_service import FileService
+from ..infra.sqlalchemy_menu_repo import SQLAlchemyMenuRepository
+from ..infra.sqlalchemy_repo import (
     SQLAlchemyRestauranteRepository,
 )
-from src.modules.restaurante.menu_service import MenuService
-from src.modules.restaurante.service import RestauranteService
+from ..menu_service import MenuService
+from ..service import RestauranteService
 
 SessionDependency = Annotated[AsyncSession, Depends(get_session)]
 
@@ -27,32 +30,52 @@ async def get_menu_repo(
         raise
 
 
-async def get_menu_service(
+async def get_file_repo(
     session: SessionDependency,
-    menu_repo: Annotated[SQLAlchemyMenuRepository, Depends(get_menu_repo)],
-) -> AsyncIterator[MenuService]:
+) -> AsyncIterator[FileRepository]:
     try:
-        yield MenuService(menu_repo)
+        yield DiskFileRepository()
         await session.commit()
     except Exception:
         await session.rollback()
         raise
 
 
-async def get_file_repo() -> AsyncIterator[DiskFileRepository]:
-    yield DiskFileRepository()
+async def get_file_service(
+    session: SessionDependency,
+    file_repo: Annotated[FileRepository, Depends(get_file_repo)],
+) -> AsyncIterator[FileService]:
+    try:
+        yield FileService(file_repo)
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
+
+
+async def get_menu_service(
+    session: SessionDependency,
+    menu_repo: Annotated[SQLAlchemyMenuRepository, Depends(get_menu_repo)],
+    file_service: Annotated[FileService, Depends(get_file_service)],
+) -> AsyncIterator[MenuService]:
+    try:
+        yield MenuService(menu_repo, file_service)
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
 
 
 async def get_restaurante_service(
     session: SessionDependency,
     menu_repo: Annotated[SQLAlchemyMenuRepository, Depends(get_menu_repo)],
-    file_repo: Annotated[DiskFileRepository, Depends(get_file_repo)],
+    file_service: Annotated[FileService, Depends(get_file_service)],
 ) -> AsyncIterator[RestauranteService]:
     try:
         yield RestauranteService(
             SQLAlchemyRestauranteRepository(session),
             menu_repo,
-            file_repo,
+            file_service,
         )
         await session.commit()
     except Exception:

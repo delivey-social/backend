@@ -3,21 +3,16 @@ from uuid import UUID, uuid4
 
 from fastapi import UploadFile
 
-from src.constants import IMAGE_PATH
 from src.core.errors import DomainError
 
-from .domain.image_repository import FileRepository
 from .domain.menu_repository import MenuRepository
 from .domain.restaurante import Restaurante
 from .domain.restaurante_repository import RestauranteRepository
+from .file_service import FileService
 from .types import (
     CreateRestauranteRequest,
     UpdateRestauranteRequest,
 )
-
-MAX_IMAGE_SIZE_MB = 5
-MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_MB * 1024 * 1024  # 5MB
-ACCEPTED_IMAGE_FORMATS = ["jpg", "jpeg", "png", "gif", "webp"]
 
 
 class RestauranteService:
@@ -25,11 +20,11 @@ class RestauranteService:
         self,
         repo: RestauranteRepository,
         menu_repo: MenuRepository,
-        file_repo: FileRepository,
+        file_service: FileService,
     ):
         self.repo = repo
         self.menu_repo = menu_repo
-        self.file_repo = file_repo
+        self.file_service = file_service
 
     async def list_restaurantes(self) -> list[Restaurante]:
         print("[RestauranteService] Listando restaurantes...")
@@ -104,33 +99,15 @@ class RestauranteService:
             f"[RestauranteService] Uploading image for restaurante with ID: {restaurante_id}"
         )
 
-        if not file.filename:
-            raise DomainError("Arquivo de imagem não fornecido", 400)
-
-        extension = file.filename.split(".")[-1].lower()
-
-        if extension not in ACCEPTED_IMAGE_FORMATS:
-            raise DomainError("Formato de imagem não suportado", 400)
-
-        if file.size is None or file.size == 0:
-            raise DomainError("Arquivo de imagem vazio", 400)
-
-        if file.size > MAX_IMAGE_SIZE:
-            raise DomainError(
-                f"Arquivo de imagem muito grande (máximo {MAX_IMAGE_SIZE_MB}MB)",
-                400,
-            )
-
         exists = bool(await self.repo.get_by_id(restaurante_id))
 
         if not exists:
             raise DomainError("Restaurante não encontrado", 404)
 
-        path = Path("logos") / f"{restaurante_id}.{extension}"
-
-        await self.file_repo.upload(
-            data=await file.read(),
-            relative_path=path,
+        await self.file_service.upload_image(
+            file=file,
+            base_path=Path("logos"),
+            filename_override=str(restaurante_id),
         )
 
     async def get_restaurante_image(self, restaurante_id: UUID) -> Path:
@@ -143,12 +120,7 @@ class RestauranteService:
         if not exists:
             raise DomainError("Restaurante não encontrado", 404)
 
-        path = Path("logos")
-
-        for ext in ACCEPTED_IMAGE_FORMATS:
-            file_path = path / f"{restaurante_id}.{ext}"
-
-            if (IMAGE_PATH / file_path).exists():
-                return IMAGE_PATH / file_path
-
-        raise DomainError("Imagem do restaurante não encontrada", 404)
+        return await self.file_service.get_image(
+            base_path=Path("logos"),
+            filename=str(restaurante_id),
+        )

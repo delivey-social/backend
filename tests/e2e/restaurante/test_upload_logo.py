@@ -4,7 +4,7 @@ from uuid import uuid4
 import pytest
 from httpx import AsyncClient
 
-from src.modules.restaurante.service import MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_MB
+from src.modules.restaurante.file_service import MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_MB
 from tests.e2e.restaurante.conftest import CreateRestauranteResponse
 
 
