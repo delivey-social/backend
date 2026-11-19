@@ -132,6 +132,7 @@ class PedidoService:
             user_id=data.user_id,
             restaurant_id=data.restaurant_id,
             items=items,
+            status=data.status,
         )
 
         await self.repo.update_pedido(updated_pedido)

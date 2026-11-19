@@ -3,9 +3,11 @@ from uuid import uuid4
 import pytest
 from httpx import AsyncClient, Response
 
+from src.modules.pedido.domain.pedido import PedidoStatus
 from src.modules.pedido.types import CreatePedidoRequestItem, UpdatePedidoRequest
 
 payload = UpdatePedidoRequest(
+    status=PedidoStatus.PENDING,
     user_id=uuid4(),
     restaurant_id=uuid4(),
     items=[

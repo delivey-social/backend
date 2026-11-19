@@ -4,6 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
+from src.modules.pedido.domain.pedido import PedidoStatus
+
 
 class UserGateway(ABC):
     @abstractmethod
@@ -41,3 +43,4 @@ class UpdatePedidoRequest(BaseModel):
     user_id: UUID
     restaurant_id: UUID
     items: Annotated[list[CreatePedidoRequestItem], Field(..., min_length=1)]
+    status: PedidoStatus
