@@ -32,3 +32,6 @@ dev = [
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
+
+[tool.uv]
+package = true
