@@ -64,7 +64,7 @@ def create_app() -> FastAPI:
     if ENVIRONMENT == "development":
         app.add_middleware(
             CORSMiddleware,
-            allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+            allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|dev-[a-zA-Z0-9-]+\.comida\.app\.br)(:\d+)?",
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
