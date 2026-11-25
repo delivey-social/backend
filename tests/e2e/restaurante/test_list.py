@@ -9,7 +9,7 @@ async def test_list_empty_restaurants(client: AsyncClient):
     response = await client.get("/restaurante/")
 
     assert response.status_code == 200
-    assert response.json() == []
+    assert response.json() == {"restaurantes": []}
 
 
 @pytest.mark.anyio
@@ -21,7 +21,7 @@ async def test_list_restaurants(
 
     assert response.status_code == 200
 
-    restaurants = response.json()
+    restaurants = response.json()["restaurantes"]
 
     assert len(restaurants) == 1
     assert restaurants[0]["nome"] == "Restaurante Teste"
@@ -45,7 +45,7 @@ async def test_list_restaurants_after_update(
 
     assert response.status_code == 200
 
-    restaurants = response.json()
+    restaurants = response.json()["restaurantes"]
 
     assert len(restaurants) == 1
     assert restaurants[0]["nome"] == updated_name
@@ -63,7 +63,7 @@ async def test_list_restaurants_after_delete(
     response = await client.get("/restaurante/")
 
     assert response.status_code == 200
-    assert response.json() == []
+    assert response.json() == {"restaurantes": []}
 
 
 @pytest.mark.anyio
@@ -82,7 +82,7 @@ async def test_list_restaurants_after_creating_multiple(
 
     assert response.status_code == 200
 
-    restaurants = response.json()
+    restaurants = response.json()["restaurantes"]
 
     assert len(restaurants) == len(restaurant_names)
 

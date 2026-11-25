@@ -12,6 +12,8 @@ from .service import RestauranteService
 from .types import (
     CreateMenuItemRequest,
     CreateRestauranteRequest,
+    GetRestauranteResponse,
+    ListRestaurantesResponse,
     UpdateRestauranteRequest,
 )
 
@@ -30,11 +32,13 @@ class RestauranteRouter(APIRouter):
             "/",
             self.list_restaurantes_endpoint(service_dependency),
             methods=["GET"],
+            response_model=ListRestaurantesResponse,
         )
         self.add_api_route(
             "/{restaurante_id}",
             self.get_restaurante_endpoint(service_dependency),
             methods=["GET"],
+            response_model=GetRestauranteResponse,
         )
 
         self.add_api_route(
@@ -73,7 +77,9 @@ class RestauranteRouter(APIRouter):
         async def endpoint(
             service: Annotated[RestauranteService, Depends(service_dependency)],
         ):
-            return await service.list_restaurantes()
+            restaurantes = await service.list_restaurantes()
+
+            return ListRestaurantesResponse(restaurantes=restaurantes)
 
         return endpoint
 
