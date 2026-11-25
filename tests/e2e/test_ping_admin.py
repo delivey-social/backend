@@ -25,4 +25,4 @@ async def test_ping_admin_with_invalid_token(
         "/admin", headers={"Authorization": f"Bearer {auth_token}"}
     )
 
-    assert response.status_code
+    assert response.status_code == 403

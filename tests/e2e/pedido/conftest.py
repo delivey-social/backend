@@ -8,8 +8,8 @@ from src.main import app
 from src.modules.pedido.infra.dependencies import get_pedido_repo
 from src.modules.pedido.infra.inmemory_repo import InMemoryPedidoRepository
 from src.modules.pedido.types import CreatePedidoRequest, CreatePedidoRequestItem
-from src.modules.restaurante.domain.restaurante import Restaurante
 from src.modules.restaurante.domain.menu import MenuItem
+from src.modules.restaurante.domain.restaurante import Restaurante
 from src.modules.restaurante.infra.dependencies import (
     get_menu_service,
     get_restaurante_service,
