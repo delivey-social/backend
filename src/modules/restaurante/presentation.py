@@ -12,6 +12,7 @@ from .service import RestauranteService
 from .types import (
     CreateMenuItemRequest,
     CreateRestauranteRequest,
+    GetMenuResponse,
     GetRestauranteResponse,
     ListRestaurantesResponse,
     UpdateRestauranteRequest,
@@ -213,6 +214,7 @@ class MenuRouter(APIRouter):
             "/{restaurante_id}",
             self.get_menu_endpoint(service),
             methods=["GET"],
+            response_model=GetMenuResponse,
         )
 
         self.add_api_route(
